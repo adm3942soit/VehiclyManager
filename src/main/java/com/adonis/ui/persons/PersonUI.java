@@ -1,4 +1,4 @@
-package com.adonis.ui;
+package com.adonis.ui.persons;
 
 import com.adonis.data.persons.Person;
 import com.adonis.data.persons.service.PersonService;
@@ -22,7 +22,7 @@ public class PersonUI extends CustomComponent implements View {
     public static final String NAME = "PersonUI";
 
     Person customer;
-    com.adonis.ui.PersonView editor = new PersonView(this::savePerson, this::deletePerson, this::addPerson, true);
+    PersonView editor = new PersonView(this::savePerson, this::deletePerson, this::addPerson, true);
     List customers= Lists.newArrayList();
     Grid<Person> grid = new Grid();
     HorizontalSplitPanel splitter = new HorizontalSplitPanel(grid, editor);

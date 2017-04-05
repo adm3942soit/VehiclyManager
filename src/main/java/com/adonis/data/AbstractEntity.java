@@ -1,4 +1,4 @@
-package com.adonis.data.persons;
+package com.adonis.data;
 
 import lombok.Getter;
 import lombok.Setter;

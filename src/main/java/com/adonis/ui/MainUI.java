@@ -1,10 +1,12 @@
 package com.adonis.ui;
 
-import com.adonis.main.MainScreen;
-import com.adonis.main.login.AccessControl;
-import com.adonis.main.login.BasicAccessControl;
-import com.adonis.main.login.LoginView;
+import com.adonis.ui.main.MainScreen;
+import com.adonis.ui.login.AccessControl;
+import com.adonis.ui.login.BasicAccessControl;
+import com.adonis.ui.login.LoginView;
 import com.adonis.data.persons.service.PersonService;
+import com.adonis.ui.persons.PersonUI;
+import com.adonis.ui.persons.RegistrationUI;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.navigator.Navigator;
@@ -79,7 +81,6 @@ public class MainUI extends UI {
 
     protected void showMainView() {
         addStyleName(ValoTheme.UI_WITH_MENU);
-//        getNavigator().addView(MainScreen.NAME, mainScreen);
         getNavigator().navigateTo(MainScreen.NAME);
     }
 

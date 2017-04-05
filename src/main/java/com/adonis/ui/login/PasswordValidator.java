@@ -1,4 +1,4 @@
-package com.adonis.main.login;
+package com.adonis.ui.login;
 
 import com.adonis.data.persons.Person;
 import com.adonis.data.persons.service.PersonService;

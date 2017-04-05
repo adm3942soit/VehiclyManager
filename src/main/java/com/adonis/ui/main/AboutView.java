@@ -1,4 +1,4 @@
-package com.adonis.main;
+package com.adonis.ui.main;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;

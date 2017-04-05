@@ -1,6 +1,7 @@
 package com.adonis.data.persons;
 
 
+import com.adonis.data.AbstractEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

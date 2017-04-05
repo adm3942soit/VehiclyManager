@@ -1,4 +1,4 @@
-package com.adonis.main;
+package com.adonis.ui.menu;
 
 import com.adonis.data.persons.Person;
 import com.adonis.data.persons.service.PersonService;

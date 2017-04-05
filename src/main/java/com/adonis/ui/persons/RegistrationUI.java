@@ -1,4 +1,4 @@
-package com.adonis.ui;
+package com.adonis.ui.persons;
 
 import com.adonis.data.persons.Person;
 import com.adonis.data.persons.service.PersonService;
@@ -20,7 +20,7 @@ public class RegistrationUI extends CustomComponent implements com.vaadin.naviga
     public static final String NAME = "RegistrationUI";
 
     private Person customer;
-    com.adonis.ui.PersonView editor = new PersonView(this::savePerson, this::deletePerson, this::addPerson, false);
+    PersonView editor = new PersonView(this::savePerson, this::deletePerson, this::addPerson, false);
 
     public RegistrationUI (PersonService personService){
         this.service = personService;

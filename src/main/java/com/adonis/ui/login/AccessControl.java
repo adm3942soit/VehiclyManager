@@ -1,4 +1,4 @@
-package com.adonis.main.login;
+package com.adonis.ui.login;
 
 /**
  * Simple interface for authentication and authorization checks.

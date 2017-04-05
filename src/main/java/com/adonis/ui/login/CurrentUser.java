@@ -1,4 +1,4 @@
-package com.adonis.main.login;
+package com.adonis.ui.login;
 
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinSession;

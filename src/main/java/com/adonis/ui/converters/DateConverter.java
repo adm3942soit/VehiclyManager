@@ -58,11 +58,11 @@ public class DateConverter implements Converter<LocalDate, Date> {
             }
         }
     */
-    public LocalDate getLocalDate(Date date) {
+    public static LocalDate getLocalDate(Date date) {
         return date == null ? null : Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
-    public Date getDate(LocalDate localDate) {
+    public static Date getDate(LocalDate localDate) {
         return localDate == null ? null : Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 

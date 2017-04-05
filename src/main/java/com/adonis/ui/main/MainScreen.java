@@ -1,7 +1,8 @@
-package com.adonis.main;
+package com.adonis.ui.main;
 
 
 import com.adonis.ui.MainUI;
+import com.adonis.ui.menu.Menu;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;

@@ -1,7 +1,8 @@
-package com.adonis.main.login;
+package com.adonis.ui.login;
 
-import com.adonis.main.MainScreen;
+import com.adonis.ui.main.MainScreen;
 import com.adonis.data.persons.service.PersonService;
+import com.adonis.ui.persons.RegistrationUI;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.*;
@@ -55,33 +56,14 @@ public class LoginView extends VerticalLayout implements View {
     }
     private void login(LoginForm form, String user, String password){
 
-        if(service.findByCustomerLogin(user).getPassword().equals(password)){
+        if(service.findByCustomerLogin(user)!=null && service.findByCustomerLogin(user).getPassword().equals(password)){
             addStyleName(ValoTheme.UI_WITH_MENU);
             getUI().getNavigator().navigateTo(MainScreen.NAME);
             return;
         }else {
-
-        /*build logout*/
-            VerticalLayout infoLayout = new VerticalLayout();
-
-            Label info = new Label("User '" + user + "', password='" + password
-                    + "' logged in");
-            Button logoutButton = new Button("Log out", new Button.ClickListener() {
-
-                @Override
-                public void buttonClick(Button.ClickEvent event) {
-                    Button b = event.getButton();
-                    loginFormLayout.replaceComponent(b.getParent(),
-                            (LoginForm) b.getData());
-                }
-
-            });
-            logoutButton.setData(loginForm);
-
-            infoLayout.addComponent(info);
-            infoLayout.addComponent(logoutButton);
-
-            loginFormLayout.replaceComponent(loginForm, infoLayout);
+            addStyleName(ValoTheme.FORMLAYOUT_LIGHT);
+            getUI().getNavigator().navigateTo(RegistrationUI.NAME);
+            return;
         }
     }
     @Override

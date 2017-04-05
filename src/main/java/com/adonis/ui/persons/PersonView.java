@@ -1,7 +1,8 @@
-package com.adonis.ui;
+package com.adonis.ui.persons;
 
 import com.adonis.data.persons.Person;
 import com.adonis.ui.converters.DateConverter;
+import com.adonis.ui.main.MainScreen;
 import com.google.common.base.Strings;
 import com.vaadin.data.Binder;
 import com.vaadin.server.ExternalResource;
@@ -31,16 +32,43 @@ public class PersonView extends PersonDesign {
 
 		if(view){
 			picture.setVisible(false);
+
 		}else {
 			if(Strings.isNullOrEmpty(picture.getValue())) {
 				picture.setVisible(true);
 			}else
 				picture.setVisible(false);
+			add.setVisible(false);
 		}
 
 		save.addClickListener(evt -> {
 			try {
-				Person person = binder.getBean();
+				Person person = binder.getBean()!=null?binder.getBean():new Person();
+				if(Strings.isNullOrEmpty(person.getFirstName())){
+					person.setFirstName(firstName.getValue());
+				}
+				if(Strings.isNullOrEmpty(person.getLastName())){
+					person.setLastName(lastName.getValue());
+				}
+				if(Strings.isNullOrEmpty(person.getEmail())){
+					person.setEmail(email.getValue());
+				}
+				if(person.getBirthDate()==null){
+					person.setBirthDate(DateConverter.getDate(dayOfBirth.getValue()));
+				}
+				if(Strings.isNullOrEmpty(person.getLogin())){
+					person.setLogin(login.getValue());
+				}
+				if(Strings.isNullOrEmpty(person.getPassword())){
+					person.setPassword(password.getValue());
+				}
+				if(Strings.isNullOrEmpty(person.getPicture())){
+					person.setPicture(picture.getValue());
+				}
+				if(Strings.isNullOrEmpty(person.getNotes())){
+					person.setNotes(notes.getValue());
+				}
+
 				if(person!=null && person.getId()!=null) {
 					saveEvt.savePerson(person);
 				}else{
@@ -63,7 +91,7 @@ public class PersonView extends PersonDesign {
 
 		});
 		cancel.addClickListener(evt -> {
-
+            getUI().getNavigator().navigateTo(MainScreen.NAME);
 		});
 
 		delete.addClickListener(evt -> {

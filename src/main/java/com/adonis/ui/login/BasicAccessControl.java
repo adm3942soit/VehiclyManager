@@ -1,4 +1,4 @@
-package com.adonis.main.login;
+package com.adonis.ui.login;
 
 /**
  * Default mock implementation of {@link AccessControl}. This implementation
