@@ -107,7 +107,7 @@ public class Menu extends CssLayout {
 
         MenuBar vehiclesMenu = new MenuBar();
         vehiclesMenu.setStyleName(VALO_MENUITEMS);
-        vehiclesMenu.addItem("Customers",  new Command() {
+        vehiclesMenu.addItem("Vehicles",  new Command() {
 
             @Override
             public void menuSelected(MenuItem selectedItem) {

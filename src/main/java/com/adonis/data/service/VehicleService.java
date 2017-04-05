@@ -74,7 +74,7 @@ public class VehicleService {
     }
 
     public void insert(Vehicle vehicle) {
-        if (vehicle == null) return;
+        if (vehicle == null) return ;
         jdbcTemplate.update(
                 "INSERT INTO vehicles " +
                         "(VEHICLE_NMBR, LICENSE_NMBR, MAKE, YEAR, STATUS," +
@@ -91,6 +91,7 @@ public class VehicleService {
                         vehicle.getLocation(),
                         vehicle.getVinNumber(),
                 });
+
     }
 
     public Vehicle save(Vehicle vehicle) {
