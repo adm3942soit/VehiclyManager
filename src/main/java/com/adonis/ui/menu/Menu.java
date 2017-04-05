@@ -116,7 +116,7 @@ public class Menu extends CssLayout {
                 final VerticalLayout area = new VerticalLayout();
                 area.setSizeFull();
                 GridBasedCrudComponent<Vehicle> crud = new GridBasedCrudComponent<>(Vehicle.class, new HorizontalSplitCrudLayout());
-                crud.setAddOperation(vehicle ->vehicleService.save(vehicle));
+                crud.setAddOperation(vehicle ->vehicleService.insert(vehicle));
                 crud.setUpdateOperation(vehicle ->vehicleService.save(vehicle));
                 crud.setDeleteOperation(vehicle ->vehicleService.delete(vehicle));
                 crud.setFindAllOperation(()->vehicleService.findAll());

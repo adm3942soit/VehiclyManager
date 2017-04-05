@@ -35,6 +35,19 @@ public class VehicleService {
 
         return vehicle;
     }
+    public Vehicle findLast() {
+        String sql = "SELECT * FROM vehicles ORDER BY ID DESC LIMIT 1";
+
+        Vehicle vehicle = null;
+        try {
+            vehicle = (Vehicle) jdbcTemplate.queryForObject(
+                    sql, new Object[]{}, new BeanPropertyRowMapper(Vehicle.class));
+        } catch (Exception e) {
+            return null;
+        }
+
+        return vehicle;
+    }
 
 
     public int findTotalVehicle() {
@@ -73,51 +86,60 @@ public class VehicleService {
                 vehicle.getId());
     }
 
-    public void insert(Vehicle vehicle) {
-        if (vehicle == null) return ;
-        jdbcTemplate.update(
-                "INSERT INTO vehicles " +
-                        "(VEHICLE_NMBR, LICENSE_NMBR, MAKE, YEAR, STATUS," +
-                        " VEHICLE_TYPE, ACTIVE, LOCATION, VIN_NUMBER) VALUES " +
-                        "(?,?,?,?,?,?,?,?,?)",
-                new Object[]{
-                        vehicle.getVehicleNmbr(),
-                        vehicle.getLicenseNmbr(),
-                        vehicle.getMake(),
-                        vehicle.getYear(),
-                        vehicle.getStatus(),
-                        vehicle.getVehicleType(),
-                        vehicle.getActive(),
-                        vehicle.getLocation(),
-                        vehicle.getVinNumber(),
-                });
+    public Vehicle insert(Vehicle vehicle) {
+        if (vehicle == null) return null;
+        try {
+            jdbcTemplate.update(
+                    "INSERT INTO vehicles " +
+                            "(VEHICLE_NMBR, LICENSE_NMBR, MAKE, YEAR, STATUS," +
+                            " VEHICLE_TYPE, ACTIVE, LOCATION, VIN_NUMBER) VALUES " +
+                            "(?,?,?,?,?,?,?,?,?)",
+                    new Object[]{
+                            vehicle.getVehicleNmbr(),
+                            vehicle.getLicenseNmbr(),
+                            vehicle.getMake(),
+                            vehicle.getYear(),
+                            vehicle.getStatus(),
+                            vehicle.getVehicleType(),
+                            vehicle.getActive(),
+                            vehicle.getLocation(),
+                            vehicle.getVinNumber(),
+                    });
+        } catch (Exception e) {
+            return null;
+        }
+     return findLast();
 
     }
 
     public Vehicle save(Vehicle vehicle) {
         if (vehicle == null) return null;
-        jdbcTemplate.update(
-                "UPDATE vehicles SET " +
-                        "VEHICLE_NMBR=?, " +
-                        "LICENSE_NMBR=?, " +
-                        "MAKE=?, " +
-                        "YEAR=?, " +
-                        "STATUS=?, " +
-                        "VEHICLE_TYPE=?, " +
-                        "ACTIVE=?, " +
-                        "LOCATION=?, " +
-                        "VIN_NUMBER=? " +
-                        "WHERE ID=?",
-                vehicle.getVehicleNmbr(),
-                vehicle.getLicenseNmbr(),
-                vehicle.getMake(),
-                vehicle.getYear(),
-                vehicle.getStatus(),
-                vehicle.getVehicleType(),
-                vehicle.getActive(),
-                vehicle.getLocation(),
-                vehicle.getVinNumber(),
-                vehicle.getId());
+        try {
+            jdbcTemplate.update(
+                    "UPDATE vehicles SET " +
+                            "VEHICLE_NMBR=?, " +
+                            "LICENSE_NMBR=?, " +
+                            "MAKE=?, " +
+                            "YEAR=?, " +
+                            "STATUS=?, " +
+                            "VEHICLE_TYPE=?, " +
+                            "ACTIVE=?, " +
+                            "LOCATION=?, " +
+                            "VIN_NUMBER=? " +
+                            "WHERE ID=?",
+                    vehicle.getVehicleNmbr(),
+                    vehicle.getLicenseNmbr(),
+                    vehicle.getMake(),
+                    vehicle.getYear(),
+                    vehicle.getStatus(),
+                    vehicle.getVehicleType(),
+                    vehicle.getActive(),
+                    vehicle.getLocation(),
+                    vehicle.getVinNumber(),
+                    vehicle.getId());
+        } catch (Exception e) {
+            return null;
+        }
         return findById(vehicle.getId());
     }
 
