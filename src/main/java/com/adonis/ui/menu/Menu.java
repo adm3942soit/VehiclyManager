@@ -80,6 +80,7 @@ public class Menu extends CssLayout {
 
             @Override
             public void menuSelected(MenuItem selectedItem) {
+                menuPart.setWidth(10F, Unit.PERCENTAGE);
                 addComponent(menuPart);
                 final VerticalLayout area = new VerticalLayout();
                 area.setSizeFull();
@@ -93,7 +94,9 @@ public class Menu extends CssLayout {
                 crud.getCrudLayout().setWidth(90F, Unit.PERCENTAGE);
                 crud.getGrid().setColumns("firstName", "lastName", "email", "login", "birthDate", "picture", "notes");
                 area.addComponent(crud);
+                area.setWidth(90F, Unit.PERCENTAGE);
                 addComponent(area);
+
             }
         });
 

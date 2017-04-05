@@ -52,7 +52,7 @@ public class LoginView extends VerticalLayout implements View {
         String w = width < 0 ? "auto" : (int) width + "px";
         String h = height < 0 ? "auto" : (int) height + "px";
 
-        loginForm.setCaption("LoginForm (" + w + "/" + h + ")");
+        loginForm.setCaption("LoginForm ");
     }
     private void login(LoginForm form, String user, String password){
 
