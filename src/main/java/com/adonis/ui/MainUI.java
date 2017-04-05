@@ -1,5 +1,6 @@
 package com.adonis.ui;
 
+import com.adonis.data.service.VehicleService;
 import com.adonis.ui.main.MainScreen;
 import com.adonis.ui.login.AccessControl;
 import com.adonis.ui.login.BasicAccessControl;
@@ -32,6 +33,8 @@ public class MainUI extends UI {
 
     @Autowired
     public PersonService service;
+    @Autowired
+    public VehicleService vehicleService;
 
     private AccessControl accessControl = new BasicAccessControl();
 

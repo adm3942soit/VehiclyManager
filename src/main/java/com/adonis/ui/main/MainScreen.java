@@ -37,7 +37,7 @@ public class MainScreen extends HorizontalLayout implements View{
 
         final Navigator navigator = new Navigator(ui, viewContainer);
         navigator.setErrorView(ErrorView.class);
-        menu = new Menu(ui.service, navigator);
+        menu = new Menu(ui.service, ui.vehicleService, navigator);
         menu.setStyleName(ValoTheme.MENU_ROOT);
 //        menu.addView(new SampleCrudView(), SampleCrudView.VIEW_NAME,
 //                SampleCrudView.VIEW_NAME, FontAwesome.EDIT);

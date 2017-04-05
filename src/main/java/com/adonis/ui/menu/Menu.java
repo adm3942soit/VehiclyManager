@@ -2,6 +2,8 @@ package com.adonis.ui.menu;
 
 import com.adonis.data.persons.Person;
 import com.adonis.data.service.PersonService;
+import com.adonis.data.service.VehicleService;
+import com.adonis.data.vehicles.Vehicle;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.server.Page;
@@ -36,7 +38,7 @@ public class Menu extends CssLayout {
     private CssLayout menuItemsLayout;
     private CssLayout menuPart;
 
-    public Menu(PersonService personService, Navigator navigator) {
+    public Menu(PersonService personService, VehicleService vehicleService, Navigator navigator) {
         this.navigator = navigator;
         setPrimaryStyleName(ValoTheme.MENU_ROOT);
         menuPart = new CssLayout();
@@ -74,9 +76,9 @@ public class Menu extends CssLayout {
         menuPart.addComponent(logoutMenu);
 
         // dataBase menu item
-        MenuBar dataMenu = new MenuBar();
-        dataMenu.setStyleName(VALO_MENUITEMS);
-        dataMenu.addItem("Customers",  new Command() {
+        MenuBar personsMenu = new MenuBar();
+        personsMenu.setStyleName(VALO_MENUITEMS);
+        personsMenu.addItem("Customers",  new Command() {
 
             @Override
             public void menuSelected(MenuItem selectedItem) {
@@ -100,8 +102,37 @@ public class Menu extends CssLayout {
             }
         });
 
-        dataMenu.addStyleName("user-menu");
-        menuPart.addComponent(dataMenu);
+        personsMenu.addStyleName("user-menu");
+        menuPart.addComponent(personsMenu);
+
+        MenuBar vehiclesMenu = new MenuBar();
+        vehiclesMenu.setStyleName(VALO_MENUITEMS);
+        vehiclesMenu.addItem("Customers",  new Command() {
+
+            @Override
+            public void menuSelected(MenuItem selectedItem) {
+                menuPart.setWidth(10F, Unit.PERCENTAGE);
+                addComponent(menuPart);
+                final VerticalLayout area = new VerticalLayout();
+                area.setSizeFull();
+                GridBasedCrudComponent<Vehicle> crud = new GridBasedCrudComponent<>(Vehicle.class, new HorizontalSplitCrudLayout());
+                crud.setAddOperation(vehicle ->vehicleService.save(vehicle));
+                crud.setUpdateOperation(vehicle ->vehicleService.save(vehicle));
+                crud.setDeleteOperation(vehicle ->vehicleService.delete(vehicle));
+                crud.setFindAllOperation(()->vehicleService.findAll());
+                crud.getCrudFormFactory().setDisabledPropertyIds(CrudOperation.UPDATE, "id", "created", "updated");
+                crud.getCrudFormFactory().setDisabledPropertyIds(CrudOperation.ADD, "id", "created", "updated");
+                crud.getCrudLayout().setWidth(90F, Unit.PERCENTAGE);
+                crud.getGrid().setColumns("vehicleNmbr", "licenseNmbr", "make", "model", "year", "status", "vehicleType", "active", "location", "vinNumber");
+                area.addComponent(crud);
+                area.setWidth(90F, Unit.PERCENTAGE);
+                addComponent(area);
+
+            }
+        });
+
+        vehiclesMenu.addStyleName("user-menu");
+        menuPart.addComponent(vehiclesMenu);
 
         // button for toggling the visibility of the menu when on a small screen
         final Button showMenu = new Button("Menu", new ClickListener() {
