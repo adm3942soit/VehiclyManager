@@ -1,7 +1,7 @@
 package com.adonis.ui.menu;
 
 import com.adonis.data.persons.Person;
-import com.adonis.data.persons.service.PersonService;
+import com.adonis.data.service.PersonService;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.server.Page;

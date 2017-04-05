@@ -4,7 +4,7 @@ import com.adonis.ui.main.MainScreen;
 import com.adonis.ui.login.AccessControl;
 import com.adonis.ui.login.BasicAccessControl;
 import com.adonis.ui.login.LoginView;
-import com.adonis.data.persons.service.PersonService;
+import com.adonis.data.service.PersonService;
 import com.adonis.ui.persons.PersonUI;
 import com.adonis.ui.persons.RegistrationUI;
 import com.vaadin.annotations.Theme;

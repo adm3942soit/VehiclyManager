@@ -1,4 +1,4 @@
-package com.adonis.data.persons.service;
+package com.adonis.data.service;
 
 import com.adonis.data.persons.Person;
 import com.google.common.base.Strings;
@@ -157,8 +157,6 @@ public class PersonService {
                 entry.setRemind(Math.random() > 0.5);
                 if (person.length == 6) entry.setPicture(person[5]);
                 if (person.length == 7) entry.setNotes(person[6]);
-                entry.setCreated(new Date());
-
                 try {
                     insert(entry);
                 } catch (Exception e) {
