@@ -2,10 +2,14 @@ package com.adonis.ui.main;
 
 
 import com.adonis.ui.MainUI;
+import com.adonis.ui.login.LoginView;
 import com.adonis.ui.menu.Menu;
+import com.adonis.ui.persons.PersonsCrudView;
+import com.adonis.ui.vehicles.VehiclesCrudView;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
@@ -26,6 +30,7 @@ public class MainScreen extends HorizontalLayout implements View{
     private Menu menu;
 
     public static final String NAME = "MainScreen";
+    LoginView loginView;
 
     public MainScreen(MainUI ui) {
 
@@ -39,9 +44,10 @@ public class MainScreen extends HorizontalLayout implements View{
         navigator.setErrorView(ErrorView.class);
         menu = new Menu(ui.service, ui.vehicleService, navigator);
         menu.setStyleName(ValoTheme.MENU_ROOT);
-//        menu.addView(new SampleCrudView(), SampleCrudView.VIEW_NAME,
-//                SampleCrudView.VIEW_NAME, FontAwesome.EDIT);
-        menu.addView(new AboutView(), AboutView.VIEW_NAME, AboutView.VIEW_NAME, null);
+        menu.addView(new VehiclesCrudView(ui.vehicleService), VehiclesCrudView.NAME,VehiclesCrudView.NAME, new ThemeResource("img/vehicles1.jpg"));
+        menu.addView(new PersonsCrudView(ui.service), PersonsCrudView.NAME, PersonsCrudView.NAME, new ThemeResource("img/persons.jpg"));
+        menu.addView(ui.getLoginView(), "LOGOUT", "LOGOUT", new ThemeResource("img/logout.jpg"));
+        menu.addView(new AboutView(), AboutView.VIEW_NAME, AboutView.VIEW_NAME, new ThemeResource("img/info.jpg"));
 
         navigator.addViewChangeListener(viewChangeListener);
 

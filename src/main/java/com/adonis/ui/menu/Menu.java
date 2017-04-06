@@ -6,14 +6,10 @@ import com.adonis.data.service.VehicleService;
 import com.adonis.data.vehicles.Vehicle;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
-import com.vaadin.server.Page;
 import com.vaadin.server.ThemeResource;
-import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.MenuBar.Command;
-import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.themes.ValoTheme;
 import lombok.NoArgsConstructor;
 import org.vaadin.crudui.crud.CrudOperation;
@@ -38,10 +34,10 @@ public class Menu extends CssLayout {
 
     private CssLayout menuItemsLayout;
     private CssLayout menuPart;
-    final VerticalLayout personsArea = new VerticalLayout();
-    final VerticalLayout vehiclesArea = new VerticalLayout();
-    final GridBasedCrudComponent<Vehicle> vehiclesCrud = new GridBasedCrudComponent<>(Vehicle.class, new HorizontalSplitCrudLayout());
-    final GridBasedCrudComponent<Person> personsCrud = new GridBasedCrudComponent<>(Person.class, new HorizontalSplitCrudLayout());
+    public final VerticalLayout personsArea = new VerticalLayout();
+    public final VerticalLayout vehiclesArea = new VerticalLayout();
+    public final GridBasedCrudComponent<Vehicle> vehiclesCrud = new GridBasedCrudComponent<>(Vehicle.class, new HorizontalSplitCrudLayout());
+    public final GridBasedCrudComponent<Person> personsCrud = new GridBasedCrudComponent<>(Person.class, new HorizontalSplitCrudLayout());
 
 
     public Menu(PersonService personService, VehicleService vehicleService, Navigator navigator) {
@@ -71,6 +67,7 @@ public class Menu extends CssLayout {
         menuPart.addComponent(top);
 
 
+/*
         HorizontalLayout personsLayout = new HorizontalLayout();
         personsLayout.addStyleName(ValoTheme.MENU_ITEM);
         personsLayout.setSpacing(false);
@@ -131,21 +128,29 @@ public class Menu extends CssLayout {
         vehiclesLayout.addComponent(vehiclesMenu,1);
 
         menuPart.addComponent(vehiclesLayout);
+*/
 
         // logout menu item
-        MenuBar logoutMenu = new MenuBar();
-        logoutMenu.setStyleName(VALO_MENUITEMS);
-        logoutMenu.addItem("Logout", new Command() {
+        HorizontalLayout logoutLayout = new HorizontalLayout();
+        logoutLayout.addStyleName(ValoTheme.MENU_ITEM);
+        logoutLayout.setSpacing(false);
 
-            @Override
-            public void menuSelected(MenuItem selectedItem) {
-                VaadinSession.getCurrent().getSession().invalidate();
-                Page.getCurrent().reload();
-            }
-        });
-
-        logoutMenu.addStyleName("user-menu");
-        menuPart.addComponent(logoutMenu);
+//        MenuBar logoutMenu = new MenuBar();
+//        logoutMenu.setStyleName(VALO_MENUITEMS);
+//        logoutMenu.addItem("Logout", new Command() {
+//
+//            @Override
+//            public void menuSelected(MenuItem selectedItem) {
+//                VaadinSession.getCurrent().getSession().invalidate();
+//                Page.getCurrent().reload();
+//            }
+//        });
+//
+//        logoutMenu.addStyleName("user-menu");
+//        Image logout = new Image(null, new ThemeResource("img/logout.png"));
+//        logoutLayout.addComponent(logout, 0);
+//        logoutLayout.addComponent(logoutMenu, 1);
+//        menuPart.addComponent(logoutLayout);
 
         // button for toggling the visibility of the menu when on a small screen
         final Button showMenu = new Button("Menu", new ClickListener() {
@@ -172,7 +177,7 @@ public class Menu extends CssLayout {
         addComponent(menuPart);
         addStyleName("backImage");
     }
-    private void setVehiclesCrudProperties(VehicleService vehicleService) {
+    public void setVehiclesCrudProperties(VehicleService vehicleService) {
         GridLayoutCrudFormFactory<Vehicle> formFactory = new GridLayoutCrudFormFactory<>(Vehicle.class, 1, 10);
         vehiclesCrud.setCrudFormFactory(formFactory);
 
@@ -187,7 +192,7 @@ public class Menu extends CssLayout {
         vehiclesCrud.getGrid().setColumns("vehicleNmbr", "licenseNmbr", "make", "model", "year", "status", "vehicleType", "active", "location", "vinNumber");
     }
 
-    private void setPersonsCrudProperties(PersonService personService){
+    public void setPersonsCrudProperties(PersonService personService){
         personsCrud.setAddOperation(person -> personService.insert(person));
         personsCrud.setUpdateOperation(person -> personService.save(person));
         personsCrud.setDeleteOperation(person -> personService.delete(person));

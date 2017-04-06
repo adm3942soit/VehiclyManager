@@ -39,7 +39,7 @@ public class MainUI extends UI {
     private AccessControl accessControl = new BasicAccessControl();
 
     PersonUI personView;
-    LoginView loginView;
+    public LoginView loginView;
     RegistrationUI registrationUI;
     MainScreen mainScreen;
 
@@ -95,5 +95,9 @@ public class MainUI extends UI {
     @Override
     public Spliterator<Component> spliterator() {
         return null;
+    }
+
+    public LoginView getLoginView() {
+        return loginView;
     }
 }
