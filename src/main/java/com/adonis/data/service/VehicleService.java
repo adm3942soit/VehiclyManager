@@ -158,11 +158,12 @@ public class VehicleService {
         try {
             jdbcTemplate.update(
                     "INSERT INTO vehicle_types " +
-                            "(TYPE)" +
+                            "(TYPE, PICTURE)" +
                             " VALUES " +
-                            "(?)",
+                            "(?, ?)",
                     new Object[]{
                             vehicleType.getType(),
+                            vehicleType.getPicture()
                     });
         } catch (Exception e) {
             return null;
