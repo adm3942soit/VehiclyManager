@@ -7,6 +7,7 @@ import com.adonis.ui.menu.Menu;
 import com.adonis.ui.persons.PersonUI;
 import com.adonis.ui.persons.PersonsCrudView;
 import com.adonis.ui.persons.RegistrationUI;
+import com.adonis.ui.vehicles.VehicleTypesCrudView;
 import com.adonis.ui.vehicles.VehiclesCrudView;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
@@ -44,6 +45,7 @@ public class MainScreen extends HorizontalLayout implements View {
         navigator.setErrorView(ErrorView.class);
         menu = new Menu(ui.service, ui.vehicleService, navigator);
         menu.setStyleName(ValoTheme.MENU_ROOT);
+        menu.addView(new VehicleTypesCrudView(ui.vehicleService), VehicleTypesCrudView.NAME, VehicleTypesCrudView.NAME, new ThemeResource("img/vehicle-type.jpg"));
         menu.addView(new VehiclesCrudView(ui.vehicleService), VehiclesCrudView.NAME, VehiclesCrudView.NAME, new ThemeResource("img/vehicles1.jpg"));
         menu.addView(new PersonsCrudView(ui.service), PersonsCrudView.NAME, PersonsCrudView.NAME, new ThemeResource("img/customers.jpg"));
         menu.addView(new RegistrationUI(ui.service), "CUSTOMER REGISTRATION" , "CUSTOMER REGISTRATION", new ThemeResource("img/Register-Today.jpg"));
