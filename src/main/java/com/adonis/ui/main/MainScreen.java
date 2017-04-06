@@ -4,7 +4,9 @@ package com.adonis.ui.main;
 import com.adonis.ui.MainUI;
 import com.adonis.ui.login.LoginView;
 import com.adonis.ui.menu.Menu;
+import com.adonis.ui.persons.PersonUI;
 import com.adonis.ui.persons.PersonsCrudView;
+import com.adonis.ui.persons.RegistrationUI;
 import com.adonis.ui.vehicles.VehiclesCrudView;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
@@ -44,6 +46,8 @@ public class MainScreen extends HorizontalLayout implements View {
         menu.setStyleName(ValoTheme.MENU_ROOT);
         menu.addView(new VehiclesCrudView(ui.vehicleService), VehiclesCrudView.NAME, VehiclesCrudView.NAME, new ThemeResource("img/vehicles1.jpg"));
         menu.addView(new PersonsCrudView(ui.service), PersonsCrudView.NAME, PersonsCrudView.NAME, new ThemeResource("img/persons.jpg"));
+        menu.addView(new RegistrationUI(ui.service), "CUSTOMER REGISTRATION" , "CUSTOMER REGISTRATION", new ThemeResource("img/Register-Today.jpg"));
+        menu.addView(new PersonUI(ui.service), "PROFILE" , "PROFILE", new ThemeResource("img/user-icon.jpg"));
         menu.addView(new AboutView(), AboutView.VIEW_NAME, AboutView.VIEW_NAME, new ThemeResource("img/info.jpg"));
         menu.addView(ui.getLoginView(), "LOGOUT", "LOGOUT", new ThemeResource("img/logout.jpg"));
 
