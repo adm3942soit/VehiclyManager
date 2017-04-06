@@ -1,2 +1,2 @@
-# PersonService
+# Vehicle manager
 Vaadin Spring Boot application

@@ -12,6 +12,8 @@
 // Affects the color of some component elements, e.g Button, Panel title, etc
 //$v-background-color: hsl(210, 0%, 98%);
 // Affects the color of content areas, e.g  Panel and Window content, TextField input etc
+
+//$v-background-color: hsl(200, 50%, 50%);
 //$v-app-background-color: $v-background-color;
 
 // Affects the visual appearance of all components
@@ -31,6 +33,7 @@ $v-luminance-threshold: 180 !default;
 
 $editor-background-color: #3b3f42 !default;
 $valo-menu-background-color: $editor-background-color !default;
+
 
 $v-focus-color: rgb(96, 160, 234) !default;
 $v-error-indicator-color: #eb2977 !default;

@@ -3,6 +3,7 @@ package com.adonis.ui.login;
 import com.adonis.ui.main.MainScreen;
 import com.adonis.data.service.PersonService;
 import com.adonis.ui.persons.RegistrationUI;
+import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.*;
@@ -15,7 +16,8 @@ import java.util.function.Consumer;
 /**
  * Created by oksdud on 03.04.2017.
  */
-public class LoginView extends VerticalLayout implements View {
+@Theme("mytheme")
+public class LoginView extends CssLayout implements View {
 
     private HorizontalLayout loginFormLayout;
     protected LoginForm loginForm;

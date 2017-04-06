@@ -33,6 +33,7 @@ dependencies {
 	compile ('com.vaadin:vaadin-compatibility-client-compiled:8.0.0')
 	compile ('com.vaadin:vaadin-compatibility-shared:8.0.0')
 	compile ('com.vaadin:vaadin-compatibility-themes:8.0.0')
+	compile ('com.vaadin:vaadin-themes:8.0.0')
 	compile libs.login
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 	compile('org.springframework.boot:spring-boot-starter-data-rest')

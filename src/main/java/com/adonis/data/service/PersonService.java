@@ -3,6 +3,7 @@ package com.adonis.data.service;
 import com.adonis.data.persons.Person;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -23,8 +24,13 @@ public class PersonService {
 
     public List<Person> findAll() {
         String sql = "SELECT * FROM persons";
-        List<Person> customers = jdbcTemplate.query(sql,
-                new BeanPropertyRowMapper(Person.class));
+        List<Person> customers = null;
+        try {
+            customers = jdbcTemplate.query(sql,
+                    new BeanPropertyRowMapper(Person.class));
+        } catch (Exception e) {
+            return Collections.emptyList();
+        }
         return customers;
     }
 
@@ -32,8 +38,13 @@ public class PersonService {
         if (custId == null) return null;
         String sql = "SELECT * FROM persons WHERE ID = ?";
 
-        Person customer = (Person) jdbcTemplate.queryForObject(
-                sql, new Object[]{custId}, new BeanPropertyRowMapper(Person.class));
+        Person customer = null;
+        try {
+            customer = (Person) jdbcTemplate.queryForObject(
+                    sql, new Object[]{custId}, new BeanPropertyRowMapper(Person.class));
+        } catch (Exception e) {
+            return null;
+        }
 
         return customer;
     }
@@ -89,34 +100,57 @@ public class PersonService {
                 customer.getId());
     }
 
-    public void insert(Person customer) {
-        if (customer == null) return;
-        jdbcTemplate.update(
-                "INSERT INTO persons (FIRST_NAME, LAST_NAME, EMAIL, LOGIN, PASSWORD," +
-                        " PICTURE, NOTES, DATE_OF_BIRTH) VALUES " +
-                        "(?,?,?,?,?,?,?,?)",
-                new Object[]{
-                        customer.getFirstName(),
-                        customer.getLastName(),
-                        customer.getEmail(),
-                        customer.getLogin(),
-                        customer.getPassword(),
-                        customer.getPicture(),
-                        customer.getNotes(),
-                        customer.getBirthDate()
+    public Person findLast() {
+        String sql = "SELECT * FROM persons ORDER BY ID DESC LIMIT 1";
 
-                });
+        Person person= null;
+        try {
+            person = (Person) jdbcTemplate.queryForObject(
+                    sql, new Object[]{}, new BeanPropertyRowMapper(Person.class));
+        } catch (Exception e) {
+            return null;
+        }
+
+        return person;
+    }
+
+    public Person insert(Person customer) {
+        if (customer == null) return null;
+        try {
+            jdbcTemplate.update(
+                    "INSERT INTO persons (FIRST_NAME, LAST_NAME, EMAIL, LOGIN, PASSWORD," +
+                            " PICTURE, NOTES, DATE_OF_BIRTH) VALUES " +
+                            "(?,?,?,?,?,?,?,?)",
+                    new Object[]{
+                            customer.getFirstName(),
+                            customer.getLastName(),
+                            customer.getEmail(),
+                            customer.getLogin(),
+                            customer.getPassword(),
+                            customer.getPicture(),
+                            customer.getNotes(),
+                            customer.getBirthDate()
+
+                    });
+        } catch (DataAccessException e) {
+            return null;
+        }
+     return findLast();
     }
 
     public Person save(Person customer) {
         if (customer == null) return null;
-        jdbcTemplate.update(
-                "UPDATE persons SET FIRST_NAME=?, LAST_NAME=?, EMAIL=? , LOGIN=?, PASSWORD=?, DATE_OF_BIRTH=?, PICTURE=?, NOTES=? " +
-                        "WHERE ID=?",
-                customer.getFirstName(), customer.getLastName(), customer.getEmail(),
-                customer.getLogin(), customer.getPassword(), customer.getBirthDate(),
-                customer.getPicture(), customer.getNotes(),
-                customer.getId());
+        try {
+            jdbcTemplate.update(
+                    "UPDATE persons SET FIRST_NAME=?, LAST_NAME=?, EMAIL=? , LOGIN=?, PASSWORD=?, DATE_OF_BIRTH=?, PICTURE=?, NOTES=? " +
+                            "WHERE ID=?",
+                    customer.getFirstName(), customer.getLastName(), customer.getEmail(),
+                    customer.getLogin(), customer.getPassword(), customer.getBirthDate(),
+                    customer.getPicture(), customer.getNotes(),
+                    customer.getId());
+        } catch (DataAccessException e) {
+            return null;
+        }
         return findByCustomerId(customer.getId());
     }
 

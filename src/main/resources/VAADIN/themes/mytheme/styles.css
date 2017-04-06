@@ -12941,6 +12941,7 @@ div.v-layout.v-horizontal.v-widget {
 
 .mytheme .valo-menu-responsive[width-range~="0-800px"] .valo-menuitems {
 	height: 100%;
+	width: 100%;
 	background-color: #4b4b4b;
 	background-image: -webkit-linear-gradient(right, #414141 0%, #4b4b4b 9px);
 	background-image: linear-gradient(to left,#414141 0%, #4b4b4b 9px);
@@ -12983,4 +12984,8 @@ div.v-layout.v-horizontal.v-widget {
 	display: inline-block;
 	width: 19px;
 	overflow: hidden;
+}
+.mytheme .backImage{
+	background: burlywood;
+    background-image: url(#{$login-background-image})
 }
