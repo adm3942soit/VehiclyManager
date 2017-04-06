@@ -39,7 +39,7 @@ public class Person extends AbstractEntity
 	@Column(name = "PASSWORD", nullable = true)
 	private String password;
 
-	@Column(name = "DATE_OF_BIRTH", nullable = true)
+	@Column(name = "BIRTH_DATE", nullable = true)
 	private Date birthDate;
 
 	private boolean remind = false;

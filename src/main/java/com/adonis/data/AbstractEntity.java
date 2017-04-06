@@ -8,8 +8,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
-import static java.lang.System.currentTimeMillis;
-
 @SuppressWarnings("serial")
 @MappedSuperclass
 @Getter
@@ -30,13 +28,13 @@ public abstract class AbstractEntity implements Serializable, Cloneable {
 
 	@PrePersist
 	protected void setCreatedDate() {
-		created = new Date(currentTimeMillis());
-		updated = new Date(currentTimeMillis());
+		created = new Date();
+		updated = new Date();
 	}
 
 	@PreUpdate
 	protected void setUpdatedDate() {
-		updated = new Date(currentTimeMillis());
+		updated = new Date();
 	}
 
 	@Override

@@ -92,7 +92,7 @@ public class PersonService {
     public void update(Person customer) {
         if (customer == null) return;
         jdbcTemplate.update(
-                "UPDATE persons SET FIRST_NAME=?, LAST_NAME=?, EMAIL=? , LOGIN=?, PASSWORD=?, DATE_OF_BIRTH=?, PICTURE=?, NOTES=? " +
+                "UPDATE persons SET FIRST_NAME=?, LAST_NAME=?, EMAIL=? , LOGIN=?, PASSWORD=?, BIRTH_DATE=?, PICTURE=?, NOTES=? " +
                         "WHERE ID=?",
                 customer.getFirstName(), customer.getLastName(), customer.getEmail(),
                 customer.getLogin(), customer.getPassword(), customer.getBirthDate(),
@@ -119,7 +119,7 @@ public class PersonService {
         try {
             jdbcTemplate.update(
                     "INSERT INTO persons (FIRST_NAME, LAST_NAME, EMAIL, LOGIN, PASSWORD," +
-                            " PICTURE, NOTES, DATE_OF_BIRTH) VALUES " +
+                            " PICTURE, NOTES, BIRTH_DATE) VALUES " +
                             "(?,?,?,?,?,?,?,?)",
                     new Object[]{
                             customer.getFirstName(),
@@ -142,7 +142,7 @@ public class PersonService {
         if (customer == null) return null;
         try {
             jdbcTemplate.update(
-                    "UPDATE persons SET FIRST_NAME=?, LAST_NAME=?, EMAIL=? , LOGIN=?, PASSWORD=?, DATE_OF_BIRTH=?, PICTURE=?, NOTES=? " +
+                    "UPDATE persons SET FIRST_NAME=?, LAST_NAME=?, EMAIL=? , LOGIN=?, PASSWORD=?, BIRTH_DATE=?, PICTURE=?, NOTES=? " +
                             "WHERE ID=?",
                     customer.getFirstName(), customer.getLastName(), customer.getEmail(),
                     customer.getLogin(), customer.getPassword(), customer.getBirthDate(),

@@ -67,6 +67,7 @@ public class VehicleService {
                         "VEHICLE_NMBR=?, " +
                         "LICENSE_NMBR=?, " +
                         "MAKE=?, " +
+                        "MODEL=?, " +
                         "YEAR=?, " +
                         "STATUS=?, " +
                         "VEHICLE_TYPE=?, " +
@@ -77,6 +78,7 @@ public class VehicleService {
                 vehicle.getVehicleNmbr(),
                 vehicle.getLicenseNmbr(),
                 vehicle.getMake(),
+                vehicle.getModel(),
                 vehicle.getYear(),
                 vehicle.getStatus(),
                 vehicle.getVehicleType(),
@@ -91,13 +93,14 @@ public class VehicleService {
         try {
             jdbcTemplate.update(
                     "INSERT INTO vehicles " +
-                            "(VEHICLE_NMBR, LICENSE_NMBR, MAKE, YEAR, STATUS," +
+                            "(VEHICLE_NMBR, LICENSE_NMBR, MAKE, MODEL, YEAR, STATUS," +
                             " VEHICLE_TYPE, ACTIVE, LOCATION, VIN_NUMBER) VALUES " +
                             "(?,?,?,?,?,?,?,?,?)",
                     new Object[]{
                             vehicle.getVehicleNmbr(),
                             vehicle.getLicenseNmbr(),
                             vehicle.getMake(),
+                            vehicle.getModel(),
                             vehicle.getYear(),
                             vehicle.getStatus(),
                             vehicle.getVehicleType(),
@@ -120,6 +123,7 @@ public class VehicleService {
                             "VEHICLE_NMBR=?, " +
                             "LICENSE_NMBR=?, " +
                             "MAKE=?, " +
+                            "MODEL=?, " +
                             "YEAR=?, " +
                             "STATUS=?, " +
                             "VEHICLE_TYPE=?, " +
@@ -130,6 +134,7 @@ public class VehicleService {
                     vehicle.getVehicleNmbr(),
                     vehicle.getLicenseNmbr(),
                     vehicle.getMake(),
+                    vehicle.getModel(),
                     vehicle.getYear(),
                     vehicle.getStatus(),
                     vehicle.getVehicleType(),

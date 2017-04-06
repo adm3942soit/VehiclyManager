@@ -6,6 +6,7 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.renderers.DateRenderer;
 import com.vaadin.ui.themes.ValoTheme;
 import org.vaadin.crudui.crud.CrudOperation;
 import org.vaadin.crudui.crud.impl.GridBasedCrudComponent;
@@ -47,6 +48,7 @@ public class VehiclesCrudView extends VerticalLayout implements View {
         vehiclesCrud.getCrudFormFactory().setDisabledPropertyIds(CrudOperation.ADD, "id", "created", "updated");
         vehiclesCrud.getCrudLayout().setWidth(90F, Unit.PERCENTAGE);
         vehiclesCrud.getGrid().setColumns("vehicleNmbr", "licenseNmbr", "make", "model", "year", "status", "vehicleType", "active", "location", "vinNumber");
+
     }
 
     @Override

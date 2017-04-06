@@ -8,6 +8,7 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.v7.ui.DateField;
 import org.vaadin.crudui.crud.CrudOperation;
 import org.vaadin.crudui.crud.impl.GridBasedCrudComponent;
 import org.vaadin.crudui.form.impl.GridLayoutCrudFormFactory;
@@ -54,10 +55,11 @@ public class PersonsCrudView extends VerticalLayout implements View {
         formFactory.setFieldType("password", com.vaadin.v7.ui.PasswordField.class);
         //formFactory.setFieldType("birthDate",com.vaadin.v7.ui.DateField.class);
         // formFactory.setFieldCreationListener("birthDate", field -> ((com.vaadin.v7.ui.DateField) field).setDateFormat("dd/mm/yy"));
-
         personsCrud.setCrudFormFactory(formFactory);
         personsCrud.getCrudLayout().setWidth(90F, Unit.PERCENTAGE);
         personsCrud.getGrid().setColumns("firstName", "lastName", "email", "login", "birthDate", "picture", "notes");
+        personsCrud.getGrid().getColumn("birthDate").setRenderer(new com.vaadin.v7.ui.renderers.DateRenderer("%1$te/%1$tm/%1$tY"));
+        personsCrud.getCrudFormFactory().setFieldCreationListener("birthDate", field -> ((DateField) field).setDateFormat("dd/MM/yyyy"));
 
 
     }

@@ -21,12 +21,10 @@ import java.util.function.Consumer;
 
 /**
  * Content of the UI when the user is logged in.
- * 
- * 
  */
 
 @NoArgsConstructor
-public class MainScreen extends HorizontalLayout implements View{
+public class MainScreen extends HorizontalLayout implements View {
     private Menu menu;
 
     public static final String NAME = "MainScreen";
@@ -44,10 +42,10 @@ public class MainScreen extends HorizontalLayout implements View{
         navigator.setErrorView(ErrorView.class);
         menu = new Menu(ui.service, ui.vehicleService, navigator);
         menu.setStyleName(ValoTheme.MENU_ROOT);
-        menu.addView(new VehiclesCrudView(ui.vehicleService), VehiclesCrudView.NAME,VehiclesCrudView.NAME, new ThemeResource("img/vehicles1.jpg"));
+        menu.addView(new VehiclesCrudView(ui.vehicleService), VehiclesCrudView.NAME, VehiclesCrudView.NAME, new ThemeResource("img/vehicles1.jpg"));
         menu.addView(new PersonsCrudView(ui.service), PersonsCrudView.NAME, PersonsCrudView.NAME, new ThemeResource("img/persons.jpg"));
-        menu.addView(ui.getLoginView(), "LOGOUT", "LOGOUT", new ThemeResource("img/logout.jpg"));
         menu.addView(new AboutView(), AboutView.VIEW_NAME, AboutView.VIEW_NAME, new ThemeResource("img/info.jpg"));
+        menu.addView(ui.getLoginView(), "LOGOUT", "LOGOUT", new ThemeResource("img/logout.jpg"));
 
         navigator.addViewChangeListener(viewChangeListener);
 
