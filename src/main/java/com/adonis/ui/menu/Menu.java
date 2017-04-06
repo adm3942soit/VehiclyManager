@@ -70,23 +70,13 @@ public class Menu extends CssLayout {
         top.addComponent(title);
         menuPart.addComponent(top);
 
-        // logout menu item
-        MenuBar logoutMenu = new MenuBar();
-        logoutMenu.setStyleName(VALO_MENUITEMS);
-        logoutMenu.addItem("Logout", new Command() {
 
-            @Override
-            public void menuSelected(MenuItem selectedItem) {
-                VaadinSession.getCurrent().getSession().invalidate();
-                Page.getCurrent().reload();
-            }
-        });
-
-        logoutMenu.addStyleName("user-menu");
-        menuPart.addComponent(logoutMenu);
-
+        HorizontalLayout personsLayout = new HorizontalLayout();
+        personsLayout.addStyleName(ValoTheme.MENU_ITEM);
+        personsLayout.setSpacing(false);
         MenuBar personsMenu = new MenuBar();
         personsMenu.setStyleName(VALO_MENUITEMS);
+
         personsMenu.addItem("Customers", new Command() {
 
             @Override
@@ -106,9 +96,14 @@ public class Menu extends CssLayout {
         });
 
         personsMenu.addStyleName("user-menu");
-        menuPart.addComponent(personsMenu);
+        Image personsImage = new Image(null, new ThemeResource("img/table-logo.png"));
+        personsLayout.addComponent(personsImage,0);
+        personsLayout.addComponent(personsMenu,1);
+        menuPart.addComponent(personsLayout);
 
-
+        HorizontalLayout vehiclesLayout = new HorizontalLayout();
+        vehiclesLayout.addStyleName(ValoTheme.MENU_ITEM);
+        vehiclesLayout.setSpacing(false);
         MenuBar vehiclesMenu = new MenuBar();
         vehiclesMenu.setStyleName(VALO_MENUITEMS);
         vehiclesMenu.addItem("Vehicles", new Command() {
@@ -130,7 +125,27 @@ public class Menu extends CssLayout {
         });
 
         vehiclesMenu.addStyleName("user-menu");
-        menuPart.addComponent(vehiclesMenu);
+
+        Image vehiclesImage = new Image(null, new ThemeResource("img/table-logo.png"));
+        vehiclesLayout.addComponent(vehiclesImage,0);
+        vehiclesLayout.addComponent(vehiclesMenu,1);
+
+        menuPart.addComponent(vehiclesLayout);
+
+        // logout menu item
+        MenuBar logoutMenu = new MenuBar();
+        logoutMenu.setStyleName(VALO_MENUITEMS);
+        logoutMenu.addItem("Logout", new Command() {
+
+            @Override
+            public void menuSelected(MenuItem selectedItem) {
+                VaadinSession.getCurrent().getSession().invalidate();
+                Page.getCurrent().reload();
+            }
+        });
+
+        logoutMenu.addStyleName("user-menu");
+        menuPart.addComponent(logoutMenu);
 
         // button for toggling the visibility of the menu when on a small screen
         final Button showMenu = new Button("Menu", new ClickListener() {
@@ -186,8 +201,8 @@ public class Menu extends CssLayout {
 
 
         formFactory.setFieldType("password", com.vaadin.v7.ui.PasswordField.class);
-        formFactory.setFieldType("birthDate",com.vaadin.v7.ui.DateField.class);
-        formFactory.setFieldCreationListener("birthDate", field -> ((com.vaadin.v7.ui.DateField) field).setDateFormat("dd/mm/yy"));
+        //formFactory.setFieldType("birthDate",com.vaadin.v7.ui.DateField.class);
+       // formFactory.setFieldCreationListener("birthDate", field -> ((com.vaadin.v7.ui.DateField) field).setDateFormat("dd/mm/yy"));
 
         personsCrud.setCrudFormFactory(formFactory);
         personsCrud.getCrudLayout().setWidth(90F, Unit.PERCENTAGE);
