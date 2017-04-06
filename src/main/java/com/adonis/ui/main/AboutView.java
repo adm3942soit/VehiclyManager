@@ -10,7 +10,7 @@ import com.vaadin.ui.VerticalLayout;
 
 public class AboutView extends VerticalLayout implements View {
 
-    public static final String VIEW_NAME = "About";
+    public static final String VIEW_NAME = "ABOUT";
 
     public AboutView() {
         CustomLayout aboutContent = new CustomLayout("aboutview");
