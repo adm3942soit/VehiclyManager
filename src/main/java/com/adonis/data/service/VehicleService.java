@@ -243,6 +243,7 @@ public class VehicleService {
         } catch (Exception e) {
             return;
         }
+        if(inputStream == null) return;
         Reader reader = new InputStreamReader(inputStream);
 
         try {

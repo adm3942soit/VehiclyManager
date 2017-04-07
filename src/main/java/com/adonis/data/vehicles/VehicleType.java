@@ -1,6 +1,6 @@
 package com.adonis.data.vehicles;
 
-import com.adonis.data.AbstractEntity;
+import com.adonis.data.Audit;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,7 +18,7 @@ import javax.persistence.Table;
 @Getter
 @Setter
 @NoArgsConstructor
-public class VehicleType extends AbstractEntity {
+public class VehicleType extends Audit {
     @Column(name = "TYPE", length = 50, unique = true)
     private String type;
     @Column(name = "PICTURE", length = 200)

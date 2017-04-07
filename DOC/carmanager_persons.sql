@@ -2,7 +2,7 @@ create table persons
 (
 	ID bigint not null auto_increment
 		primary key,
-	CREATED datetime null,
+	CREATED datetime default CURRENT_TIMESTAMP not null,
 	EMAIL varchar(255) not null,
 	FIRST_NAME varchar(255) not null,
 	LAST_NAME varchar(255) not null,
@@ -11,7 +11,7 @@ create table persons
 	PASSWORD varchar(255) null,
 	PICTURE varchar(255) null,
 	REMIND tinyint(1) default '0' null,
-	UPDATED datetime null,
+	UPDATED datetime default CURRENT_TIMESTAMP not null,
 	BIRTH_DATE date null,
 	constraint EMAIL
 		unique (EMAIL),
@@ -19,3 +19,4 @@ create table persons
 		unique (LOGIN)
 )
 ;
+

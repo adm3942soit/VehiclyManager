@@ -12,7 +12,7 @@ import java.util.Objects;
 @MappedSuperclass
 @Getter
 @Setter
-public abstract class AbstractEntity implements Serializable, Cloneable {
+public class Audit implements Serializable, Cloneable {
 
 
 	@Id
@@ -47,8 +47,8 @@ public abstract class AbstractEntity implements Serializable, Cloneable {
 			return false;
 		}
 
-		if (obj instanceof AbstractEntity && obj.getClass().equals(getClass())) {
-			return this.id.equals(((AbstractEntity) obj).id);
+		if (obj instanceof Audit && obj.getClass().equals(getClass())) {
+			return this.id.equals(((Audit) obj).id);
 		}
 
 		return false;
