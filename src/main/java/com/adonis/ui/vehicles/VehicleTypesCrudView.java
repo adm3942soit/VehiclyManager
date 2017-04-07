@@ -4,6 +4,7 @@ import com.adonis.data.service.VehicleService;
 import com.adonis.data.vehicles.VehicleType;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
@@ -21,7 +22,6 @@ public class VehicleTypesCrudView extends VerticalLayout implements View {
     public static final String NAME = "VEHICLE-TYPES VIEW";
 
     public final GridBasedCrudComponent<VehicleType> vehiclesCrud = new GridBasedCrudComponent<>(VehicleType.class, new HorizontalSplitCrudLayout());
-    private String picture;
 
     public VehicleTypesCrudView(VehicleService vehicleService) {
         setSizeFull();
@@ -39,7 +39,6 @@ public class VehicleTypesCrudView extends VerticalLayout implements View {
         vehiclesCrud.setAddOperation(new AddOperationListener<VehicleType>() {
             @Override
             public VehicleType perform(VehicleType vehicleType) {
-//                picture = vehicleType.getPicture();
                 return vehicleService.insertType(vehicleType);
             }
         });
@@ -49,18 +48,14 @@ public class VehicleTypesCrudView extends VerticalLayout implements View {
         vehiclesCrud.getCrudFormFactory().setVisiblePropertyIds("type", "picture");
         vehiclesCrud.getCrudFormFactory().setDisabledPropertyIds(CrudOperation.UPDATE, "id", "created", "updated");
         vehiclesCrud.getCrudFormFactory().setDisabledPropertyIds(CrudOperation.ADD, "id", "created", "updated");
-//        vehiclesCrud.getCrudFormFactory().setFieldProvider("picture", ()->new ImageField());
-//        vehiclesCrud.getCrudFormFactory().setFieldCreationListener("picture", field -> {
-//                    ImageField imageField = new ImageField((String) field.getValue());
-//                    imageField.setConverter(StringToImageConverter.class);
-//                });
-//        crud.setFieldType("status", ComboBox.class);
-//        crud.setFieldCreationListener("status", field -> {
-//            ComboBox comboBox = (ComboBox) field;
-//            comboBox.setContainerDataSource(new BeanItemContainer<>(CustomerStatus.class, EnumSet.allOf(CustomerStatus.class)));
-//            comboBox.setItemCaptionPropertyId("status");
-//        });
+        vehiclesCrud.getCrudFormFactory().setFieldType("picture", com.vaadin.v7.ui.TextField.class);
+        vehiclesCrud.getCrudFormFactory().setFieldCreationListener("picture", field -> {
+            com.vaadin.v7.ui.TextField textField = (com.vaadin.v7.ui.TextField) field;
+            textField.addStyleName(ValoTheme.TEXTFIELD_LARGE);
+            textField.addStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
+            textField.setIcon(new ThemeResource("img/SUV/2017LI.jpg"));
 
+        });
         vehiclesCrud.getCrudLayout().setWidth(90F, Unit.PERCENTAGE);
         vehiclesCrud.getGrid().setColumns("type", "picture");
 

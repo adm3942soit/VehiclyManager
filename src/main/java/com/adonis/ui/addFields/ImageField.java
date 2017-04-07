@@ -3,8 +3,11 @@ package com.adonis.ui.addFields;
 import com.adonis.data.vehicles.VehicleType;
 import com.google.common.base.Strings;
 import com.vaadin.annotations.PropertyId;
-import com.vaadin.server.ExternalResource;
-import com.vaadin.ui.*;
+import com.vaadin.server.ThemeResource;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.Image;
+import com.vaadin.ui.Layout;
 import com.vaadin.v7.data.Validator;
 import com.vaadin.v7.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.v7.data.fieldgroup.FieldGroup;
@@ -57,8 +60,9 @@ public class ImageField extends Form {
     public void doSetValue(String value) {
         this.value = value;
         if(value!=null) {
-            image = new Image(null, new ExternalResource(value));
+            image = new Image(null, new ThemeResource("img/SUV/2017LI.jpg"));//new ExternalResource(value));
         }
+        initContent();
     }
 
     @Override
