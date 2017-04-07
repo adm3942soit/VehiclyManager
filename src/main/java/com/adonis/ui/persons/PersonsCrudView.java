@@ -2,7 +2,6 @@ package com.adonis.ui.persons;
 
 import com.adonis.data.persons.Person;
 import com.adonis.data.service.PersonService;
-import com.adonis.data.vehicles.Vehicle;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Alignment;
@@ -21,13 +20,9 @@ public class PersonsCrudView extends VerticalLayout implements View {
 
     public static final String NAME = "CUSTOMER VIEW";
 
-    public final VerticalLayout personsArea = new VerticalLayout();
-    public final VerticalLayout vehiclesArea = new VerticalLayout();
-    public final GridBasedCrudComponent<Vehicle> vehiclesCrud = new GridBasedCrudComponent<>(Vehicle.class, new HorizontalSplitCrudLayout());
     public final GridBasedCrudComponent<Person> personsCrud = new GridBasedCrudComponent<>(Person.class, new HorizontalSplitCrudLayout());
 
     public PersonsCrudView(PersonService personService) {
-//        CustomLayout content = new CustomLayout("persons");
         setSizeFull();
         setStyleName(ValoTheme.FORMLAYOUT_LIGHT);
 

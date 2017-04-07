@@ -1,14 +1,20 @@
 package com.adonis.data.service;
 
 import com.adonis.data.vehicles.Vehicle;
+import com.adonis.data.vehicles.VehicleModel;
 import com.adonis.data.vehicles.VehicleType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -26,12 +32,38 @@ public class VehicleService {
                 new BeanPropertyRowMapper(Vehicle.class));
         return customers;
     }
+
     public List<VehicleType> findAllTypes() {
         String sql = "SELECT * FROM vehicle_types";
         List<VehicleType> customers = jdbcTemplate.query(sql,
                 new BeanPropertyRowMapper(VehicleType.class));
         return customers;
     }
+
+    public List<String> findAllTypesNames() {
+        String sql = "SELECT m.TYPE FROM vehicle_types m ";
+
+        List<String> customers = null;
+        try {
+            customers = (List<String>) jdbcTemplate.query(sql,
+                    new RowMapper<String>() {
+                        public String mapRow(ResultSet rs, int rowNum)
+                                throws SQLException {
+                            return rs.getString("type");
+                        }});
+        } catch (DataAccessException e) {
+            return Collections.emptyList();
+        }
+
+        return customers;
+                }
+
+        public List<VehicleModel> findAllModels () {
+            String sql = "SELECT * FROM vehicle_models";
+            List<VehicleModel> customers = jdbcTemplate.query(sql,
+                    new BeanPropertyRowMapper(VehicleModel.class));
+            return customers;
+        }
 
     public Vehicle findById(Long id) {
         if (id == null) return null;
@@ -51,6 +83,16 @@ public class VehicleService {
                 sql, new Object[]{id}, new BeanPropertyRowMapper(VehicleType.class));
 
         return vehicleType;
+    }
+
+    public VehicleModel findByIdModle(Long id) {
+        if (id == null) return null;
+        String sql = "SELECT * FROM vehicle_models WHERE ID = ?";
+
+        VehicleModel vehicleModel = (VehicleModel) jdbcTemplate.queryForObject(
+                sql, new Object[]{id}, new BeanPropertyRowMapper(VehicleModel.class));
+
+        return vehicleModel;
     }
 
     public Vehicle findLast() {
@@ -79,6 +121,20 @@ public class VehicleService {
         }
 
         return vehicleType;
+    }
+
+    public VehicleModel findLastModel() {
+        String sql = "SELECT * FROM vehicle_models ORDER BY ID DESC LIMIT 1";
+
+        VehicleModel vehicleModel = null;
+        try {
+            vehicleModel = (VehicleModel) jdbcTemplate.queryForObject(
+                    sql, new Object[]{}, new BeanPropertyRowMapper(VehicleModel.class));
+        } catch (Exception e) {
+            return null;
+        }
+
+        return vehicleModel;
     }
 
     public int findTotalVehicle() {
@@ -150,9 +206,10 @@ public class VehicleService {
         } catch (Exception e) {
             return null;
         }
-     return findLast();
+        return findLast();
 
     }
+
     public VehicleType insertType(VehicleType vehicleType) {
         if (vehicleType == null) return null;
         try {
@@ -169,6 +226,25 @@ public class VehicleService {
             return null;
         }
         return findLastType();
+    }
+
+    public VehicleModel insertModel(VehicleModel vehicleModel) {
+        if (vehicleModel == null) return null;
+        try {
+            jdbcTemplate.update(
+                    "INSERT INTO vehicle_models " +
+                            "(VEHICLE_TYPE, MODEL, COMMENT)" +
+                            " VALUES " +
+                            "(?, ?, ?)",
+                    new Object[]{
+                            vehicleModel.getVehicleType(),
+                            vehicleModel.getModel(),
+                            vehicleModel.getComment()
+                    });
+        } catch (Exception e) {
+            return null;
+        }
+        return findLastModel();
     }
 
     public Vehicle save(Vehicle vehicle) {
@@ -203,6 +279,7 @@ public class VehicleService {
         }
         return findById(vehicle.getId());
     }
+
     public VehicleType save(VehicleType vehicleType) {
         if (vehicleType == null) return null;
         try {
@@ -220,6 +297,25 @@ public class VehicleService {
         return findByIdType(vehicleType.getId());
     }
 
+    public VehicleModel save(VehicleModel vehicleModel) {
+        if (vehicleModel == null) return null;
+        try {
+            jdbcTemplate.update(
+                    "UPDATE vehicle_types SET " +
+                            "VEHICLE_TYPE=?, " +
+                            "MODEL=? " +
+                            "COMMENT=? " +
+                            "WHERE ID=?",
+                    vehicleModel.getVehicleType(),
+                    vehicleModel.getModel(),
+                    vehicleModel.getComment(),
+                    vehicleModel.getId());
+        } catch (Exception e) {
+            return null;
+        }
+        return findByIdModle(vehicleModel.getId());
+    }
+
     public void delete(Vehicle vehicle) {
         if (vehicle == null) return;
         jdbcTemplate.execute("DELETE FROM vehicles WHERE ID=" + vehicle.getId());
@@ -228,6 +324,11 @@ public class VehicleService {
     public void delete(VehicleType vehicleType) {
         if (vehicleType == null) return;
         jdbcTemplate.execute("DELETE FROM vehicle_types WHERE ID=" + vehicleType.getId());
+    }
+
+    public void delete(VehicleModel vehicleModel) {
+        if (vehicleModel == null) return;
+        jdbcTemplate.execute("DELETE FROM vehicle_models WHERE ID=" + vehicleModel.getId());
     }
 
     public void loadData() {
@@ -243,7 +344,7 @@ public class VehicleService {
         } catch (Exception e) {
             return;
         }
-        if(inputStream == null) return;
+        if (inputStream == null) return;
         Reader reader = new InputStreamReader(inputStream);
 
         try {
@@ -255,7 +356,7 @@ public class VehicleService {
                 String[] vehicle = line.split(cvsSplitBy);
 
                 Vehicle entry = new Vehicle();
-                 //todo
+                //todo
 
 
                 try {
@@ -282,6 +383,7 @@ public class VehicleService {
             }
         }
     }
+
     public void loadVechicleTypes() {
 
         String csvFile = "VechycleType.csv";

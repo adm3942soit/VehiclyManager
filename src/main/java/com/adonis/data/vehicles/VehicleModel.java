@@ -18,11 +18,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class VehicleModel extends Audit{
 
-
-    @ManyToOne(fetch = FetchType.EAGER)
     @Column(name = "VEHICLE_TYPE")
-    @JoinColumn(name = "ID")
-    private VehicleType vehicleType;
+    private String vehicleType;
 
     @Column(name = "MODEL", length = 100)
     private String model;

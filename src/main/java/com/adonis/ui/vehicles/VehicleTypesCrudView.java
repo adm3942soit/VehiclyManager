@@ -7,6 +7,7 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import org.vaadin.crudui.crud.AddOperationListener;
 import org.vaadin.crudui.crud.CrudOperation;
 import org.vaadin.crudui.crud.impl.GridBasedCrudComponent;
 import org.vaadin.crudui.form.impl.GridLayoutCrudFormFactory;
@@ -20,6 +21,7 @@ public class VehicleTypesCrudView extends VerticalLayout implements View {
     public static final String NAME = "VEHICLE-TYPES VIEW";
 
     public final GridBasedCrudComponent<VehicleType> vehiclesCrud = new GridBasedCrudComponent<>(VehicleType.class, new HorizontalSplitCrudLayout());
+    private String picture;
 
     public VehicleTypesCrudView(VehicleService vehicleService) {
         setSizeFull();
@@ -34,14 +36,31 @@ public class VehicleTypesCrudView extends VerticalLayout implements View {
     public void setVehiclesCrudProperties(VehicleService vehicleService) {
         GridLayoutCrudFormFactory<VehicleType> formFactory = new GridLayoutCrudFormFactory<>(VehicleType.class, 1, 5);
         vehiclesCrud.setCrudFormFactory(formFactory);
-
-        vehiclesCrud.setAddOperation(vehicle -> vehicleService.insertType(vehicle));
+        vehiclesCrud.setAddOperation(new AddOperationListener<VehicleType>() {
+            @Override
+            public VehicleType perform(VehicleType vehicleType) {
+//                picture = vehicleType.getPicture();
+                return vehicleService.insertType(vehicleType);
+            }
+        });
         vehiclesCrud.setUpdateOperation(vehicle -> vehicleService.save(vehicle));
         vehiclesCrud.setDeleteOperation(vehicle -> vehicleService.delete(vehicle));
         vehiclesCrud.setFindAllOperation(() -> vehicleService.findAllTypes());
         vehiclesCrud.getCrudFormFactory().setVisiblePropertyIds("type", "picture");
         vehiclesCrud.getCrudFormFactory().setDisabledPropertyIds(CrudOperation.UPDATE, "id", "created", "updated");
         vehiclesCrud.getCrudFormFactory().setDisabledPropertyIds(CrudOperation.ADD, "id", "created", "updated");
+//        vehiclesCrud.getCrudFormFactory().setFieldProvider("picture", ()->new ImageField());
+//        vehiclesCrud.getCrudFormFactory().setFieldCreationListener("picture", field -> {
+//                    ImageField imageField = new ImageField((String) field.getValue());
+//                    imageField.setConverter(StringToImageConverter.class);
+//                });
+//        crud.setFieldType("status", ComboBox.class);
+//        crud.setFieldCreationListener("status", field -> {
+//            ComboBox comboBox = (ComboBox) field;
+//            comboBox.setContainerDataSource(new BeanItemContainer<>(CustomerStatus.class, EnumSet.allOf(CustomerStatus.class)));
+//            comboBox.setItemCaptionPropertyId("status");
+//        });
+
         vehiclesCrud.getCrudLayout().setWidth(90F, Unit.PERCENTAGE);
         vehiclesCrud.getGrid().setColumns("type", "picture");
 
