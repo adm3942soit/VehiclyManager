@@ -1,3 +1,4 @@
+-- auto-generated definition
 create table vehicles
 (
 	ID bigint not null auto_increment
@@ -22,3 +23,4 @@ create table vehicles
 		unique (LICENSE_NMBR)
 )
 ;
+
