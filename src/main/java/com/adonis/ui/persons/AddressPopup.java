@@ -5,11 +5,12 @@ package com.adonis.ui.persons;
  */
 
 import com.adonis.data.persons.Address;
-import com.adonis.data.persons.Person;
-import com.adonis.data.service.PersonService;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.Window;
 import com.vaadin.ui.Window.CloseEvent;
 import com.vaadin.ui.Window.CloseListener;
 import com.vaadin.v7.data.fieldgroup.BeanFieldGroup;
