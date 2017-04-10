@@ -15,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -168,7 +169,8 @@ public class VehicleService {
                         "VEHICLE_TYPE=?, " +
                         "ACTIVE=?, " +
                         "LOCATION=?, " +
-                        "VIN_NUMBER=? " +
+                        "VIN_NUMBER=?, " +
+                        "UPDATED =? " +
                         "WHERE ID=?",
                 vehicle.getVehicleNmbr(),
                 vehicle.getLicenseNmbr(),
@@ -180,6 +182,7 @@ public class VehicleService {
                 vehicle.getActive(),
                 vehicle.getLocation(),
                 vehicle.getVinNumber(),
+                new Date(),
                 vehicle.getId());
     }
 
@@ -189,8 +192,8 @@ public class VehicleService {
             jdbcTemplate.update(
                     "INSERT INTO vehicles " +
                             "(VEHICLE_NMBR, LICENSE_NMBR, MAKE, MODEL, YEAR, STATUS," +
-                            " VEHICLE_TYPE, ACTIVE, LOCATION, VIN_NUMBER) VALUES " +
-                            "(?,?,?,?,?,?,?,?,?)",
+                            " VEHICLE_TYPE, ACTIVE, LOCATION, VIN_NUMBER, UPDATED, CREATED ) VALUES " +
+                            "(?,?,?,?,?,?,?,?,?, ?, ?)",
                     new Object[]{
                             vehicle.getVehicleNmbr(),
                             vehicle.getLicenseNmbr(),
@@ -202,6 +205,7 @@ public class VehicleService {
                             vehicle.getActive(),
                             vehicle.getLocation(),
                             vehicle.getVinNumber(),
+                            new Date(),new Date()
                     });
         } catch (Exception e) {
             return null;
@@ -215,12 +219,14 @@ public class VehicleService {
         try {
             jdbcTemplate.update(
                     "INSERT INTO vehicle_types " +
-                            "(TYPE, PICTURE)" +
+                            "(TYPE, PICTURE, UPDATED, CREATED )" +
                             " VALUES " +
-                            "(?, ?)",
+                            "(?, ?, ?, ?)",
                     new Object[]{
                             vehicleType.getType(),
-                            vehicleType.getPicture()
+                            vehicleType.getPicture(),
+                            new Date(),new Date()
+
                     });
         } catch (Exception e) {
             return null;
@@ -233,13 +239,14 @@ public class VehicleService {
         try {
             jdbcTemplate.update(
                     "INSERT INTO vehicle_models " +
-                            "(VEHICLE_TYPE, MODEL, COMMENT)" +
+                            "(VEHICLE_TYPE, MODEL, COMMENT, UPDATED, CREATED)" +
                             " VALUES " +
-                            "(?, ?, ?)",
+                            "(?, ?, ?, ?,?)",
                     new Object[]{
                             vehicleModel.getVehicleType(),
                             vehicleModel.getModel(),
-                            vehicleModel.getComment()
+                            vehicleModel.getComment(),
+                            new Date(), new Date()
                     });
         } catch (Exception e) {
             return null;
@@ -261,7 +268,8 @@ public class VehicleService {
                             "VEHICLE_TYPE=?, " +
                             "ACTIVE=?, " +
                             "LOCATION=?, " +
-                            "VIN_NUMBER=? " +
+                            "VIN_NUMBER=?, " +
+                            "UPDATED=? " +
                             "WHERE ID=?",
                     vehicle.getVehicleNmbr(),
                     vehicle.getLicenseNmbr(),
@@ -273,6 +281,7 @@ public class VehicleService {
                     vehicle.getActive(),
                     vehicle.getLocation(),
                     vehicle.getVinNumber(),
+                    new Date(),
                     vehicle.getId());
         } catch (Exception e) {
             return null;
@@ -286,10 +295,12 @@ public class VehicleService {
             jdbcTemplate.update(
                     "UPDATE vehicle_types SET " +
                             "TYPE=?, " +
-                            "PICTURE=? " +
+                            "PICTURE=?, " +
+                            "UPDATED=? " +
                             "WHERE ID=?",
                     vehicleType.getType(),
                     vehicleType.getPicture(),
+                    new Date(),
                     vehicleType.getId());
         } catch (Exception e) {
             return null;
@@ -303,12 +314,14 @@ public class VehicleService {
             jdbcTemplate.update(
                     "UPDATE vehicle_types SET " +
                             "VEHICLE_TYPE=?, " +
-                            "MODEL=? " +
-                            "COMMENT=? " +
+                            "MODEL=?, " +
+                            "COMMENT=?, " +
+                            "UPDATED=? " +
                             "WHERE ID=?",
                     vehicleModel.getVehicleType(),
                     vehicleModel.getModel(),
                     vehicleModel.getComment(),
+                    new Date(),
                     vehicleModel.getId());
         } catch (Exception e) {
             return null;
@@ -358,6 +371,8 @@ public class VehicleService {
                 Vehicle entry = new Vehicle();
                 //todo
 
+                entry.setCreated(new Date());
+                entry.setUpdated(new Date());
 
                 try {
                     insert(entry);
@@ -408,6 +423,9 @@ public class VehicleService {
                 VehicleType entry = new VehicleType();
                 entry.setType(vehicleType[1]);
                 entry.setPicture(vehicleType[2]);
+                entry.setCreated(new Date());
+                entry.setUpdated(new Date());
+
                 try {
                     insertType(entry);
                 } catch (Exception e) {

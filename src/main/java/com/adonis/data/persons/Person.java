@@ -5,6 +5,7 @@ import com.adonis.data.Audit;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -28,6 +29,7 @@ public class Person extends Audit
 	@Column(name = "LAST_NAME", nullable = false)
 	private String lastName;
 
+	@Email
 	@Column(name = "EMAIL", unique = true, nullable = false)
 	private String email;
 
@@ -40,7 +42,16 @@ public class Person extends Audit
 	@Column(name = "BIRTH_DATE", nullable = true)
 	private Date birthDate;
 
-	private boolean remind = false;
+//	@Column(name = "ADDRESS", nullable = true)
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "ADDRESS")
+	private Address address;
+
+	@Column(name = "PHONE_NUMBER", nullable = true)
+	private String phoneNumber;
+
+	@Column(name = "GENDER", nullable = true)
+	private String gender;
 
 	@Column(name = "PICTURE", nullable = true)
 	private String picture;

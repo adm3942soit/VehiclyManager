@@ -1,5 +1,6 @@
 package com.adonis.data.service;
 
+import com.adonis.data.persons.Address;
 import com.adonis.data.persons.Person;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,13 +29,27 @@ public class PersonService {
         List<Person> customers = null;
         try {
             customers = jdbcTemplate.query(sql,
-                    new BeanPropertyRowMapper(Person.class));
+                    new PersonRowMapper(this));
         } catch (Exception e) {
             return Collections.emptyList();
         }
         return customers;
     }
+    public Address findByAddressId(Long id) {
+        if (id == null) return null;
+        String sql = "SELECT * FROM address WHERE ID = ?";
+        Address address = null;
+        try {
+            address = (Address) jdbcTemplate.queryForObject(
+                    sql, new Object[]{id}, new BeanPropertyRowMapper(Address.class));
+        } catch (Exception e) {
+            return null;
+        }
 
+        return address;
+
+
+    }
     public Person findByCustomerId(Long custId) {
         if (custId == null) return null;
         String sql = "SELECT * FROM persons WHERE ID = ?";
@@ -41,7 +57,7 @@ public class PersonService {
         Person customer = null;
         try {
             customer = (Person) jdbcTemplate.queryForObject(
-                    sql, new Object[]{custId}, new BeanPropertyRowMapper(Person.class));
+                    sql, new Object[]{custId}, new PersonRowMapper(this));
         } catch (Exception e) {
             return null;
         }
@@ -58,7 +74,7 @@ public class PersonService {
         Person customer = null;
         try {
             customer = (Person) jdbcTemplate.queryForObject(
-                    sql, new Object[]{login}, new BeanPropertyRowMapper(Person.class));
+                    sql, new Object[]{login}, new PersonRowMapper(this));
         } catch (Exception e) {
             return null;
         }
@@ -71,7 +87,7 @@ public class PersonService {
         try {
             person = (Person) jdbcTemplate.queryForObject(
                     "SELECT * FROM persons p WHERE p.FIRST_NAME = ? and p.LAST_NAME = ? and p.EMAIL = ?",
-                    new Object[]{firstName, lastName, email}, new BeanPropertyRowMapper(Person.class)
+                    new Object[]{firstName, lastName, email}, new PersonRowMapper(this)
             );
         } catch (Exception e) {
             return null;
@@ -92,21 +108,32 @@ public class PersonService {
     public void update(Person customer) {
         if (customer == null) return;
         jdbcTemplate.update(
-                "UPDATE persons SET FIRST_NAME=?, LAST_NAME=?, EMAIL=? , LOGIN=?, PASSWORD=?, BIRTH_DATE=?, PICTURE=?, NOTES=? " +
+                "UPDATE persons SET FIRST_NAME=?, LAST_NAME=?, EMAIL=? , LOGIN=?, PASSWORD=?, " +
+                        "BIRTH_DATE=?, PICTURE=?, NOTES=?, UPDATED=? " +
                         "WHERE ID=?",
                 customer.getFirstName(), customer.getLastName(), customer.getEmail(),
                 customer.getLogin(), customer.getPassword(), customer.getBirthDate(),
-                customer.getPicture(), customer.getNotes(),
+                customer.getPicture(), customer.getNotes(), new Date(),
                 customer.getId());
     }
-
+    public Address findLastAddress(){
+        String sql = "SELECT * FROM address ORDER BY ID DESC LIMIT 1";
+        Address address;
+        try {
+            address = (Address) jdbcTemplate.queryForObject(
+                    sql, new Object[]{}, new BeanPropertyRowMapper(Address.class));
+        } catch (Exception e) {
+            return null;
+        }
+      return address;
+    }
     public Person findLast() {
         String sql = "SELECT * FROM persons ORDER BY ID DESC LIMIT 1";
 
-        Person person= null;
+        Person person = null;
         try {
             person = (Person) jdbcTemplate.queryForObject(
-                    sql, new Object[]{}, new BeanPropertyRowMapper(Person.class));
+                    sql, new Object[]{}, new PersonRowMapper(this));
         } catch (Exception e) {
             return null;
         }
@@ -114,13 +141,35 @@ public class PersonService {
         return person;
     }
 
-    public Person insert(Person customer) {
-        if (customer == null) return null;
+    public Address insert(Address address) {
+        if (address == null) return null;
         try {
             jdbcTemplate.update(
+                    "INSERT INTO address (STREET, ZIP, CITY, COUNTRY, CREATED, UPDATED)" +
+                            "  VALUES " +
+                            "(?,?,?,?, ?, ?)",
+                    new Object[]{
+                            address.getStreet(),
+                            address.getZip(),
+                            address.getCity(),
+                            address.getCountry(),
+                            new Date(), new Date()
+                    });
+        } catch (DataAccessException e) {
+            return null;
+        }
+     return findLastAddress();
+    }
+
+    public Person insert(Person customer) {
+        if (customer == null) return null;
+        Address address = null;
+        try {
+            if(customer.getAddress()!=null)address = insert(customer.getAddress());
+            jdbcTemplate.update(
                     "INSERT INTO persons (FIRST_NAME, LAST_NAME, EMAIL, LOGIN, PASSWORD," +
-                            " PICTURE, NOTES, BIRTH_DATE) VALUES " +
-                            "(?,?,?,?,?,?,?,?)",
+                            " PICTURE, NOTES, BIRTH_DATE, GENDER, PHONE_NUMBER, ADDRESS, CREATED, UPDATED) VALUES " +
+                            "(?,?,?,?,?,?,?,?, ?, ?,?, ?, ?)",
                     new Object[]{
                             customer.getFirstName(),
                             customer.getLastName(),
@@ -129,24 +178,32 @@ public class PersonService {
                             customer.getPassword(),
                             customer.getPicture(),
                             customer.getNotes(),
-                            customer.getBirthDate()
+                            customer.getBirthDate(),
+                            customer.getGender(),
+                            customer.getPhoneNumber(),
+                            address!=null?address.getId():null,
+                            new Date(),new Date()
 
                     });
         } catch (DataAccessException e) {
             return null;
         }
-     return findLast();
+        return findLast();
     }
 
     public Person save(Person customer) {
         if (customer == null) return null;
+        Address address = null;
         try {
+            if(customer.getAddress()!=null)address = insert(customer.getAddress());
             jdbcTemplate.update(
-                    "UPDATE persons SET FIRST_NAME=?, LAST_NAME=?, EMAIL=? , LOGIN=?, PASSWORD=?, BIRTH_DATE=?, PICTURE=?, NOTES=? " +
+                    "UPDATE persons SET FIRST_NAME=?, LAST_NAME=?, EMAIL=? , LOGIN=?, PASSWORD=?, " +
+                            "BIRTH_DATE=?, PICTURE=?, NOTES=?, GENDER=?, PHONE_NUMBER=?, ADDRESS=?, UPDATED=? " +
                             "WHERE ID=?",
                     customer.getFirstName(), customer.getLastName(), customer.getEmail(),
                     customer.getLogin(), customer.getPassword(), customer.getBirthDate(),
-                    customer.getPicture(), customer.getNotes(),
+                    customer.getPicture(), customer.getNotes(),customer.getGender(), customer.getPhoneNumber(),
+                    address!=null?address.getId():null, new Date(),
                     customer.getId());
         } catch (DataAccessException e) {
             return null;
@@ -188,9 +245,14 @@ public class PersonService {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                entry.setRemind(Math.random() > 0.5);
+//                entry.setRemind(Math.random() > 0.5);
                 if (person.length == 6) entry.setPicture(person[5]);
                 if (person.length == 7) entry.setNotes(person[6]);
+                entry.setAddress(new Address());
+                entry.setPhoneNumber("");
+                entry.setGender("");
+                entry.setCreated(new Date());
+                entry.setUpdated(new Date());
                 try {
                     insert(entry);
                 } catch (Exception e) {
