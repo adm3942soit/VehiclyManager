@@ -52,7 +52,7 @@ public class PersonsCrudView extends VerticalLayout implements View {
 
         formFactory.setFieldType("password", com.vaadin.v7.ui.PasswordField.class);
         formFactory.setFieldType("address", AddressPopup.class);
-        formFactory.setFieldProvider("address", () -> new AddressPopup(personService, personsCrud.getGridContainer().getItem("id")));
+        formFactory.setFieldProvider("address", () -> new AddressPopup());
         formFactory.setFieldCreationListener("address", field -> {
               AddressPopup address = (AddressPopup) field;
               if(((Person)personsCrud.getGrid().getSelectedRow())!=null) address.setInternalValue(((Person)personsCrud.getGrid().getSelectedRow()).getAddress());

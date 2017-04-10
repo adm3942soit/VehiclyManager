@@ -19,12 +19,7 @@ import com.vaadin.v7.data.util.BeanItem;
 public class AddressPopup extends com.vaadin.v7.ui.CustomField<Address> {
 
     private FieldGroup fieldGroup = new BeanFieldGroup<Address>(Address.class);
-    PersonService personService;
-    Long personId ;
-    public Address homeAddress = new Address();
-    public AddressPopup(PersonService personService, com.vaadin.v7.data.util.BeanItem item) {
-        this.personService = personService;
-        this.personId = item!=null?((Person)item.getBean()).getId():null;//((Person)item).getId();
+    public AddressPopup() {
     }
 
     @Override
@@ -59,7 +54,6 @@ public class AddressPopup extends com.vaadin.v7.ui.CustomField<Address> {
                     address.setCountry(country.getValue());
                     address.setStreet(street.getValue());
                     address.setZip(zip.getValue());
-//                    homeAddress = personService.insert(address);
                     fieldGroup.commit();
 
                 } catch (FieldGroup.CommitException ex) {
@@ -82,7 +76,7 @@ public class AddressPopup extends com.vaadin.v7.ui.CustomField<Address> {
 
     @Override
     public void setInternalValue(Address address) {
-        Address currentAddress = address!=null?address:homeAddress!=null?homeAddress:new Address();
+        Address currentAddress = address!=null?address:new Address();
         super.setInternalValue(currentAddress);
         fieldGroup.setItemDataSource(new BeanItem<Address>(currentAddress));
     }

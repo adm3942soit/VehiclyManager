@@ -1,3 +1,4 @@
+-- auto-generated definition
 create table persons
 (
 	ID bigint not null auto_increment
