@@ -19,7 +19,7 @@ import java.util.function.Consumer;
 /**
  * Created by oksdud on 07.04.2017.
  */
-public class ImageField extends Form {
+public class VehicleTypeImageField extends Form {
 
     private String value;
     private Image  image;
@@ -29,17 +29,17 @@ public class ImageField extends Form {
     @PropertyId("picture")
     private com.vaadin.v7.ui.TextField textField = new com.vaadin.v7.ui.TextField("Picture");
 
-    public ImageField() {
+    public VehicleTypeImageField() {
         super(new FormLayout());
         initContent();
     }
 
-    public ImageField(Layout formLayout, String value) {
+    public VehicleTypeImageField(Layout formLayout, String value) {
         super(formLayout);
         this.value = value;
         initContent();
     }
-    public ImageField( String value) {
+    public VehicleTypeImageField(String value) {
         super(new FormLayout());
         this.value = value;
         initContent();

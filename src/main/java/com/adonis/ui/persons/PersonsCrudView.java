@@ -2,6 +2,7 @@ package com.adonis.ui.persons;
 
 import com.adonis.data.persons.Person;
 import com.adonis.data.service.PersonService;
+import com.adonis.ui.addFields.PersonImageField;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Alignment;
@@ -9,8 +10,10 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import com.vaadin.v7.ui.ComboBox;
 import com.vaadin.v7.ui.DateField;
+import com.vaadin.v7.ui.Field;
 import org.vaadin.crudui.crud.CrudOperation;
 import org.vaadin.crudui.crud.impl.GridBasedCrudComponent;
+import org.vaadin.crudui.form.FieldProvider;
 import org.vaadin.crudui.form.impl.GridLayoutCrudFormFactory;
 import org.vaadin.crudui.layout.impl.HorizontalSplitCrudLayout;
 
@@ -44,13 +47,25 @@ public class PersonsCrudView extends VerticalLayout implements View {
         personsCrud.setFindAllOperation(() -> personService.findAll());
 
         GridLayoutCrudFormFactory<Person> formFactory = new GridLayoutCrudFormFactory<>(Person.class, 1, 10);
-
         formFactory.setVisiblePropertyIds("firstName", "lastName", "email", "phoneNumber", "gender","login","password","birthDate", "picture", "notes", "address");
         formFactory.setDisabledPropertyIds(CrudOperation.UPDATE, "id", "created", "updated");
         formFactory.setDisabledPropertyIds(CrudOperation.ADD, "id", "created", "updated");
 
 
         formFactory.setFieldType("password", com.vaadin.v7.ui.PasswordField.class);
+        formFactory.setFieldProvider("picture", new FieldProvider() {
+            @Override
+            public Field buildField() {
+                PersonImageField imageField =
+                ((Person) personsCrud.getGrid().getSelectedRow()) != null ?
+                        new PersonImageField(((Person) personsCrud.getGrid().getSelectedRow()).getPicture(), ((Person) personsCrud.getGrid().getSelectedRow())):
+                        new PersonImageField();
+                if(((Person)personsCrud.getGrid().getSelectedRow())!=null)
+                    imageField.setInternalValue((((Person)personsCrud.getGrid().getSelectedRow()).getPicture()));
+                return imageField;
+            }
+        });
+
         formFactory.setFieldType("address", AddressPopup.class);
         formFactory.setFieldProvider("address", () -> new AddressPopup());
         formFactory.setFieldCreationListener("address", field -> {
@@ -65,7 +80,6 @@ public class PersonsCrudView extends VerticalLayout implements View {
             com.vaadin.v7.ui.ComboBox comboBox = (com.vaadin.v7.ui.ComboBox) field;
             comboBox.addItem(gender[0]);
             comboBox.addItem(gender[1]);
-//            comboBox.setContainerDataSource(new BeanItemContainer<>(String.class, Arrays.asList(gender)));
         });
 
         personsCrud.setCrudFormFactory(formFactory);
