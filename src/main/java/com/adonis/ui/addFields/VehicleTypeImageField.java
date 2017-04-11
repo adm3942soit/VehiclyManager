@@ -1,99 +1,80 @@
 package com.adonis.ui.addFields;
 
 import com.adonis.data.vehicles.VehicleType;
-import com.google.common.base.Strings;
-import com.vaadin.annotations.PropertyId;
-import com.vaadin.server.ThemeResource;
+import com.vaadin.server.ExternalResource;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.Image;
-import com.vaadin.ui.Layout;
-import com.vaadin.v7.data.Validator;
-import com.vaadin.v7.data.fieldgroup.BeanFieldGroup;
-import com.vaadin.v7.data.fieldgroup.FieldGroup;
-import com.vaadin.v7.ui.Form;
-
-import java.util.Spliterator;
-import java.util.function.Consumer;
 
 /**
  * Created by oksdud on 07.04.2017.
  */
-public class VehicleTypeImageField extends Form {
+public class VehicleTypeImageField extends com.vaadin.v7.ui.CustomField<String> {
 
     private String value;
     private Image  image;
-    private FieldGroup fieldGroup;
-
-
-    @PropertyId("picture")
-    private com.vaadin.v7.ui.TextField textField = new com.vaadin.v7.ui.TextField("Picture");
+    private VehicleType vehicleType;
+    private FormLayout layout = new FormLayout();
+    private com.vaadin.v7.ui.TextField textField = new com.vaadin.v7.ui.TextField("");
 
     public VehicleTypeImageField() {
-        super(new FormLayout());
-        initContent();
     }
 
-    public VehicleTypeImageField(Layout formLayout, String value) {
-        super(formLayout);
+    public VehicleTypeImageField(String value, VehicleType type) {
         this.value = value;
-        initContent();
-    }
-    public VehicleTypeImageField(String value) {
-        super(new FormLayout());
-        this.value = value;
-        initContent();
-    }
-
-    protected Component initContent() {
-        FormLayout layout = new FormLayout();
-        if(image!=null) {
-            layout.addComponent(image);
-        }
-        if(value!=null)textField.setValue(value);
-        layout.addComponent(textField);
-        fieldGroup = new BeanFieldGroup<VehicleType>(VehicleType.class);
-        fieldGroup.bind(textField, "picture");
-        return layout;
-    }
-
-    public void doSetValue(String value) {
-        this.value = value;
+        this.vehicleType = type;
         if(value!=null) {
-            image = new Image(null, new ThemeResource("img/SUV/2017LI.jpg"));//new ExternalResource(value));
-        }
-        initContent();
-    }
+            image = new Image(null, new ExternalResource(value));//new ExternalResource(value));
+            textField.setValue(value);
 
+        }
+
+    }
     @Override
-    public String getValue() {
+    public Object getConvertedValue() {
         return this.value;
     }
 
+    @Override
+    protected Component initContent() {
+        if(value!=null) {
+            image = new Image(null, new ExternalResource(value));//new ExternalResource(value));
+            textField.setValue(value);
+
+        }
+        if(image!=null) {
+            image.setWidth(90, Unit.PIXELS);
+            image.setHeight(90, Unit.PIXELS);
+            layout.addComponent(image);
+        }
+        layout.addComponent(textField);
+        textField.addListener(new Listener() {
+            @Override
+            public void componentEvent(Event event) {
+                VehicleTypeImageField.super.setInternalValue(textField.getValue());
+                setInternalValue(textField.getValue());
+            }
+        });
+        return layout;
+    }
+
 
     @Override
-    public boolean isEmpty() {
-        return Strings.isNullOrEmpty(this.value);
+    public Class<? extends String> getType() {
+        return String.class;
     }
 
     @Override
-    public void clear() {
-        this.value = "";
-    }
+    public void setInternalValue(String picture) {
+        String curPicture = picture!=null?picture:"";
+        super.setInternalValue(curPicture);
+        this.value = curPicture;
+        if( image == null ) image = new Image(null, new ExternalResource(value));//new ExternalResource(value));
+        textField.setValue(value);
+        image.setSource(new ExternalResource(curPicture));
+        image.setWidth(90, Unit.PIXELS);
+        image.setHeight(90, Unit.PIXELS);
 
-    @Override
-    public void forEach(Consumer<? super Component> action) {
-
-    }
-
-    @Override
-    public Spliterator<Component> spliterator() {
-        return null;
-    }
-
-    @Override
-    public void addValidator(Validator validator) {
-        return;
     }
 
 }

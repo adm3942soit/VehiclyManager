@@ -6,7 +6,6 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.renderers.DateRenderer;
 import com.vaadin.ui.themes.ValoTheme;
 import org.vaadin.crudui.crud.CrudOperation;
 import org.vaadin.crudui.crud.impl.GridBasedCrudComponent;
@@ -23,7 +22,6 @@ public class VehiclesCrudView extends VerticalLayout implements View {
     public final GridBasedCrudComponent<Vehicle> vehiclesCrud = new GridBasedCrudComponent<>(Vehicle.class, new HorizontalSplitCrudLayout());
 
     public VehiclesCrudView(VehicleService vehicleService) {
-//        CustomLayout content = new CustomLayout("persons");
         setSizeFull();
         setStyleName(ValoTheme.FORMLAYOUT_LIGHT);
 
