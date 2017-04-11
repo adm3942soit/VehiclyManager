@@ -3,6 +3,7 @@ package com.adonis.data.service;
 import com.adonis.data.vehicles.Vehicle;
 import com.adonis.data.vehicles.VehicleModel;
 import com.adonis.data.vehicles.VehicleType;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -32,6 +33,14 @@ public class VehicleService {
         List<Vehicle> customers = jdbcTemplate.query(sql,
                 new BeanPropertyRowMapper(Vehicle.class));
         return customers;
+    }
+    public List<String> findAllNames() {
+
+        List<Vehicle> vehicles = findAll();
+        if(vehicles==null || vehicles.isEmpty()) return Collections.EMPTY_LIST;
+        List<String> names = Lists.newArrayList();
+        vehicles.forEach(vehicle -> {names.add(vehicle.getVehicleNmbr());});
+        return names;
     }
 
     public List<VehicleType> findAllTypes() {

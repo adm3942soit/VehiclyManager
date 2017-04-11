@@ -29,6 +29,9 @@ public class Person extends Audit
 	@Column(name = "LAST_NAME", nullable = false)
 	private String lastName;
 
+	@Column(name = "NAME", nullable = false)
+	private String name;
+
 	@Email
 	@Column(name = "EMAIL", unique = true, nullable = false)
 	private String email;

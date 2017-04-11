@@ -3,6 +3,7 @@ package com.adonis.data.service;
 import com.adonis.data.persons.Address;
 import com.adonis.data.persons.Person;
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -35,6 +36,17 @@ public class PersonService {
         }
         return customers;
     }
+
+    public List<String> findAllNames() {
+        List<Person> customers = findAll();
+        if (customers == null || customers.isEmpty()) return Collections.EMPTY_LIST;
+        List<String> names = Lists.newArrayList();
+        customers.forEach(person -> {
+            names.add(person.getName());//person.getFirstName() + " " + person.getLastName()
+        });
+        return names;
+    }
+
     public Address findByAddressId(Long id) {
         if (id == null) return null;
         String sql = "SELECT * FROM address WHERE ID = ?";
@@ -50,6 +62,7 @@ public class PersonService {
 
 
     }
+
     public Person findByCustomerId(Long custId) {
         if (custId == null) return null;
         String sql = "SELECT * FROM persons WHERE ID = ?";
@@ -86,7 +99,7 @@ public class PersonService {
         Person person = null;
         try {
             person = (Person) jdbcTemplate.queryForObject(
-                    "SELECT * FROM persons p WHERE p.FIRST_NAME = ? and p.LAST_NAME = ? and p.EMAIL = ?",
+                    "SELECT * FROM persons p WHERE p.FIRST_NAME = ? AND p.LAST_NAME = ? AND p.EMAIL = ?",
                     new Object[]{firstName, lastName, email}, new PersonRowMapper(this)
             );
         } catch (Exception e) {
@@ -109,14 +122,16 @@ public class PersonService {
         if (customer == null) return;
         jdbcTemplate.update(
                 "UPDATE persons SET FIRST_NAME=?, LAST_NAME=?, EMAIL=? , LOGIN=?, PASSWORD=?, " +
-                        "BIRTH_DATE=?, PICTURE=?, NOTES=?, UPDATED=? " +
+                        "BIRTH_DATE=?, PICTURE=?, NOTES=?, NAME=?, UPDATED=? " +
                         "WHERE ID=?",
                 customer.getFirstName(), customer.getLastName(), customer.getEmail(),
                 customer.getLogin(), customer.getPassword(), customer.getBirthDate(),
-                customer.getPicture(), customer.getNotes(), new Date(),
+                customer.getPicture(), customer.getNotes(), customer.getFirstName().trim()+" "+customer.getLastName().trim(),
+                new Date(),
                 customer.getId());
     }
-    public Address findLastAddress(){
+
+    public Address findLastAddress() {
         String sql = "SELECT * FROM address ORDER BY ID DESC LIMIT 1";
         Address address;
         try {
@@ -125,8 +140,9 @@ public class PersonService {
         } catch (Exception e) {
             return null;
         }
-      return address;
+        return address;
     }
+
     public Person findLast() {
         String sql = "SELECT * FROM persons ORDER BY ID DESC LIMIT 1";
 
@@ -158,18 +174,18 @@ public class PersonService {
         } catch (DataAccessException e) {
             return null;
         }
-     return findLastAddress();
+        return findLastAddress();
     }
 
     public Person insert(Person customer) {
         if (customer == null) return null;
         Address address = null;
         try {
-            if(customer.getAddress()!=null)address = insert(customer.getAddress());
+            if (customer.getAddress() != null) address = insert(customer.getAddress());
             jdbcTemplate.update(
                     "INSERT INTO persons (FIRST_NAME, LAST_NAME, EMAIL, LOGIN, PASSWORD," +
-                            " PICTURE, NOTES, BIRTH_DATE, GENDER, PHONE_NUMBER, ADDRESS, CREATED, UPDATED) VALUES " +
-                            "(?,?,?,?,?,?,?,?, ?, ?,?, ?, ?)",
+                            " PICTURE, NOTES, BIRTH_DATE, GENDER, PHONE_NUMBER, ADDRESS, NAME, CREATED, UPDATED) VALUES " +
+                            "(?,?,?,?,?,?,?,?, ?, ?,?, ?, ?, ?)",
                     new Object[]{
                             customer.getFirstName(),
                             customer.getLastName(),
@@ -181,8 +197,9 @@ public class PersonService {
                             customer.getBirthDate(),
                             customer.getGender(),
                             customer.getPhoneNumber(),
-                            address!=null?address.getId():null,
-                            new Date(),new Date()
+                            address != null ? address.getId() : null,
+                            customer.getFirstName().trim()+" "+customer.getLastName().trim(),
+                            new Date(), new Date()
 
                     });
         } catch (DataAccessException e) {
@@ -195,16 +212,20 @@ public class PersonService {
         if (customer == null) return null;
         Address address = null;
         try {
-            if(customer.getAddress()!=null)address = insert(customer.getAddress());
+            if (customer.getAddress() != null) address = insert(customer.getAddress());
             jdbcTemplate.update(
                     "UPDATE persons SET FIRST_NAME=?, LAST_NAME=?, EMAIL=? , LOGIN=?, PASSWORD=?, " +
-                            "BIRTH_DATE=?, PICTURE=?, NOTES=?, GENDER=?, PHONE_NUMBER=?, ADDRESS=?, UPDATED=? " +
+                            "BIRTH_DATE=?, PICTURE=?, NOTES=?, GENDER=?, PHONE_NUMBER=?, ADDRESS=?, NAME=?, UPDATED=? " +//
                             "WHERE ID=?",
+                    new Object[]{
                     customer.getFirstName(), customer.getLastName(), customer.getEmail(),
                     customer.getLogin(), customer.getPassword(), customer.getBirthDate(),
-                    customer.getPicture(), customer.getNotes(),customer.getGender(), customer.getPhoneNumber(),
-                    address!=null?address.getId():null, new Date(),
-                    customer.getId());
+                    customer.getPicture(), customer.getNotes(), customer.getGender(), customer.getPhoneNumber(),
+                    address != null ? address.getId() : null,
+                    customer.getFirstName().trim()+" "+customer.getLastName().trim(),
+                    new Date(),
+                    customer.getId()}//, Person.class
+            );
         } catch (DataAccessException e) {
             return null;
         }
@@ -251,6 +272,7 @@ public class PersonService {
                 entry.setAddress(new Address());
                 entry.setPhoneNumber("");
                 entry.setGender("");
+                entry.setName(entry.getFirstName()+" "+entry.getLastName());
                 entry.setCreated(new Date());
                 entry.setUpdated(new Date());
                 try {
