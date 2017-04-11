@@ -47,7 +47,7 @@ public class VehicleTypesCrudView extends VerticalLayout implements View {
         vehiclesCrud.setUpdateOperation(vehicle -> vehicleService.save(vehicle));
         vehiclesCrud.setDeleteOperation(vehicle -> vehicleService.delete(vehicle));
         vehiclesCrud.setFindAllOperation(() -> vehicleService.findAllTypes());
-        vehiclesCrud.getCrudFormFactory().setVisiblePropertyIds("type", "picture");
+        vehiclesCrud.getCrudFormFactory().setVisiblePropertyIds("picture", "type" );
         vehiclesCrud.getCrudFormFactory().setDisabledPropertyIds(CrudOperation.UPDATE, "id", "created", "updated");
         vehiclesCrud.getCrudFormFactory().setDisabledPropertyIds(CrudOperation.ADD, "id", "created", "updated");
         vehiclesCrud.getCrudFormFactory().setFieldProvider("picture",
@@ -72,7 +72,6 @@ public class VehicleTypesCrudView extends VerticalLayout implements View {
 //            textField.setIcon(new ThemeResource("img/SUV/2017LI.jpg"));
 //
 //        });
-        vehiclesCrud.getCrudLayout().setWidth(90F, Unit.PERCENTAGE);
         vehiclesCrud.getGrid().setColumns("type", "picture");
 
     }

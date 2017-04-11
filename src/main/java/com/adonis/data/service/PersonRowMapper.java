@@ -32,10 +32,6 @@ public class PersonRowMapper implements RowMapper {
         customer.setBirthDate(rs.getDate("BIRTH_DATE"));
         customer.setCreated(rs.getDate("CREATED"));
         customer.setUpdated(rs.getDate("UPDATED"));
-
-//            customer.setCustId(rs.getInt("CUST_ID"));
-//            customer.setName(rs.getString("NAME"));
-//            customer.setAge(rs.getInt("AGE"));
         return customer;
     }
 }

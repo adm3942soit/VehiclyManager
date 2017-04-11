@@ -105,7 +105,7 @@ public class VehicleService {
         return vehicleType;
     }
 
-    public VehicleModel findByIdModle(Long id) {
+    public VehicleModel findByIdModel(Long id) {
         if (id == null) return null;
         String sql = "SELECT * FROM vehicle_models WHERE ID = ?";
 
@@ -189,6 +189,7 @@ public class VehicleService {
                         "ACTIVE=?, " +
                         "LOCATION=?, " +
                         "VIN_NUMBER=?, " +
+                        "PRICE=?, " +
                         "UPDATED =? " +
                         "WHERE ID=?",
                 vehicle.getVehicleNmbr(),
@@ -201,6 +202,7 @@ public class VehicleService {
                 vehicle.getActive(),
                 vehicle.getLocation(),
                 vehicle.getVinNumber(),
+                vehicle.getPrice(),
                 new Date(),
                 vehicle.getId());
     }
@@ -211,7 +213,7 @@ public class VehicleService {
             jdbcTemplate.update(
                     "INSERT INTO vehicles " +
                             "(VEHICLE_NMBR, LICENSE_NMBR, MAKE, MODEL, YEAR, STATUS," +
-                            " VEHICLE_TYPE, ACTIVE, LOCATION, VIN_NUMBER, UPDATED, CREATED ) VALUES " +
+                            " VEHICLE_TYPE, ACTIVE, LOCATION, VIN_NUMBER, PRICE, UPDATED, CREATED ) VALUES " +
                             "(?,?,?,?,?,?,?,?,?, ?, ?, ?)",
                     new Object[]{
                             vehicle.getVehicleNmbr(),
@@ -224,6 +226,7 @@ public class VehicleService {
                             vehicle.getActive(),
                             vehicle.getLocation(),
                             vehicle.getVinNumber(),
+                            vehicle.getPrice(),
                             new Date(), new Date()
                     });
         } catch (Exception e) {
@@ -289,6 +292,7 @@ public class VehicleService {
                             "ACTIVE=?, " +
                             "LOCATION=?, " +
                             "VIN_NUMBER=?, " +
+                            "PRICE=?, " +
                             "UPDATED=? " +
                             "WHERE ID=?",
                     vehicle.getVehicleNmbr(),
@@ -301,6 +305,7 @@ public class VehicleService {
                     vehicle.getActive(),
                     vehicle.getLocation(),
                     vehicle.getVinNumber(),
+                    vehicle.getPrice(),
                     new Date(),
                     vehicle.getId());
         } catch (Exception e) {
@@ -348,7 +353,7 @@ public class VehicleService {
         } catch (Exception e) {
             return null;
         }
-        return findByIdModle(vehicleModel.getId());
+        return findByIdModel(vehicleModel.getId());
     }
 
     public void delete(Vehicle vehicle) {

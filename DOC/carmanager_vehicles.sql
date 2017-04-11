@@ -15,12 +15,12 @@ create table vehicles
 	VIN_NUMBER varchar(50) null,
 	CREATED datetime default CURRENT_TIMESTAMP null,
 	UPDATED datetime default CURRENT_TIMESTAMP null,
+	PRICE double null,
 	constraint vehicles_ID_uindex
-		unique (ID),
+	unique (ID),
 	constraint vehicles_vehicleNmbr_uindex
-		unique (VEHICLE_NMBR),
+	unique (VEHICLE_NMBR),
 	constraint vehicles_LICENSE_NMBR_uindex
-		unique (LICENSE_NMBR)
+	unique (LICENSE_NMBR)
 )
-;
-
+;;

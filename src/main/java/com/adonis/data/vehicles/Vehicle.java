@@ -39,5 +39,8 @@ public class Vehicle extends Audit {
     private String location;
     @Column(name = "VIN_NMBR")
     private String vinNumber;
+    @Column(name = "PRICE")
+    private Double price;
+
 
 }

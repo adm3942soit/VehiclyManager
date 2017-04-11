@@ -44,11 +44,11 @@ public class VehiclesCrudView extends VerticalLayout implements View {
         vehiclesCrud.setUpdateOperation(vehicle -> vehicleService.save(vehicle));
         vehiclesCrud.setDeleteOperation(vehicle -> vehicleService.delete(vehicle));
         vehiclesCrud.setFindAllOperation(() -> vehicleService.findAll());
-        vehiclesCrud.getCrudFormFactory().setVisiblePropertyIds("vehicleNmbr", "licenseNmbr", "make", "vehicleType","model", "year", "status",  "active", "location", "vinNumber");
+        vehiclesCrud.getCrudFormFactory().setVisiblePropertyIds("vehicleNmbr", "licenseNmbr", "make", "vehicleType","model", "year", "status",  "active", "location", "vinNumber", "price");
         vehiclesCrud.getCrudFormFactory().setDisabledPropertyIds(CrudOperation.UPDATE, "id", "created", "updated");
         vehiclesCrud.getCrudFormFactory().setDisabledPropertyIds(CrudOperation.ADD, "id", "created", "updated");
         vehiclesCrud.getCrudLayout().setWidth(90F, Unit.PERCENTAGE);
-        vehiclesCrud.getGrid().setColumns("vehicleNmbr", "licenseNmbr", "make", "vehicleType", "model", "year", "status",  "active", "location", "vinNumber");
+        vehiclesCrud.getGrid().setColumns("vehicleNmbr", "licenseNmbr", "make", "vehicleType", "model", "year", "status",  "active", "location", "vinNumber", "price");
 
         vehiclesCrud.getCrudFormFactory().setFieldType("vehicleType", ComboBox.class);
         vehiclesCrud.getCrudFormFactory().setFieldProvider("vehicleType", () -> new ComboBox("vehicleType", vehicleService.findAllTypesNames()));

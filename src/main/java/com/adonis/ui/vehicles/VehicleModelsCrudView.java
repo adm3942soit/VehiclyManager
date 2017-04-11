@@ -66,7 +66,7 @@ public class VehicleModelsCrudView extends VerticalLayout implements View {
         vehiclesCrud.setUpdateOperation(vehicle -> vehicleService.save(vehicle));
         vehiclesCrud.setDeleteOperation(vehicle -> vehicleService.delete(vehicle));
         vehiclesCrud.setFindAllOperation(() -> vehicleService.findAllModels());
-        vehiclesCrud.getCrudFormFactory().setVisiblePropertyIds("vehicleType", "model", "comment", "picture");
+        vehiclesCrud.getCrudFormFactory().setVisiblePropertyIds("picture", "vehicleType", "model", "comment" );
         vehiclesCrud.getCrudFormFactory().setDisabledPropertyIds(CrudOperation.UPDATE, "id", "created", "updated");
         vehiclesCrud.getCrudFormFactory().setDisabledPropertyIds(CrudOperation.ADD, "id", "created", "updated");
         vehiclesCrud.getCrudFormFactory().setFieldType("vehicleType", ComboBox.class);
@@ -93,7 +93,6 @@ public class VehicleModelsCrudView extends VerticalLayout implements View {
                 }
 
                 );
-        vehiclesCrud.getCrudLayout().setWidth(90F, Unit.PERCENTAGE);
         vehiclesCrud.getGrid().setColumns("vehicleType", "model", "comment", "picture");
 
     }

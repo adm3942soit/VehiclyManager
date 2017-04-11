@@ -47,7 +47,7 @@ public class PersonsCrudView extends VerticalLayout implements View {
         personsCrud.setFindAllOperation(() -> personService.findAll());
 
         GridLayoutCrudFormFactory<Person> formFactory = new GridLayoutCrudFormFactory<>(Person.class, 1, 10);
-        formFactory.setVisiblePropertyIds("firstName", "lastName", "email", "phoneNumber", "gender","login","password","birthDate", "picture", "notes", "address");
+        formFactory.setVisiblePropertyIds("picture","firstName", "lastName", "email", "phoneNumber", "gender","login","password","birthDate", "notes", "address");
         formFactory.setDisabledPropertyIds(CrudOperation.UPDATE, "id", "created", "updated");
         formFactory.setDisabledPropertyIds(CrudOperation.ADD, "id", "created", "updated");
 
@@ -83,8 +83,7 @@ public class PersonsCrudView extends VerticalLayout implements View {
         });
 
         personsCrud.setCrudFormFactory(formFactory);
-        personsCrud.getCrudLayout().setWidth(90F, Unit.PERCENTAGE);
-        personsCrud.getGrid().setColumns("firstName", "lastName", "email", "login", "birthDate", "picture", "notes");
+        personsCrud.getGrid().setColumns( "firstName", "lastName", "email", "login", "birthDate",  "notes", "picture");
         personsCrud.getGrid().getColumn("birthDate").setRenderer(new com.vaadin.v7.ui.renderers.DateRenderer("%1$te/%1$tm/%1$tY"));
         personsCrud.getCrudFormFactory().setFieldCreationListener("birthDate", field -> ((DateField) field).setDateFormat("dd/MM/yyyy"));
 
