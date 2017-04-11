@@ -2,19 +2,18 @@ package com.adonis.ui.vehicles;
 
 import com.adonis.data.service.VehicleService;
 import com.adonis.data.vehicles.VehicleModel;
+import com.adonis.ui.addFields.VehicleModelImageField;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-import com.vaadin.v7.data.fieldgroup.BeanFieldGroup;
-import com.vaadin.v7.data.fieldgroup.DefaultFieldGroupFieldFactory;
-import com.vaadin.v7.data.util.BeanItemContainer;
 import com.vaadin.v7.ui.ComboBox;
 import com.vaadin.v7.ui.Field;
 import org.vaadin.crudui.crud.AddOperationListener;
 import org.vaadin.crudui.crud.CrudOperation;
 import org.vaadin.crudui.crud.impl.GridBasedCrudComponent;
+import org.vaadin.crudui.form.FieldProvider;
 import org.vaadin.crudui.form.impl.GridLayoutCrudFormFactory;
 import org.vaadin.crudui.layout.impl.HorizontalSplitCrudLayout;
 
@@ -50,24 +49,24 @@ public class VehicleModelsCrudView extends VerticalLayout implements View {
             }
         });
 
-        final BeanFieldGroup<VehicleModel> binder = new BeanFieldGroup<VehicleModel>(VehicleModel.class);
-        binder.setFieldFactory(new DefaultFieldGroupFieldFactory() {
-
-            @Override
-            public <T extends Field> T createField(Class<?> type, Class<T> fieldType) {
-
-                if (type.isAssignableFrom(String.class) && fieldType.isAssignableFrom(ComboBox.class)) {
-                    return (T) new ComboBox();
-                }
-
-                return super.createField(type, fieldType);
-            }
-
-        });
+//        final BeanFieldGroup<VehicleModel> binder = new BeanFieldGroup<VehicleModel>(VehicleModel.class);
+//        binder.setFieldFactory(new DefaultFieldGroupFieldFactory() {
+//
+//            @Override
+//            public <T extends Field> T createField(Class<?> type, Class<T> fieldType) {
+//
+//                if (type.isAssignableFrom(String.class) && fieldType.isAssignableFrom(ComboBox.class)) {
+//                    return (T) new ComboBox();
+//                }
+//
+//                return super.createField(type, fieldType);
+//            }
+//
+//        });
         vehiclesCrud.setUpdateOperation(vehicle -> vehicleService.save(vehicle));
         vehiclesCrud.setDeleteOperation(vehicle -> vehicleService.delete(vehicle));
         vehiclesCrud.setFindAllOperation(() -> vehicleService.findAllModels());
-        vehiclesCrud.getCrudFormFactory().setVisiblePropertyIds("vehicleType", "model", "comment");
+        vehiclesCrud.getCrudFormFactory().setVisiblePropertyIds("vehicleType", "model", "comment", "picture");
         vehiclesCrud.getCrudFormFactory().setDisabledPropertyIds(CrudOperation.UPDATE, "id", "created", "updated");
         vehiclesCrud.getCrudFormFactory().setDisabledPropertyIds(CrudOperation.ADD, "id", "created", "updated");
         vehiclesCrud.getCrudFormFactory().setFieldType("vehicleType", ComboBox.class);
@@ -78,11 +77,25 @@ public class VehicleModelsCrudView extends VerticalLayout implements View {
             items.forEach(item -> {
                 comboBox.addItem(item);
             });
-            comboBox.setContainerDataSource(new BeanItemContainer<>(String.class, vehicleService.findAllTypesNames()));
+//            comboBox.setContainerDataSource(new BeanItemContainer<>(String.class, vehicleService.findAllTypesNames()));
         });
+        vehiclesCrud.getCrudFormFactory().setFieldProvider("picture",
+                new FieldProvider() {
+                    @Override
+                    public Field buildField() {
+                        VehicleModelImageField imageField =
+                                ((VehicleModel) vehiclesCrud.getGrid().getSelectedRow()) != null ?
+                                        new VehicleModelImageField(((VehicleModel) vehiclesCrud.getGrid().getSelectedRow()).getPicture(), ((VehicleModel) vehiclesCrud.getGrid().getSelectedRow())):
+                                        new VehicleModelImageField();
+                        if(((VehicleModel)vehiclesCrud.getGrid().getSelectedRow())!=null)
+                            imageField.setInternalValue((((VehicleModel)vehiclesCrud.getGrid().getSelectedRow()).getPicture()));
+                        return imageField;
+                    }
+                }
 
+                );
         vehiclesCrud.getCrudLayout().setWidth(90F, Unit.PERCENTAGE);
-        vehiclesCrud.getGrid().setColumns("vehicleType", "model", "comment");
+        vehiclesCrud.getGrid().setColumns("vehicleType", "model", "comment", "picture");
 
     }
 

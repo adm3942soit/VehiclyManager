@@ -24,6 +24,9 @@ public class VehicleModel extends Audit{
     @Column(name = "MODEL", length = 100)
     private String model;
 
+    @Column(name = "PICTURE", length = 200)
+    private String picture;
+
     @Column(name = "COMMENT", length = 100)
     private String comment;
 

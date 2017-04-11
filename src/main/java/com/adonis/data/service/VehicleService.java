@@ -239,12 +239,13 @@ public class VehicleService {
         try {
             jdbcTemplate.update(
                     "INSERT INTO vehicle_models " +
-                            "(VEHICLE_TYPE, MODEL, COMMENT, UPDATED, CREATED)" +
+                            "(VEHICLE_TYPE, MODEL, PICTURE, COMMENT, UPDATED, CREATED)" +
                             " VALUES " +
-                            "(?, ?, ?, ?,?)",
+                            "(?, ?, ?, ?, ?,?)",
                     new Object[]{
                             vehicleModel.getVehicleType(),
                             vehicleModel.getModel(),
+                            vehicleModel.getPicture(),
                             vehicleModel.getComment(),
                             new Date(), new Date()
                     });
@@ -315,11 +316,13 @@ public class VehicleService {
                     "UPDATE vehicle_types SET " +
                             "VEHICLE_TYPE=?, " +
                             "MODEL=?, " +
+                            "PICTURE=?, " +
                             "COMMENT=?, " +
                             "UPDATED=? " +
                             "WHERE ID=?",
                     vehicleModel.getVehicleType(),
                     vehicleModel.getModel(),
+                    vehicleModel.getPicture(),
                     vehicleModel.getComment(),
                     new Date(),
                     vehicleModel.getId());
@@ -428,6 +431,58 @@ public class VehicleService {
 
                 try {
                     insertType(entry);
+                } catch (Exception e) {
+                    if (e.getMessage() != null && e.getMessage().contains("Duplicate entry")) {
+                        break;
+                    }
+                }
+
+
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+    public void loadVechicleModels() {
+
+        String csvFile = "VechycleModels.csv";
+        BufferedReader br = null;
+        String line = "";
+        String cvsSplitBy = ",";
+
+        InputStream inputStream = null;
+        try {
+            inputStream = getClass().getClassLoader().getResourceAsStream(csvFile);
+        } catch (Exception e) {
+            return;
+        }
+        Reader reader = new InputStreamReader(inputStream);
+
+        try {
+            br = new BufferedReader(reader);
+
+            while ((line = br.readLine()) != null) {
+                String[] vehicleModel = line.split(cvsSplitBy);
+
+                VehicleModel entry = new VehicleModel();
+                entry.setVehicleType(vehicleModel[1]);
+                entry.setModel(vehicleModel[2]);
+                entry.setPicture(vehicleModel[3]);
+                entry.setCreated(new Date());
+                entry.setUpdated(new Date());
+
+                try {
+                    insertModel(entry);
                 } catch (Exception e) {
                     if (e.getMessage() != null && e.getMessage().contains("Duplicate entry")) {
                         break;

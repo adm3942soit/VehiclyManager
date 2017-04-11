@@ -54,6 +54,10 @@ public class MainUI extends UI {
         if(vehicleService.findLastType()==null){
             vehicleService.loadVechicleTypes();
         }
+        if(vehicleService.findLastModel()==null){
+            vehicleService.loadVechicleModels();
+        }
+
         personView = new PersonUI(service);
         loginView = new LoginView(service, new LoginView.LoginListener() {
             @Override
