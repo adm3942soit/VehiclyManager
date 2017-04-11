@@ -44,27 +44,46 @@ public class VehicleService {
     public List<String> findAllTypesNames() {
         String sql = "SELECT m.TYPE FROM vehicle_types m ";
 
-        List<String> customers = null;
+        List<String> types = null;
         try {
-            customers = (List<String>) jdbcTemplate.query(sql,
+            types = (List<String>) jdbcTemplate.query(sql,
                     new RowMapper<String>() {
                         public String mapRow(ResultSet rs, int rowNum)
                                 throws SQLException {
                             return rs.getString("type");
-                        }});
+                        }
+                    });
         } catch (DataAccessException e) {
             return Collections.emptyList();
         }
 
-        return customers;
-                }
+        return types;
+    }
+    public List<String> findAllModelNames() {
+        String sql = "SELECT m.MODEL FROM vehicle_models m ";
 
-        public List<VehicleModel> findAllModels () {
-            String sql = "SELECT * FROM vehicle_models";
-            List<VehicleModel> customers = jdbcTemplate.query(sql,
-                    new BeanPropertyRowMapper(VehicleModel.class));
-            return customers;
+        List<String> models = null;
+        try {
+            models = (List<String>) jdbcTemplate.query(sql,
+                    new RowMapper<String>() {
+                        public String mapRow(ResultSet rs, int rowNum)
+                                throws SQLException {
+                            return rs.getString("model");
+                        }
+                    });
+        } catch (DataAccessException e) {
+            return Collections.emptyList();
         }
+
+        return models;
+    }
+
+    public List<VehicleModel> findAllModels() {
+        String sql = "SELECT * FROM vehicle_models";
+        List<VehicleModel> customers = jdbcTemplate.query(sql,
+                new BeanPropertyRowMapper(VehicleModel.class));
+        return customers;
+    }
 
     public Vehicle findById(Long id) {
         if (id == null) return null;
@@ -193,7 +212,7 @@ public class VehicleService {
                     "INSERT INTO vehicles " +
                             "(VEHICLE_NMBR, LICENSE_NMBR, MAKE, MODEL, YEAR, STATUS," +
                             " VEHICLE_TYPE, ACTIVE, LOCATION, VIN_NUMBER, UPDATED, CREATED ) VALUES " +
-                            "(?,?,?,?,?,?,?,?,?, ?, ?)",
+                            "(?,?,?,?,?,?,?,?,?, ?, ?, ?)",
                     new Object[]{
                             vehicle.getVehicleNmbr(),
                             vehicle.getLicenseNmbr(),
@@ -205,7 +224,7 @@ public class VehicleService {
                             vehicle.getActive(),
                             vehicle.getLocation(),
                             vehicle.getVinNumber(),
-                            new Date(),new Date()
+                            new Date(), new Date()
                     });
         } catch (Exception e) {
             return null;
@@ -225,7 +244,7 @@ public class VehicleService {
                     new Object[]{
                             vehicleType.getType(),
                             vehicleType.getPicture(),
-                            new Date(),new Date()
+                            new Date(), new Date()
 
                     });
         } catch (Exception e) {
@@ -453,6 +472,7 @@ public class VehicleService {
             }
         }
     }
+
     public void loadVechicleModels() {
 
         String csvFile = "VechycleModels.csv";

@@ -7,10 +7,13 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.v7.ui.ComboBox;
 import org.vaadin.crudui.crud.CrudOperation;
 import org.vaadin.crudui.crud.impl.GridBasedCrudComponent;
 import org.vaadin.crudui.form.impl.GridLayoutCrudFormFactory;
 import org.vaadin.crudui.layout.impl.HorizontalSplitCrudLayout;
+
+import java.util.List;
 
 /**
  * Created by oksdud on 06.04.2017.
@@ -41,11 +44,32 @@ public class VehiclesCrudView extends VerticalLayout implements View {
         vehiclesCrud.setUpdateOperation(vehicle -> vehicleService.save(vehicle));
         vehiclesCrud.setDeleteOperation(vehicle -> vehicleService.delete(vehicle));
         vehiclesCrud.setFindAllOperation(() -> vehicleService.findAll());
-        vehiclesCrud.getCrudFormFactory().setVisiblePropertyIds("vehicleNmbr", "licenseNmbr", "make", "model", "year", "status", "vehicleType", "active", "location", "vinNumber");
+        vehiclesCrud.getCrudFormFactory().setVisiblePropertyIds("vehicleNmbr", "licenseNmbr", "make", "vehicleType","model", "year", "status",  "active", "location", "vinNumber");
         vehiclesCrud.getCrudFormFactory().setDisabledPropertyIds(CrudOperation.UPDATE, "id", "created", "updated");
         vehiclesCrud.getCrudFormFactory().setDisabledPropertyIds(CrudOperation.ADD, "id", "created", "updated");
         vehiclesCrud.getCrudLayout().setWidth(90F, Unit.PERCENTAGE);
-        vehiclesCrud.getGrid().setColumns("vehicleNmbr", "licenseNmbr", "make", "model", "year", "status", "vehicleType", "active", "location", "vinNumber");
+        vehiclesCrud.getGrid().setColumns("vehicleNmbr", "licenseNmbr", "make", "vehicleType", "model", "year", "status",  "active", "location", "vinNumber");
+
+        vehiclesCrud.getCrudFormFactory().setFieldType("vehicleType", ComboBox.class);
+        vehiclesCrud.getCrudFormFactory().setFieldProvider("vehicleType", () -> new ComboBox("vehicleType", vehicleService.findAllTypesNames()));
+        vehiclesCrud.getCrudFormFactory().setFieldCreationListener("vehicleType", field -> {
+            com.vaadin.v7.ui.ComboBox comboBox = (com.vaadin.v7.ui.ComboBox) field;
+            List<String> items = vehicleService.findAllTypesNames();
+            items.forEach(item -> {
+                comboBox.addItem(item);
+            });
+        });
+
+        vehiclesCrud.getCrudFormFactory().setFieldType("model", ComboBox.class);
+        vehiclesCrud.getCrudFormFactory().setFieldProvider("model", () -> new ComboBox("model", vehicleService.findAllModelNames()));
+        vehiclesCrud.getCrudFormFactory().setFieldCreationListener("model", field -> {
+            com.vaadin.v7.ui.ComboBox comboBox = (com.vaadin.v7.ui.ComboBox) field;
+            List<String> items = vehicleService.findAllModelNames();
+            items.forEach(item -> {
+                comboBox.addItem(item);
+            });
+        });
+
 
     }
 

@@ -77,7 +77,6 @@ public class VehicleModelsCrudView extends VerticalLayout implements View {
             items.forEach(item -> {
                 comboBox.addItem(item);
             });
-//            comboBox.setContainerDataSource(new BeanItemContainer<>(String.class, vehicleService.findAllTypesNames()));
         });
         vehiclesCrud.getCrudFormFactory().setFieldProvider("picture",
                 new FieldProvider() {
