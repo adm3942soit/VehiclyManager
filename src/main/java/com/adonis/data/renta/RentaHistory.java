@@ -8,7 +8,7 @@ import lombok.Setter;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.util.Date;
+import java.sql.Timestamp;
 
 /**
  * Created by oksdud on 11.04.2017.
@@ -25,9 +25,9 @@ public class RentaHistory extends Audit{
     @Column(name = "VEHICLE", length = 255)
     private String vehicle;
     @Column(name = "FROM_DATE")
-    private Date fromDate;
+    private Timestamp fromDate;
     @Column(name = "TO_DATE")
-    private Date toDate;
+    private Timestamp toDate;
     @Column(name = "PRICE")
     private Double price;
     @Column(name = "SUMMA")

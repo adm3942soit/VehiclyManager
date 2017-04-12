@@ -4,20 +4,26 @@ import com.adonis.data.renta.RentaHistory;
 import com.adonis.data.service.PersonService;
 import com.adonis.data.service.RentaHistoryService;
 import com.adonis.data.service.VehicleService;
-import com.adonis.ui.converters.DateUtils;
+import com.adonis.ui.converters.StringOfInstantToSqlTimestampConverter;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.v7.shared.ui.datefield.Resolution;
 import com.vaadin.v7.ui.ComboBox;
+import com.vaadin.v7.ui.Field;
 import org.vaadin.crudui.crud.CrudOperation;
 import org.vaadin.crudui.crud.impl.GridBasedCrudComponent;
+import org.vaadin.crudui.form.FieldProvider;
 import org.vaadin.crudui.form.impl.GridLayoutCrudFormFactory;
 import org.vaadin.crudui.layout.impl.HorizontalSplitCrudLayout;
 
-import java.time.Duration;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -30,8 +36,49 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
     Double price = 0.0;
     com.vaadin.v7.ui.TextField priceTextField;
     com.vaadin.v7.ui.TextField summaTextField;
-    com.vaadin.v7.ui.DateField fromDateDateField;
-    com.vaadin.v7.ui.DateField toDateDateField;
+    com.vaadin.v7.ui.DateField fromDateDateField = new com.vaadin.v7.ui.DateField("fromDate") {
+        Timestamp parsedValue;
+        @Override
+        protected Timestamp handleUnparsableDateString(
+                String dateString) {
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                LocalDateTime dateTime = LocalDateTime.parse(dateString, formatter);
+                parsedValue = new Timestamp(dateTime.toEpochSecond(ZoneOffset.ofTotalSeconds(0)));
+                return parsedValue;
+            } catch (DateTimeParseException e) {
+                return null;
+            }
+        }
+        @Override
+        public Object getConvertedValue() {
+            return this.parsedValue;
+        }
+
+    };
+    com.vaadin.v7.ui.DateField toDateDateField = new com.vaadin.v7.ui.DateField("toDate") {
+        Timestamp parsedValue;
+        @Override
+        protected Timestamp handleUnparsableDateString(
+                String dateString) {
+
+            try {
+                // try to parse with alternative format
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                LocalDateTime dateTime = LocalDateTime.parse(dateString, formatter);
+                parsedValue = new Timestamp(dateTime.toEpochSecond(ZoneOffset.ofTotalSeconds(0)));
+                return parsedValue;
+            } catch (DateTimeParseException e) {
+                return null;
+            }
+        }
+        @Override
+        public Object getConvertedValue() {
+            return this.parsedValue;
+        }
+
+    };
+
     public final GridBasedCrudComponent<RentaHistory> crud = new GridBasedCrudComponent<>(RentaHistory.class, new HorizontalSplitCrudLayout());
     private PersonService personService;
     private VehicleService vehicleService;
@@ -88,31 +135,37 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
                 }
             });
         });
-        crud.getGrid().getColumn("fromDate").setRenderer(new com.vaadin.v7.ui.renderers.DateRenderer("%1$te/%1$tm/%1$tY"));
-        formFactory.setFieldCreationListener("fromDate", field -> {
-            fromDateDateField = (com.vaadin.v7.ui.DateField) field;
-            fromDateDateField.setDateFormat("dd/MM/yyyy");
+        crud.getGrid().getColumn("fromDate").setRenderer(new com.vaadin.v7.ui.renderers.DateRenderer("%1$te/%1$tm/%1$tY %1$tH:%1$tM"));
+        formFactory.setFieldProvider("fromDate", new FieldProvider() {
+            @Override
+            public Field buildField() {
+                fromDateDateField.setResolution(Resolution.SECOND);
+                fromDateDateField.setDateFormat( "yyyy-MM-dd HH:mm:ss");
+                fromDateDateField.setConverter(StringOfInstantToSqlTimestampConverter.class);
+                return fromDateDateField;
+            }
         });
-        crud.getGrid().getColumn("toDate").setRenderer(new com.vaadin.v7.ui.renderers.DateRenderer("%1$te/%1$tm/%1$tY"));
-        formFactory.setFieldCreationListener("toDate", field -> {
-            toDateDateField = (com.vaadin.v7.ui.DateField) field;
-            toDateDateField.setDateFormat("dd/MM/yyyy");
-            toDateDateField.addListener(new Listener() {
-                @Override
-                public void componentEvent(Event event) {
-                    Date dateFrom = fromDateDateField.getValue();
-                    Date dateTo = toDateDateField.getValue();
-                    if(dateFrom!=null && dateTo!=null && price!=null){
-                        LocalDateTime oldDate = DateUtils.getLocalDateTime(dateFrom);
-                        LocalDateTime newDate = DateUtils.getLocalDateTime(dateTo);
-                        //count seconds between dates
-                        Duration duration = Duration.between(oldDate, newDate);
-                        long countMinutes = duration.getSeconds()/60;
-                        summaTextField.setValue(String.valueOf(price*countMinutes) );
-                        summaTextField.setEnabled(false);
+        crud.getGrid().getColumn("toDate").setRenderer(new com.vaadin.v7.ui.renderers.DateRenderer("%1$te/%1$tm/%1$tY %1$tH:%1$tM"));
+        formFactory.setFieldProvider("toDate", new FieldProvider() {
+            @Override
+            public Field buildField() {
+                toDateDateField.setResolution(Resolution.SECOND);
+                toDateDateField.setDateFormat("yyyy-MM-dd HH:mm:ss");
+                toDateDateField.setConverter(StringOfInstantToSqlTimestampConverter.class);
+                toDateDateField.addListener(new Listener() {
+                    @Override
+                    public void componentEvent(Event event) {
+                        Date dateFrom = fromDateDateField.getValue();
+                        Date dateTo = toDateDateField.getValue();
+                        if(dateFrom!=null && dateTo!=null && priceTextField.getValue()!=null){
+                            long countMinutes = (dateTo.getTime()-dateFrom.getTime())/1000/60/60;
+                            summaTextField.setValue(String.valueOf(price*countMinutes) );
+                            summaTextField.setEnabled(false);
+                        }
                     }
-                }
-            });
+                });
+                return toDateDateField;
+            }
         });
 
         formFactory.setFieldCreationListener("price", field -> {
