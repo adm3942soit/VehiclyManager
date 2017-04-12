@@ -3,6 +3,7 @@ package com.adonis.data.service;
 import com.adonis.data.vehicles.Vehicle;
 import com.adonis.data.vehicles.VehicleModel;
 import com.adonis.data.vehicles.VehicleType;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -100,6 +101,15 @@ public class VehicleService {
 
         Vehicle vehicle = (Vehicle) jdbcTemplate.queryForObject(
                 sql, new Object[]{id}, new BeanPropertyRowMapper(Vehicle.class));
+
+        return vehicle;
+    }
+    public Vehicle findByVehicleNumber(String vehicleNumber) {
+        if (Strings.isNullOrEmpty(vehicleNumber)) return null;
+        String sql = "SELECT * FROM vehicles WHERE VEHICLE_NMBR = ?";
+
+        Vehicle vehicle = (Vehicle) jdbcTemplate.queryForObject(
+                sql, new Object[]{vehicleNumber}, new BeanPropertyRowMapper(Vehicle.class));
 
         return vehicle;
     }
