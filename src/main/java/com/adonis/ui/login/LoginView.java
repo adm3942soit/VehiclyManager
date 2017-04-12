@@ -1,5 +1,6 @@
 package com.adonis.ui.login;
 
+import com.adonis.ui.MainUI;
 import com.adonis.ui.main.MainScreen;
 import com.adonis.data.service.PersonService;
 import com.adonis.ui.persons.RegistrationUI;
@@ -58,7 +59,7 @@ public class LoginView extends CssLayout implements View {
     }
     private void login(LoginForm form, String user, String password){
 
-        if(service.findByCustomerLogin(user)!=null && service.findByCustomerLogin(user).getPassword().equals(password)){
+        if((MainUI.loginPerson = service.findByCustomerLogin(user))!=null && service.findByCustomerLogin(user).getPassword().equals(password)){
             addStyleName(ValoTheme.UI_WITH_MENU);
             getUI().getNavigator().navigateTo(MainScreen.NAME);
             return;

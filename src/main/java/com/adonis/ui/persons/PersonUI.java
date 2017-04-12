@@ -2,6 +2,7 @@ package com.adonis.ui.persons;
 
 import com.adonis.data.persons.Person;
 import com.adonis.data.service.PersonService;
+import com.adonis.ui.MainUI;
 import com.google.common.collect.Lists;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -16,25 +17,23 @@ import java.util.List;
  */
 public class PersonUI extends CustomComponent implements View {
 
-   // @Autowired
     PersonService service;
 
     public static final String NAME = "PersonUI";
 
     Person customer;
     PersonView editor = new PersonView(this::savePerson, this::deletePerson, this::addPerson, true);
-    List customers= Lists.newArrayList();
+    List<Person> customers= Lists.newArrayList();
     Grid<Person> grid = new Grid();
     HorizontalSplitPanel splitter = new HorizontalSplitPanel(grid, editor);
     // The view root layout
     HorizontalLayout viewLayout = new HorizontalLayout();
 
+    Boolean selectLoginPerson = false;
 
-
-//    @PostConstruct
-//    protected void init(VaadinRequest request) {
-    public PersonUI (PersonService personService){
+    public PersonUI (PersonService personService, Boolean selectLoginPerson){
         this.service = personService;
+        this.selectLoginPerson = selectLoginPerson;
         setSizeFull();
         updateGrid();
         grid.addColumn(Person::getFirstName).setCaption("First name");
@@ -56,21 +55,24 @@ public class PersonUI extends CustomComponent implements View {
         splitter.setFirstComponent(grid);
         splitter.setSecondComponent(editor);
         splitter.setSizeFull();
-
-//        setContent(splitter);
-
         viewLayout.setSizeFull();
         viewLayout.addComponentsAndExpand(grid, editor, splitter);
         viewLayout.setComponentAlignment(splitter, Alignment.MIDDLE_CENTER);
-//        viewLayout.addComponent(editor);
-//        viewLayout.addComponent(splitter);
         setCompositionRoot(viewLayout);
         selectDefault();
     }
-
+    private int findIndex(Person person){
+        return customers.indexOf(person);
+    }
     private void selectDefault() {
         if (!customers.isEmpty()) {
-            grid.getSelectionModel().select((Person)this.customers.get(0));
+            if(!selectLoginPerson)
+               grid.getSelectionModel().select((Person)this.customers.get(0));
+            else {
+                if (MainUI.loginPerson != null)
+                    grid.getSelectionModel().select(customers.get(findIndex(MainUI.loginPerson)));
+                else grid.getSelectionModel().select((Person) this.customers.get(0));
+            }
         }
     }
 

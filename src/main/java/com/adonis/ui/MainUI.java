@@ -1,5 +1,6 @@
 package com.adonis.ui;
 
+import com.adonis.data.persons.Person;
 import com.adonis.data.service.RentaHistoryService;
 import com.adonis.data.service.VehicleService;
 import com.adonis.ui.main.MainScreen;
@@ -46,6 +47,8 @@ public class MainUI extends UI {
     RegistrationUI registrationUI;
     MainScreen mainScreen;
 
+    public static Person loginPerson;
+
     @PostConstruct
     void load() {
         if(service.findTotalCustomer()==0) {
@@ -61,7 +64,7 @@ public class MainUI extends UI {
             vehicleService.loadVechicleModels();
         }
 
-        personView = new PersonUI(service);
+        personView = new PersonUI(service, false);
         loginView = new LoginView(service, new LoginView.LoginListener() {
             @Override
             public void loginSuccessful() {
