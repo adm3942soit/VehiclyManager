@@ -33,7 +33,7 @@ import java.util.List;
 public class RentaHistoryCrudView extends VerticalLayout implements View {
 
     public static final String NAME = "RENTA HISTORY VIEW";
-    Double price = 0.0;
+    Double price;// = 0.0;
     com.vaadin.v7.ui.TextField priceTextField;
     com.vaadin.v7.ui.TextField summaTextField;
     com.vaadin.v7.ui.DateField fromDateDateField = new com.vaadin.v7.ui.DateField("fromDate") {
@@ -135,7 +135,7 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
                 }
             });
         });
-        crud.getGrid().getColumn("fromDate").setRenderer(new com.vaadin.v7.ui.renderers.DateRenderer("%1$te/%1$tm/%1$tY %1$tH:%1$tM"));
+        crud.getGrid().getColumn("fromDate").setRenderer(new com.vaadin.v7.ui.renderers.DateRenderer("%1$te/%1$tm/%1$tY %1$tH:%1$tM:%1$tS"));
         formFactory.setFieldProvider("fromDate", new FieldProvider() {
             @Override
             public Field buildField() {
@@ -145,7 +145,7 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
                 return fromDateDateField;
             }
         });
-        crud.getGrid().getColumn("toDate").setRenderer(new com.vaadin.v7.ui.renderers.DateRenderer("%1$te/%1$tm/%1$tY %1$tH:%1$tM"));
+        crud.getGrid().getColumn("toDate").setRenderer(new com.vaadin.v7.ui.renderers.DateRenderer("%1$te/%1$tm/%1$tY %1$tH:%1$tM:%1$tS"));
         formFactory.setFieldProvider("toDate", new FieldProvider() {
             @Override
             public Field buildField() {
@@ -159,7 +159,8 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
                         Date dateTo = toDateDateField.getValue();
                         if(dateFrom!=null && dateTo!=null && priceTextField!=null && priceTextField.getValue()!=null){
                             long countMinutes = (dateTo.getTime()-dateFrom.getTime())/1000/60/60;
-                            if(summaTextField!=null) {
+                           // price = Double.parseDouble(priceTextField.getValue());
+                            if(summaTextField!=null && price!=null) {
                                 summaTextField.setValue(String.valueOf(price * countMinutes));
                                 summaTextField.setEnabled(false);
                             }
