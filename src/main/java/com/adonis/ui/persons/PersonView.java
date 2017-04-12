@@ -83,7 +83,7 @@ public class PersonView extends PersonDesign {
                 if (person != null && person.getId() != null) {
                     saveEvt.savePerson(person);
                 } else {
-                    addListener.addPerson(person);
+                    if(addListener!=null)addListener.addPerson(person);
                     pictureImage.setSource(new ExternalResource(picture.getValue()));
                 }
                 binder.writeBean(person);
@@ -106,9 +106,14 @@ public class PersonView extends PersonDesign {
             getUI().getNavigator().navigateTo(MainScreen.NAME);
         });
 
-        delete.addClickListener(evt -> {
-            delEvt.deletePerson(binder.getBean());
-        });
+        if(delEvt!=null) {
+            delete.addClickListener(evt -> {
+                delEvt.deletePerson(binder.getBean());
+            });
+        }else {
+            delete.setVisible(false);
+            cancel.setVisible(false);
+        }
     }
 
     public void setPerson(Person selectedRow) {

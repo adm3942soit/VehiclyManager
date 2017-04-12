@@ -20,7 +20,7 @@ public class RegistrationUI extends CustomComponent implements com.vaadin.naviga
     public static final String NAME = "RegistrationUI";
 
     private Person customer;
-    PersonView editor = new PersonView(this::savePerson, this::deletePerson, this::addPerson, false);
+    PersonView editor = new PersonView(this::savePerson, null, this::addPerson, false);//this::deletePerson, this::addPerson, false);
 
     public RegistrationUI (PersonService personService){
         this.service = personService;
