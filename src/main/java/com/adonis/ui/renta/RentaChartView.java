@@ -41,25 +41,27 @@ public class RentaChartView extends CustomComponent implements View {
         Double active = Double.valueOf(vehicleService.findAllActive().size());
         Double all = Double.valueOf(vehicleService.findAll().size());
         Double notActive = all - active;
-        PieChartSeries pieVehicles = new PieChartSeries("Vehicles");
-        PieChartData workingVehicles = new PieChartData("Working", Double.valueOf((working/all)*100));
-        PieChartData notWorkingVehicles = new PieChartData("Not working", Double.valueOf(((active-working)/all)*100));
-        PieChartData notActiveVehicles = new PieChartData("Not active", Double.valueOf((notActive/all)*100));
-        pieVehicles.getData().add(workingVehicles);
-        pieVehicles.getData().add(notActiveVehicles);
-        pieVehicles.getData().add(notWorkingVehicles);
+        if(!all.equals(0.0)) {
+            PieChartSeries pieVehicles = new PieChartSeries("Vehicles");
+            PieChartData workingVehicles = new PieChartData("Working", Double.valueOf((working / all) * 100));
+            PieChartData notWorkingVehicles = new PieChartData("Not working", Double.valueOf(((active - working) / all) * 100));
+            PieChartData notActiveVehicles = new PieChartData("Not active", Double.valueOf((notActive / all) * 100));
+            pieVehicles.getData().add(workingVehicles);
+            pieVehicles.getData().add(notActiveVehicles);
+            pieVehicles.getData().add(notWorkingVehicles);
 
 
-        rentaConfiguration.getSeriesList().add(pieVehicles);
-        try {
-            HighChart pieChart = HighChartFactory.renderChart(rentaConfiguration);
-            pieChart.setHeight(80, Unit.PERCENTAGE);
-            pieChart.setWidth(80, Unit.PERCENTAGE);
-            System.out.println("PieChart Script : " + rentaConfiguration.getHighChartValue());
-            viewLayout.addComponent(pieChart);
-            viewLayout.setComponentAlignment(pieChart, Alignment.MIDDLE_CENTER);
-        } catch (Exception e) {
-            e.printStackTrace();
+            rentaConfiguration.getSeriesList().add(pieVehicles);
+            try {
+                HighChart pieChart = HighChartFactory.renderChart(rentaConfiguration);
+                pieChart.setHeight(80, Unit.PERCENTAGE);
+                pieChart.setWidth(80, Unit.PERCENTAGE);
+                System.out.println("PieChart Script : " + rentaConfiguration.getHighChartValue());
+                viewLayout.addComponent(pieChart);
+                viewLayout.setComponentAlignment(pieChart, Alignment.MIDDLE_CENTER);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         viewLayout.setSizeFull();
         setCompositionRoot(viewLayout);
