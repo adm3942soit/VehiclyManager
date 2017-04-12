@@ -23,4 +23,6 @@ create table vehicles
 	constraint vehicles_LICENSE_NMBR_uindex
 	unique (LICENSE_NMBR)
 )
-;;
+;
+
+

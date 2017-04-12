@@ -8,9 +8,9 @@ create table vehicle_types
 	TYPE varchar(50) not null,
 	PICTURE varchar(200) null,
 	constraint vehicle_types_ID_uindex
-		unique (ID),
+	unique (ID),
 	constraint vehicle_types_TYPE_uindex
-		unique (TYPE)
+	unique (TYPE)
 )
 ;
 

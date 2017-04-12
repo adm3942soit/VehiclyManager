@@ -1,3 +1,4 @@
+create table address
 (
 	ID bigint not null auto_increment
 		primary key,
@@ -8,6 +9,7 @@
 	CREATED datetime null,
 	UPDATED datetime null,
 	constraint address_ID_uindex
-		unique (ID)
+	unique (ID)
 )
 ;
+

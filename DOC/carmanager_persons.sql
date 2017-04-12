@@ -1,4 +1,5 @@
 -- auto-generated definition
+-- auto-generated definition
 create table persons
 (
 	ID bigint not null auto_increment
@@ -15,9 +16,9 @@ create table persons
 	UPDATED datetime default CURRENT_TIMESTAMP not null,
 	BIRTH_DATE date null,
 	constraint EMAIL
-		unique (EMAIL),
+	unique (EMAIL),
 	constraint persons_LOGIN_uindex
-		unique (LOGIN)
+	unique (LOGIN)
 )
 ;
 

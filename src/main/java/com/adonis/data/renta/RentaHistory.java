@@ -20,14 +20,14 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 public class RentaHistory extends Audit{
-    @Column(name = "PERSON")
-    private String namePerson;
-    @Column(name = "VEHICLE")
-    private String nameVehicle;
-    @Column(name = "FROM")
-    private Date from;
-    @Column(name = "TO")
-    private Date to;
+    @Column(name = "PERSON",length = 255)
+    private String person;
+    @Column(name = "VEHICLE", length = 255)
+    private String vehicle;
+    @Column(name = "FROM_DATE")
+    private Date fromDate;
+    @Column(name = "TO_DATE")
+    private Date toDate;
     @Column(name = "PRICE")
     private Double price;
     @Column(name = "SUMMA")

@@ -49,39 +49,39 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
         crud.setFindAllOperation(() -> service.findAll());
 
         GridLayoutCrudFormFactory<RentaHistory> formFactory = new GridLayoutCrudFormFactory<>(RentaHistory.class, 1, 10);
-        formFactory.setVisiblePropertyIds("namePerson","nameVehicle","from", "to", "price", "summa", "paid");
+        formFactory.setVisiblePropertyIds("person","vehicle","fromDate", "toDate", "price", "summa", "paid");
         formFactory.setDisabledPropertyIds(CrudOperation.UPDATE, "id", "created", "updated");
         formFactory.setDisabledPropertyIds(CrudOperation.ADD, "id", "created", "updated");
 
 
-        formFactory.setFieldType("namePerson", ComboBox.class);
-        formFactory.setFieldProvider("namePerson", () -> new ComboBox("namePerson", personService.findAllNames()));
-        formFactory.setFieldCreationListener("namePerson", field -> {
+        formFactory.setFieldType("person", ComboBox.class);
+        formFactory.setFieldProvider("person", () -> new ComboBox("person", personService.findAllNames()));
+        formFactory.setFieldCreationListener("person", field -> {
             ComboBox comboBox = (ComboBox) field;
             List<String> persons = personService.findAllNames();
             persons.forEach(person->comboBox.addItem(person));
         });
 
-        formFactory.setFieldType("nameVehicle", ComboBox.class);
-        formFactory.setFieldProvider("nameVehicle", () -> new ComboBox("nameVehicle", vehicleService.findAllNames()));
-        formFactory.setFieldCreationListener("nameVehicle", field -> {
+        formFactory.setFieldType("vehicle", ComboBox.class);
+        formFactory.setFieldProvider("vehicle", () -> new ComboBox("vehicle", vehicleService.findAllNames()));
+        formFactory.setFieldCreationListener("vehicle", field -> {
             ComboBox comboBox = (ComboBox) field;
             List<String> vehicles = vehicleService.findAllNames();
             vehicles.forEach(vehicle->comboBox.addItem(vehicle));
-            comboBox.addListener(new Listener() {
-                @Override
-                public void componentEvent(Event event) {
-
-                }
-            });
+//            comboBox.addListener(new Listener() {
+//                @Override
+//                public void componentEvent(Event event) {
+//                   String name = event.getSource().toString();
+//                }
+//            });
         });
 
         crud.setCrudFormFactory(formFactory);
-        crud.getGrid().setColumns( "namePerson","nameVehicle","from", "to", "price", "summa", "paid");
-        crud.getGrid().getColumn("from").setRenderer(new com.vaadin.v7.ui.renderers.DateRenderer("%1$te/%1$tm/%1$tY"));
-        crud.getCrudFormFactory().setFieldCreationListener("from", field -> ((DateField) field).setDateFormat("dd/MM/yyyy"));
-        crud.getGrid().getColumn("to").setRenderer(new com.vaadin.v7.ui.renderers.DateRenderer("%1$te/%1$tm/%1$tY"));
-        crud.getCrudFormFactory().setFieldCreationListener("to", field -> ((DateField) field).setDateFormat("dd/MM/yyyy"));
+        crud.getGrid().setColumns( "person","vehicle","fromDate", "toDate", "price", "summa", "paid");
+        crud.getGrid().getColumn("fromDate").setRenderer(new com.vaadin.v7.ui.renderers.DateRenderer("%1$te/%1$tm/%1$tY"));
+        crud.getCrudFormFactory().setFieldCreationListener("fromDate", field -> ((DateField) field).setDateFormat("dd/MM/yyyy"));
+        crud.getGrid().getColumn("toDate").setRenderer(new com.vaadin.v7.ui.renderers.DateRenderer("%1$te/%1$tm/%1$tY"));
+        crud.getCrudFormFactory().setFieldCreationListener("toDate", field -> ((DateField) field).setDateFormat("dd/MM/yyyy"));
 
 
     }

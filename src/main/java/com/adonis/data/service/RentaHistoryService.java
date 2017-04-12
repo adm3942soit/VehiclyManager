@@ -62,16 +62,16 @@ public class RentaHistoryService {
         try {
             jdbcTemplate.update(
                     "INSERT INTO renta_history " +
-                            "(PERSON, VEHICLE, PRICE, SUMMA, FROM, TO, PAID, UPDATED, CREATED ) VALUES " +
+                            "(PERSON, VEHICLE, FROM_DATE, TO_DATE, PAID, PRICE, SUMMA, UPDATED, CREATED) VALUES " +
                             "(?,?,?,?,?,?,?,?,?)",
                     new Object[]{
-                            vehicle.getNamePerson(),
-                            vehicle.getNameVehicle(),
+                            vehicle.getPerson(),
+                            vehicle.getVehicle(),
+                            vehicle.getFromDate(),
+                            vehicle.getToDate(),
+                            vehicle.getPaid(),
                             vehicle.getPrice(),
                             vehicle.getSumma(),
-                            vehicle.getFrom(),
-                            vehicle.getTo(),
-                            vehicle.getPaid(),
                             new Date(), new Date()
                     });
         } catch (Exception e) {
@@ -91,17 +91,17 @@ public class RentaHistoryService {
                             "VEHICLE=?, " +
                             "PRICE=?, " +
                             "SUMMA=?, " +
-                            "FROM=?, " +
-                            "TO=?, " +
+                            "FROM_DATE=?, " +
+                            "TO_DATE=?, " +
                             "PAID=?, " +
                             "UPDATED=? " +
                             "WHERE ID=?",
-                    vehicle.getNamePerson(),
-                    vehicle.getNameVehicle(),
+                    vehicle.getPerson(),
+                    vehicle.getVehicle(),
                     vehicle.getPrice(),
                     vehicle.getSumma(),
-                    vehicle.getFrom(),
-                    vehicle.getTo(),
+                    vehicle.getFromDate(),
+                    vehicle.getToDate(),
                     vehicle.getPaid(),
                     new Date(),
                     vehicle.getId());
@@ -114,7 +114,7 @@ public class RentaHistoryService {
 
     public void delete(RentaHistory vehicle) {
         if (vehicle == null) return;
-        jdbcTemplate.execute("DELETE FROM renta_history WHERE ID=" + vehicle.getId());
+        jdbcTemplate.execute("DELETE FROM_DATE renta_history WHERE ID=" + vehicle.getId());
     }
 
 }
