@@ -157,10 +157,12 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
                     public void componentEvent(Event event) {
                         Date dateFrom = fromDateDateField.getValue();
                         Date dateTo = toDateDateField.getValue();
-                        if(dateFrom!=null && dateTo!=null && priceTextField.getValue()!=null){
+                        if(dateFrom!=null && dateTo!=null && priceTextField!=null && priceTextField.getValue()!=null){
                             long countMinutes = (dateTo.getTime()-dateFrom.getTime())/1000/60/60;
-                            summaTextField.setValue(String.valueOf(price*countMinutes) );
-                            summaTextField.setEnabled(false);
+                            if(summaTextField!=null) {
+                                summaTextField.setValue(String.valueOf(price * countMinutes));
+                                summaTextField.setEnabled(false);
+                            }
                         }
                     }
                 });
