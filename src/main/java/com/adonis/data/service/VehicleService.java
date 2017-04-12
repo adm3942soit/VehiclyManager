@@ -35,6 +35,19 @@ public class VehicleService {
                 new BeanPropertyRowMapper(Vehicle.class));
         return customers;
     }
+    public List<Vehicle> findAllActive() {
+        String sql = "SELECT * FROM vehicles WHERE ACTIVE = 1";
+        List<Vehicle> customers = jdbcTemplate.query(sql,
+                new BeanPropertyRowMapper(Vehicle.class));
+        return customers;
+    }
+    public List<Vehicle> findAllNotActive() {
+        String sql = "SELECT * FROM vehicles WHERE ACTIVE = 0";
+        List<Vehicle> customers = jdbcTemplate.query(sql,
+                new BeanPropertyRowMapper(Vehicle.class));
+        return customers;
+    }
+
     public List<String> findAllNames() {
 
         List<Vehicle> vehicles = findAll();
@@ -142,6 +155,7 @@ public class VehicleService {
             vehicle = (Vehicle) jdbcTemplate.queryForObject(
                     sql, new Object[]{}, new BeanPropertyRowMapper(Vehicle.class));
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
 
@@ -156,6 +170,7 @@ public class VehicleService {
             vehicleType = (VehicleType) jdbcTemplate.queryForObject(
                     sql, new Object[]{}, new BeanPropertyRowMapper(VehicleType.class));
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
 
@@ -170,6 +185,7 @@ public class VehicleService {
             vehicleModel = (VehicleModel) jdbcTemplate.queryForObject(
                     sql, new Object[]{}, new BeanPropertyRowMapper(VehicleModel.class));
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
 
@@ -233,7 +249,7 @@ public class VehicleService {
                     "INSERT INTO vehicles " +
                             "(VEHICLE_NMBR, LICENSE_NMBR, MAKE, MODEL, YEAR, STATUS," +
                             " VEHICLE_TYPE, ACTIVE, LOCATION, VIN_NUMBER, PRICE, UPDATED, CREATED ) VALUES " +
-                            "(?,?,?,?,?,?,?,?,?, ?, ?, ?)",
+                            "(?,?,?,?,?,?,?,?,?, ?, ?, ?, ?)",
                     new Object[]{
                             vehicle.getVehicleNmbr(),
                             vehicle.getLicenseNmbr(),
@@ -242,13 +258,14 @@ public class VehicleService {
                             vehicle.getYear(),
                             vehicle.getStatus(),
                             vehicle.getVehicleType(),
-                            vehicle.getActive(),
+                            vehicle.getActive()==null?0:1,
                             vehicle.getLocation(),
                             vehicle.getVinNumber(),
                             vehicle.getPrice(),
                             new Date(), new Date()
                     });
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
         return findLast();
@@ -270,6 +287,7 @@ public class VehicleService {
 
                     });
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
         return findLastType();
@@ -291,6 +309,7 @@ public class VehicleService {
                             new Date(), new Date()
                     });
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
         return findLastModel();
@@ -321,13 +340,14 @@ public class VehicleService {
                     vehicle.getYear(),
                     vehicle.getStatus(),
                     vehicle.getVehicleType(),
-                    vehicle.getActive(),
+                    vehicle.getActive()==null?0:1,
                     vehicle.getLocation(),
                     vehicle.getVinNumber(),
                     vehicle.getPrice(),
                     new Date(),
                     vehicle.getId());
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
         return findById(vehicle.getId());
@@ -347,6 +367,7 @@ public class VehicleService {
                     new Date(),
                     vehicleType.getId());
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
         return findByIdType(vehicleType.getId());
@@ -370,6 +391,7 @@ public class VehicleService {
                     new Date(),
                     vehicleModel.getId());
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
         return findByIdModel(vehicleModel.getId());

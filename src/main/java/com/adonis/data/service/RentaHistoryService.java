@@ -23,6 +23,11 @@ public class RentaHistoryService {
         List<RentaHistory> customers = jdbcTemplate.query(sql, new BeanPropertyRowMapper(RentaHistory.class));
         return customers;
     }
+    public List<String> findAllWorking() {
+        String sql = "SELECT r.VEHICLE FROM renta_history r WHERE NOW() BETWEEN FROM_DATE AND TO_DATE";
+        List<String> customers = jdbcTemplate.query(sql, new BeanPropertyRowMapper(RentaHistory.class));
+        return customers;
+    }
 
     public RentaHistory findById(Long id) {
         if (id == null) return null;
@@ -114,7 +119,7 @@ public class RentaHistoryService {
 
     public void delete(RentaHistory vehicle) {
         if (vehicle == null) return;
-        jdbcTemplate.execute("DELETE FROM_DATE renta_history WHERE ID=" + vehicle.getId());
+        jdbcTemplate.execute("DELETE FROM renta_history WHERE ID=" + vehicle.getId());
     }
 
 }
