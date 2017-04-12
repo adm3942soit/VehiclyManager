@@ -212,7 +212,8 @@ public class PersonService {
         if (customer == null) return null;
         Address address = null;
         try {
-            if (customer.getAddress() != null) address = insert(customer.getAddress());
+            if (customer.getAddress() != null && customer.getAddress().getStreet()!=null)
+                                 address = insert(customer.getAddress());
             jdbcTemplate.update(
                     "UPDATE persons SET FIRST_NAME=?, LAST_NAME=?, EMAIL=? , LOGIN=?, PASSWORD=?, " +
                             "BIRTH_DATE=?, PICTURE=?, NOTES=?, GENDER=?, PHONE_NUMBER=?, ADDRESS=?, NAME=?, UPDATED=? " +//
