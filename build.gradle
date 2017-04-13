@@ -28,6 +28,7 @@ def libs = [
 
 dependencies {
 	compile('org.projectlombok:lombok:1.16.10')
+	compile('ma.glasnost.orika:orika-core:1.4.3')
 	compile('com.google.guava:guava:18.0')
 	compile('com.vaadin:vaadin-compatibility-server:8.0.0')
 	compile ('com.vaadin:vaadin-compatibility-client-compiled:8.0.0')
@@ -40,6 +41,7 @@ dependencies {
 	compile('com.vaadin:vaadin-spring-boot-starter')
 	runtime('mysql:mysql-connector-java')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
+	testCompile('ma.glasnost.orika:orika-core:1.4.3')
 }
 
 dependencyManagement {

@@ -47,7 +47,6 @@ public class VehiclesCrudView extends VerticalLayout implements View {
         vehiclesCrud.getCrudFormFactory().setVisiblePropertyIds("vehicleNmbr", "licenseNmbr", "make", "vehicleType","model", "year", "status",  "active", "location", "vinNumber", "price");
         vehiclesCrud.getCrudFormFactory().setDisabledPropertyIds(CrudOperation.UPDATE, "id", "created", "updated");
         vehiclesCrud.getCrudFormFactory().setDisabledPropertyIds(CrudOperation.ADD, "id", "created", "updated");
-        vehiclesCrud.getCrudLayout().setWidth(90F, Unit.PERCENTAGE);
         vehiclesCrud.getGrid().setColumns("vehicleNmbr", "licenseNmbr", "make", "vehicleType", "model", "year", "status",  "active", "location", "vinNumber", "price");
 
         vehiclesCrud.getCrudFormFactory().setFieldType("vehicleType", ComboBox.class);

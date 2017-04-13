@@ -2,8 +2,10 @@ package com.adonis.data.service;
 
 import com.adonis.data.persons.Address;
 import com.adonis.data.persons.Person;
+import com.adonis.data.persons.PersonDTO;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import ma.glasnost.orika.MapperFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -25,6 +27,8 @@ public class PersonService {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    public static final MapperFacade dtoMapper = new DTOMapper();
+
     public List<Person> findAll() {
         String sql = "SELECT * FROM persons";
         List<Person> customers = null;
@@ -36,7 +40,15 @@ public class PersonService {
         }
         return customers;
     }
-
+    public List<PersonDTO> findAllDTO() {
+        List<Person> customers = findAll();
+        List<PersonDTO> customersDao = Lists.newArrayList();
+        customers.forEach(customer->{
+            customersDao.add(dtoMapper.map(customer, PersonDTO.class));
+        });
+       return customersDao;
+    }
+//
     public List<String> findAllNames() {
         List<Person> customers = findAll();
         if (customers == null || customers.isEmpty()) return Collections.EMPTY_LIST;

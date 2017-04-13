@@ -8,6 +8,7 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.v7.data.util.BeanItemContainer;
 import com.vaadin.v7.ui.ComboBox;
 import com.vaadin.v7.ui.DateField;
 import com.vaadin.v7.ui.Field;
@@ -18,15 +19,19 @@ import org.vaadin.crudui.form.impl.GridLayoutCrudFormFactory;
 import org.vaadin.crudui.layout.impl.HorizontalSplitCrudLayout;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by oksdud on 06.04.2017.
  */
+
 public class PersonsCrudView extends VerticalLayout implements View {
 
     public static final String NAME = "CUSTOMER VIEW";
 
-    public final GridBasedCrudComponent<Person> personsCrud = new GridBasedCrudComponent<>(Person.class, new HorizontalSplitCrudLayout());
+    public static final GridBasedCrudComponent<Person> personsCrud = new GridBasedCrudComponent<>(Person.class, new HorizontalSplitCrudLayout());
+    public static final BeanItemContainer<Person> container = new BeanItemContainer<Person>(Person.class);
+    public static List<Person> objects;
 
     public PersonsCrudView(PersonService personService) {
         setSizeFull();
@@ -35,19 +40,23 @@ public class PersonsCrudView extends VerticalLayout implements View {
         setPersonsCrudProperties(personService);
         addComponent(personsCrud);
 
+        objects = personService.findAll();
 
+        objects.forEach(person -> {
+            container.addBean(person);
+        });
         setComponentAlignment(personsCrud, Alignment.MIDDLE_CENTER);
 
     }
 
-    public void setPersonsCrudProperties(PersonService personService){
+    public void setPersonsCrudProperties(PersonService personService) {
         personsCrud.setAddOperation(person -> personService.insert(person));
         personsCrud.setUpdateOperation(person -> personService.save(person));
         personsCrud.setDeleteOperation(person -> personService.delete(person));
         personsCrud.setFindAllOperation(() -> personService.findAll());
 
         GridLayoutCrudFormFactory<Person> formFactory = new GridLayoutCrudFormFactory<>(Person.class, 1, 10);
-        formFactory.setVisiblePropertyIds("picture","firstName", "lastName", "email", "phoneNumber", "gender","login","password","birthDate", "notes", "address");
+        formFactory.setVisiblePropertyIds("picture", "firstName", "lastName", "email", "phoneNumber", "gender", "login", "password", "birthDate", "notes", "address");
         formFactory.setDisabledPropertyIds(CrudOperation.UPDATE, "id", "created", "updated");
         formFactory.setDisabledPropertyIds(CrudOperation.ADD, "id", "created", "updated");
 
@@ -57,11 +66,11 @@ public class PersonsCrudView extends VerticalLayout implements View {
             @Override
             public Field buildField() {
                 PersonImageField imageField =
-                ((Person) personsCrud.getGrid().getSelectedRow()) != null ?
-                        new PersonImageField(((Person) personsCrud.getGrid().getSelectedRow()).getPicture(), ((Person) personsCrud.getGrid().getSelectedRow())):
-                        new PersonImageField();
-                if(((Person)personsCrud.getGrid().getSelectedRow())!=null)
-                    imageField.setInternalValue((((Person)personsCrud.getGrid().getSelectedRow()).getPicture()));
+                        ((Person) personsCrud.getGrid().getSelectedRow()) != null ?
+                                new PersonImageField(((Person) personsCrud.getGrid().getSelectedRow()).getPicture(), ((Person) personsCrud.getGrid().getSelectedRow())) :
+                                new PersonImageField();
+                if (((Person) personsCrud.getGrid().getSelectedRow()) != null)
+                    imageField.setInternalValue((((Person) personsCrud.getGrid().getSelectedRow()).getPicture()));
                 return imageField;
             }
         });
@@ -69,12 +78,13 @@ public class PersonsCrudView extends VerticalLayout implements View {
         formFactory.setFieldType("address", AddressPopup.class);
         formFactory.setFieldProvider("address", () -> new AddressPopup());
         formFactory.setFieldCreationListener("address", field -> {
-              AddressPopup address = (AddressPopup) field;
-              if(((Person)personsCrud.getGrid().getSelectedRow())!=null) address.setInternalValue(((Person)personsCrud.getGrid().getSelectedRow()).getAddress());
-              address.setValidationVisible(true);
-                });
+            AddressPopup address = (AddressPopup) field;
+            if (((Person) personsCrud.getGrid().getSelectedRow()) != null)
+                address.setInternalValue(((Person) personsCrud.getGrid().getSelectedRow()).getAddress());
+            address.setValidationVisible(true);
+        });
         formFactory.setFieldType("gender", com.vaadin.v7.ui.ComboBox.class);
-        String [] gender = {"mail", "femail"};
+        String[] gender = {"mail", "femail"};
         formFactory.setFieldProvider("gender", () -> new ComboBox("gender", Arrays.asList(gender)));
         formFactory.setFieldCreationListener("gender", field -> {
             com.vaadin.v7.ui.ComboBox comboBox = (com.vaadin.v7.ui.ComboBox) field;
@@ -83,7 +93,7 @@ public class PersonsCrudView extends VerticalLayout implements View {
         });
 
         personsCrud.setCrudFormFactory(formFactory);
-        personsCrud.getGrid().setColumns( "firstName", "lastName", "email", "login", "birthDate",  "notes", "picture");
+        personsCrud.getGrid().setColumns("firstName", "lastName", "email", "login", "birthDate", "notes", "picture");
         personsCrud.getGrid().getColumn("birthDate").setRenderer(new com.vaadin.v7.ui.renderers.DateRenderer("%1$te/%1$tm/%1$tY"));
         personsCrud.getCrudFormFactory().setFieldCreationListener("birthDate", field -> ((DateField) field).setDateFormat("dd/MM/yyyy"));
 
@@ -94,5 +104,9 @@ public class PersonsCrudView extends VerticalLayout implements View {
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
 
+    }
+
+    public static GridBasedCrudComponent<Person> getPersonsCrud() {
+        return personsCrud;
     }
 }

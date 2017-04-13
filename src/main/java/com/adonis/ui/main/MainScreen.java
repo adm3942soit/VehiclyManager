@@ -7,6 +7,7 @@ import com.adonis.ui.menu.Menu;
 import com.adonis.ui.persons.PersonUI;
 import com.adonis.ui.persons.PersonsCrudView;
 import com.adonis.ui.persons.RegistrationUI;
+import com.adonis.ui.print.PrintView;
 import com.adonis.ui.renta.RentaChartView;
 import com.adonis.ui.renta.RentaHistoryCrudView;
 import com.adonis.ui.vehicles.VehicleModelsCrudView;
@@ -51,11 +52,13 @@ public class MainScreen extends HorizontalLayout implements View {
         menu.addView(new VehicleModelsCrudView(ui.vehicleService), VehicleModelsCrudView.NAME, VehicleModelsCrudView.NAME, new ThemeResource("img/vehicle-model.jpg"));
         menu.addView(new VehicleTypesCrudView(ui.vehicleService), VehicleTypesCrudView.NAME, VehicleTypesCrudView.NAME, new ThemeResource("img/vehicle-type.jpg"));
         menu.addView(new VehiclesCrudView(ui.vehicleService), VehiclesCrudView.NAME, VehiclesCrudView.NAME, new ThemeResource("img/car.jpg"));//vehicles1
-        menu.addView(new PersonsCrudView(ui.service), PersonsCrudView.NAME, PersonsCrudView.NAME, new ThemeResource("img/customers.jpg"));
+        //new PersonsCrudView(ui.service)
+        menu.addView(ui.getPersonsCrudView(), PersonsCrudView.NAME, PersonsCrudView.NAME, new ThemeResource("img/customers.jpg"));
         menu.addView(new RentaHistoryCrudView(ui.rentaHistoryService,ui.service, ui.vehicleService), RentaHistoryCrudView.NAME, RentaHistoryCrudView.NAME, new ThemeResource("img/for-rent.jpg"));
         menu.addView(new RentaChartView(ui.service, ui.rentaHistoryService, ui.vehicleService), RentaChartView.NAME, RentaChartView.NAME, new ThemeResource("img/chart.jpg"));
         menu.addView(new RegistrationUI(ui.service), "CUSTOMER REGISTRATION" , "CUSTOMER REGISTRATION", new ThemeResource("img/Register-Today.jpg"));
         menu.addView(new PersonUI(ui.service, true), "PROFILE" , "PROFILE", new ThemeResource("img/user-icon.jpg"));
+        menu.addView(new PrintView(ui.service, ui.rentaHistoryService), "PRINT", "PRINT", new ThemeResource("img/print-icon.jpg"));
         menu.addView(new AboutView(), AboutView.VIEW_NAME, AboutView.VIEW_NAME, new ThemeResource("img/info.jpg"));
         menu.addView(ui.getLoginView(), "LOGOUT", "LOGOUT", new ThemeResource("img/logout.jpg"));
 

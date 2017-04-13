@@ -10,6 +10,7 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.v7.data.util.BeanItemContainer;
 import com.vaadin.v7.shared.ui.datefield.Resolution;
 import com.vaadin.v7.ui.ComboBox;
 import com.vaadin.v7.ui.Field;
@@ -33,6 +34,9 @@ import java.util.List;
 public class RentaHistoryCrudView extends VerticalLayout implements View {
 
     public static final String NAME = "RENTA HISTORY VIEW";
+    public static final BeanItemContainer<RentaHistory> container = new BeanItemContainer<RentaHistory>(RentaHistory.class);
+    public static List<RentaHistory> objects;
+
     Double price;// = 0.0;
     com.vaadin.v7.ui.TextField priceTextField;
     com.vaadin.v7.ui.TextField summaTextField;
@@ -88,6 +92,12 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
         this.vehicleService = vehicleService;
         setSizeFull();
         setStyleName(ValoTheme.FORMLAYOUT_LIGHT);
+
+        objects = service.findAll();
+
+        objects.forEach(rentaHistory -> {
+            container.addBean(rentaHistory);
+        });
 
         setCrudProperties(service);
         addComponent(crud);

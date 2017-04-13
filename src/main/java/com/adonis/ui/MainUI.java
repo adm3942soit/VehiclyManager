@@ -1,15 +1,17 @@
 package com.adonis.ui;
 
 import com.adonis.data.persons.Person;
+import com.adonis.data.service.PersonService;
 import com.adonis.data.service.RentaHistoryService;
 import com.adonis.data.service.VehicleService;
-import com.adonis.ui.main.MainScreen;
 import com.adonis.ui.login.AccessControl;
 import com.adonis.ui.login.BasicAccessControl;
 import com.adonis.ui.login.LoginView;
-import com.adonis.data.service.PersonService;
+import com.adonis.ui.main.MainScreen;
 import com.adonis.ui.persons.PersonUI;
+import com.adonis.ui.persons.PersonsCrudView;
 import com.adonis.ui.persons.RegistrationUI;
+import com.adonis.ui.renta.RentaHistoryCrudView;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.navigator.Navigator;
@@ -46,6 +48,8 @@ public class MainUI extends UI {
     public LoginView loginView;
     RegistrationUI registrationUI;
     MainScreen mainScreen;
+    public static PersonsCrudView personsCrudView;
+    public static RentaHistoryCrudView rentaHistoryCrudView;
 
     public static Person loginPerson;
 
@@ -72,6 +76,8 @@ public class MainUI extends UI {
             }
         });
         registrationUI = new RegistrationUI(service);
+        personsCrudView = new PersonsCrudView(service);
+        rentaHistoryCrudView = new RentaHistoryCrudView(rentaHistoryService,service, vehicleService);
         mainScreen = new MainScreen(MainUI.this);
     }
 
@@ -87,6 +93,7 @@ public class MainUI extends UI {
         getNavigator().addView(RegistrationUI.NAME, registrationUI);
         getNavigator().addView(PersonUI.NAME, personView);
         getNavigator().addView(MainScreen.NAME, mainScreen);
+        getNavigator().addView(PersonsCrudView.NAME, personsCrudView);
 
 
         if (!accessControl.isUserSignedIn()) {
@@ -115,5 +122,18 @@ public class MainUI extends UI {
 
     public LoginView getLoginView() {
         return loginView;
+    }
+
+    public PersonsCrudView getPersonsCrudView() {
+        return personsCrudView;
+    }
+
+    public static RentaHistoryCrudView getRentaHistoryCrudView() {
+        return rentaHistoryCrudView;
+    }
+
+    @Override
+    public void markAsDirty() {
+
     }
 }

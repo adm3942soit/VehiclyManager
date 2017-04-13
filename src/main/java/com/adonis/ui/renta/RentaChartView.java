@@ -54,8 +54,8 @@ public class RentaChartView extends CustomComponent implements View {
             rentaConfiguration.getSeriesList().add(pieVehicles);
             try {
                 HighChart pieChart = HighChartFactory.renderChart(rentaConfiguration);
-                pieChart.setHeight(80, Unit.PERCENTAGE);
-                pieChart.setWidth(80, Unit.PERCENTAGE);
+                pieChart.setHeight(80, UNITS_PERCENTAGE);
+                pieChart.setWidth(80, UNITS_PERCENTAGE);
                 System.out.println("PieChart Script : " + rentaConfiguration.getHighChartValue());
                 viewLayout.addComponent(pieChart);
                 viewLayout.setComponentAlignment(pieChart, Alignment.MIDDLE_CENTER);
