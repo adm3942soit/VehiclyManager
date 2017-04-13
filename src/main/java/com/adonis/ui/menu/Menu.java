@@ -51,7 +51,6 @@ public class Menu extends CssLayout {
 
         // header of the menu
         final HorizontalLayout top = new HorizontalLayout();
-//        top.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
         top.addStyleName(ValoTheme.MENU_TITLE);
         top.setSpacing(true);
 
@@ -66,81 +65,17 @@ public class Menu extends CssLayout {
         top.addComponent(title);
         menuPart.addComponent(top);
 
-
-/*
-        HorizontalLayout personsLayout = new HorizontalLayout();
-        personsLayout.addStyleName(ValoTheme.MENU_ITEM);
-        personsLayout.setSpacing(false);
-        MenuBar personsMenu = new MenuBar();
-        personsMenu.setStyleName(VALO_MENUITEMS);
-
-        personsMenu.addItem("Customers", new Command() {
-
-            @Override
-            public void menuSelected(MenuItem selectedItem) {
-                menuPart.setWidth(10F, Unit.PERCENTAGE);
-                addComponent(menuPart);
-
-                personsArea.setSizeFull();
-
-                if(personsArea.getComponentCount()==0)personsArea.addComponent(personsCrud);
-                personsArea.setWidth(90F, Unit.PERCENTAGE);
-                if (components.contains(vehiclesArea)) removeComponent(vehiclesArea);
-                if (!components.contains(personsArea)) addComponent(personsArea);
-
-
-            }
-        });
-
-        personsMenu.addStyleName("user-menu");
-        Image personsImage = new Image(null, new ThemeResource("img/table-logo.png"));
-        personsLayout.addComponent(personsImage,0);
-        personsLayout.addComponent(personsMenu,1);
-        menuPart.addComponent(personsLayout);
-
-        HorizontalLayout vehiclesLayout = new HorizontalLayout();
-        vehiclesLayout.addStyleName(ValoTheme.MENU_ITEM);
-        vehiclesLayout.setSpacing(false);
-        MenuBar vehiclesMenu = new MenuBar();
-        vehiclesMenu.setStyleName(VALO_MENUITEMS);
-        vehiclesMenu.addItem("Vehicles", new Command() {
-
-            @Override
-            public void menuSelected(MenuItem selectedItem) {
-                menuPart.setWidth(10F, Unit.PERCENTAGE);
-                addComponent(menuPart);
-
-                vehiclesArea.setSizeFull();
-
-
-                vehiclesArea.addComponent(vehiclesCrud);
-                vehiclesArea.setWidth(90F, Unit.PERCENTAGE);
-                if (components.contains(personsArea)) removeComponent(personsArea);
-                if(!components.contains(vehiclesArea))addComponent(vehiclesArea);
-
-            }
-        });
-
-        vehiclesMenu.addStyleName("user-menu");
-
-        Image vehiclesImage = new Image(null, new ThemeResource("img/table-logo.png"));
-        vehiclesLayout.addComponent(vehiclesImage,0);
-        vehiclesLayout.addComponent(vehiclesMenu,1);
-
-        menuPart.addComponent(vehiclesLayout);
-*/
-
         // logout menu item
-        HorizontalLayout logoutLayout = new HorizontalLayout();
-        logoutLayout.addStyleName(ValoTheme.MENU_ITEM);
-        logoutLayout.setSpacing(false);
-
+//        HorizontalLayout logoutLayout = new HorizontalLayout();
+//        logoutLayout.addStyleName(ValoTheme.MENU_ITEM);
+//        logoutLayout.setSpacing(false);
+//
 //        MenuBar logoutMenu = new MenuBar();
 //        logoutMenu.setStyleName(VALO_MENUITEMS);
-//        logoutMenu.addItem("Logout", new Command() {
+//        logoutMenu.addItem("Logout", new MenuBar.Command() {
 //
 //            @Override
-//            public void menuSelected(MenuItem selectedItem) {
+//            public void menuSelected(MenuBar.MenuItem selectedItem) {
 //                VaadinSession.getCurrent().getSession().invalidate();
 //                Page.getCurrent().reload();
 //            }
