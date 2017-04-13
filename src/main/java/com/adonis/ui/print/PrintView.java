@@ -18,7 +18,6 @@ public class PrintView extends CustomComponent implements View {
 
     PersonService personService;
     RentaHistoryService rentaHistoryService;
-    // The view root layout
     VerticalLayout viewLayout = new VerticalLayout();
 
     public PrintView(PersonService personService, RentaHistoryService rentaHistoryService) {
