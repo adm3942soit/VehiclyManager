@@ -12,6 +12,7 @@ import com.adonis.ui.persons.PersonUI;
 import com.adonis.ui.persons.PersonsCrudView;
 import com.adonis.ui.persons.RegistrationUI;
 import com.adonis.ui.renta.RentaHistoryCrudView;
+import com.adonis.ui.vehicles.VehiclesCrudView;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.navigator.Navigator;
@@ -50,7 +51,7 @@ public class MainUI extends UI {
     MainScreen mainScreen;
     public static PersonsCrudView personsCrudView;
     public static RentaHistoryCrudView rentaHistoryCrudView;
-
+    public static VehiclesCrudView vehiclesCrudView;
     public static Person loginPerson;
 
     @PostConstruct
@@ -76,8 +77,11 @@ public class MainUI extends UI {
             }
         });
         registrationUI = new RegistrationUI(service);
+
         personsCrudView = new PersonsCrudView(service);
         rentaHistoryCrudView = new RentaHistoryCrudView(rentaHistoryService,service, vehicleService);
+        vehiclesCrudView = new VehiclesCrudView(vehicleService);
+
         mainScreen = new MainScreen(MainUI.this);
     }
 
@@ -130,6 +134,10 @@ public class MainUI extends UI {
 
     public static RentaHistoryCrudView getRentaHistoryCrudView() {
         return rentaHistoryCrudView;
+    }
+
+    public static VehiclesCrudView getVehiclesCrudView() {
+        return vehiclesCrudView;
     }
 
     @Override

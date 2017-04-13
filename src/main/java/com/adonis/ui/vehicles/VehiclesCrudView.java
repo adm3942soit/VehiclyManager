@@ -7,6 +7,7 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.v7.data.util.BeanItemContainer;
 import com.vaadin.v7.ui.ComboBox;
 import org.vaadin.crudui.crud.CrudOperation;
 import org.vaadin.crudui.crud.impl.GridBasedCrudComponent;
@@ -23,6 +24,8 @@ public class VehiclesCrudView extends VerticalLayout implements View {
     public static final String NAME = "VEHICLES VIEW";
 
     public final GridBasedCrudComponent<Vehicle> vehiclesCrud = new GridBasedCrudComponent<>(Vehicle.class, new HorizontalSplitCrudLayout());
+    public static final BeanItemContainer<Vehicle> container = new BeanItemContainer<Vehicle>(Vehicle.class);
+    public static List<Vehicle> objects;
 
     public VehiclesCrudView(VehicleService vehicleService) {
         setSizeFull();
@@ -30,6 +33,11 @@ public class VehiclesCrudView extends VerticalLayout implements View {
 
         setVehiclesCrudProperties(vehicleService);
         addComponent(vehiclesCrud);
+        objects = vehicleService.findAll();
+
+        objects.forEach(vehicle -> {
+            container.addBean(vehicle);
+        });
 
 
         setComponentAlignment(vehiclesCrud, Alignment.MIDDLE_CENTER);

@@ -46,33 +46,22 @@ public class PrintView extends CustomComponent implements View {
         openerRenta.setFeatures("height=400,width=400,resizable");
         openerRenta.extend(printRenta);
 
-//        composition(layout);
+        final com.vaadin.ui.Button printVehicles = new Button("Print vehicles");
+        printVehicles.setPrimaryStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+        printVehicles.setIcon(new ThemeResource("img/veh.jpg"));
+        // Create an opener extension
+        BrowserWindowOpener openerVehicles =
+                new BrowserWindowOpener(PrintVehiclesUI.class);
+        openerRenta.setFeatures("height=400,width=400,resizable");
+        openerVehicles.extend(printVehicles);
+
         viewLayout.addComponent(printPersons);
         viewLayout.addComponent(printRenta);
+        viewLayout.addComponent(printVehicles);
+
         setCompositionRoot(viewLayout);
     }
 
-//    void composition(VerticalLayout layout) {
-//        // BEGIN-EXAMPLE: layout.popupview.composition
-//        com.vaadin.v7.ui.TextField tf = new com.vaadin.v7.ui.TextField();
-//        layout.addComponent(tf);
-//
-//        Table table = new Table(null, TableExample.generateContent());
-//        table.setSelectable(true);
-//
-//        final PopupView popup = new PopupView("Small", table);
-//        layout.addComponent(popup);
-//
-//        tf.addListener(new Property.ValueChangeListener() {
-//            private static final long serialVersionUID = -7331971790077682727L;
-//
-//            public void valueChange(Property.ValueChangeEvent event) {
-//                popup.setPopupVisible(true);
-//            }
-//        });
-//        tf.setImmediate(true);
-//        // END-EXAMPLE: layout.popupview.composition
-//    }
 
 
 
