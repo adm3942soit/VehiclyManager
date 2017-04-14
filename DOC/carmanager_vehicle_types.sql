@@ -4,7 +4,7 @@ create table vehicle_types
 (
   ID bigint not null auto_increment
     primary key,
-  CREATED datetime not null,
+  CREATED datetime  not null,
   UPDATED datetime not null,
   TYPE varchar(50) not null,
   PICTURE varchar(200) null,
@@ -14,6 +14,7 @@ create table vehicle_types
   unique (TYPE)
 )
 ;
+
 
 ;
 
