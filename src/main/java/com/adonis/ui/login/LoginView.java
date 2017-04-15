@@ -27,15 +27,18 @@ public class LoginView extends CssLayout implements View {
 
     public LoginView(PersonService personService, LoginListener loginListener){
         this.service = personService;
-        addStyleName("login-screen");
+//        addStyleName("login-screen");
         loginFormLayout = new HorizontalLayout();
         VerticalLayout centeringLayout = new VerticalLayout();
         centeringLayout.setStyleName("centering-layout");
+        centeringLayout.setSizeFull();
+        centeringLayout.addStyleName(ValoTheme.PANEL_WELL);
 
         loginForm = new LoginForm();
         loginForm.setStyleName(ValoTheme.FORMLAYOUT_LIGHT);
-        loginForm.setSizeUndefined();
+        loginForm.setSizeFull();
         updateCaption();
+        loginForm.setSizeFull();
         loginForm.addLoginListener(new LoginForm.LoginListener() {
             @Override
             public void onLogin(LoginForm.LoginEvent event) {
@@ -46,7 +49,9 @@ public class LoginView extends CssLayout implements View {
         centeringLayout.setComponentAlignment(loginForm,
                 Alignment.MIDDLE_CENTER);
         loginFormLayout.addComponent(centeringLayout);
+        loginFormLayout.setComponentAlignment(centeringLayout, Alignment.MIDDLE_CENTER);
         addComponent(loginFormLayout);
+
     }
     protected void updateCaption() {
         float width = loginForm.getWidth();
@@ -54,8 +59,8 @@ public class LoginView extends CssLayout implements View {
 
         String w = width < 0 ? "auto" : (int) width + "px";
         String h = height < 0 ? "auto" : (int) height + "px";
-
-        loginForm.setCaption("LoginForm ");
+        loginForm.setSizeFull();
+        loginForm.setCaption("Enter your login and password here");
     }
     private void login(LoginForm form, String user, String password){
 

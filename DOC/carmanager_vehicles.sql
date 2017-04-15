@@ -13,8 +13,8 @@ create table vehicles
 	ACTIVE bit default b'0' not null,
 	LOCATION varchar(100) null,
 	VIN_NUMBER varchar(50) null,
-	CREATED datetime default CURRENT_TIMESTAMP null,
-	UPDATED datetime default CURRENT_TIMESTAMP null,
+	CREATED datetime  null,
+	UPDATED datetime  null,
 	PRICE double null,
 	constraint vehicles_ID_uindex
 	unique (ID),

@@ -1,10 +1,10 @@
 package com.adonis.ui.converters;
 
+import com.google.common.base.Strings;
+
 import java.sql.Timestamp;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -27,6 +27,7 @@ public class DateUtils {
     }
     /*util.Date->sql.Timestamp*/
     public static Timestamp getTimeStamp(Date date) {
+        if (date==null) return null;
         Timestamp timestamp = new Timestamp(date.getTime());
         return timestamp;
     }
@@ -54,5 +55,12 @@ public class DateUtils {
         java.sql.Time sqlTime = new java.sql.Time(utilDate.getTime());
         return sqlTime;
     }
-
+   public static Timestamp convertValue(String dateString){
+        if(Strings.isNullOrEmpty(dateString)) return null;
+       // try to parse with alternative format
+       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+       LocalDateTime dateTime = LocalDateTime.parse(dateString, formatter);
+       Timestamp parsedValueTo = new Timestamp(dateTime.toEpochSecond(ZoneOffset.ofTotalSeconds(0)));
+       return parsedValueTo;
+   }
 }

@@ -6,8 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -39,13 +41,14 @@ public class Person extends Audit
 	@Column(name = "LOGIN", nullable = true, unique = true)
 	private String login;
 
+	@NotNull(message="Please select a password")
+	@Length(min=5, max=10, message="Password should be between 5 - 10 charactes")
 	@Column(name = "PASSWORD", nullable = true)
 	private String password;
 
 	@Column(name = "BIRTH_DATE", nullable = true)
 	private Date birthDate;
 
-//	@Column(name = "ADDRESS", nullable = true)
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "ADDRESS")
 	private Address address;

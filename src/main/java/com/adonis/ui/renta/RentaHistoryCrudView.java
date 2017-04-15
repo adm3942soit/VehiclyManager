@@ -4,26 +4,28 @@ import com.adonis.data.renta.RentaHistory;
 import com.adonis.data.service.PersonService;
 import com.adonis.data.service.RentaHistoryService;
 import com.adonis.data.service.VehicleService;
+import com.adonis.ui.converters.DateUtils;
 import com.adonis.ui.converters.StringOfInstantToSqlTimestampConverter;
+import com.vaadin.data.converter.StringToDoubleConverter;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import com.vaadin.v7.data.util.BeanItemContainer;
 import com.vaadin.v7.shared.ui.datefield.Resolution;
 import com.vaadin.v7.ui.ComboBox;
 import com.vaadin.v7.ui.Field;
+import com.vaadin.v7.ui.TextField;
 import org.vaadin.crudui.crud.CrudOperation;
 import org.vaadin.crudui.crud.impl.GridBasedCrudComponent;
 import org.vaadin.crudui.form.FieldProvider;
 import org.vaadin.crudui.form.impl.GridLayoutCrudFormFactory;
 import org.vaadin.crudui.layout.impl.HorizontalSplitCrudLayout;
 
+import javax.annotation.PostConstruct;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.List;
@@ -37,48 +39,55 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
     public static final BeanItemContainer<RentaHistory> container = new BeanItemContainer<RentaHistory>(RentaHistory.class);
     public static List<RentaHistory> objects;
 
-    Double price;// = 0.0;
-    com.vaadin.v7.ui.TextField priceTextField;
-    com.vaadin.v7.ui.TextField summaTextField;
+    Double price, summa;// = 0.0;
+    Timestamp parsedValueFrom, parsedValueTo;
+    com.vaadin.v7.ui.TextField priceTextField = new TextField("price"){
+        @Override
+        public Object getConvertedValue() {
+            return price;
+        }
+    };
+    com.vaadin.v7.ui.TextField summaTextField = new TextField("summa"){
+        @Override
+        public Object getConvertedValue() {
+            return summa;
+        }
+
+    };
     com.vaadin.v7.ui.DateField fromDateDateField = new com.vaadin.v7.ui.DateField("fromDate") {
-        Timestamp parsedValue;
+
         @Override
         protected Timestamp handleUnparsableDateString(
                 String dateString) {
             try {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                LocalDateTime dateTime = LocalDateTime.parse(dateString, formatter);
-                parsedValue = new Timestamp(dateTime.toEpochSecond(ZoneOffset.ofTotalSeconds(0)));
-                return parsedValue;
+                parsedValueFrom = DateUtils.convertValue(dateString);
+                return parsedValueFrom;
             } catch (DateTimeParseException e) {
                 return null;
             }
         }
         @Override
         public Object getConvertedValue() {
-            return this.parsedValue;
+            return parsedValueFrom;
         }
 
     };
     com.vaadin.v7.ui.DateField toDateDateField = new com.vaadin.v7.ui.DateField("toDate") {
-        Timestamp parsedValue;
         @Override
         protected Timestamp handleUnparsableDateString(
                 String dateString) {
 
             try {
                 // try to parse with alternative format
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                LocalDateTime dateTime = LocalDateTime.parse(dateString, formatter);
-                parsedValue = new Timestamp(dateTime.toEpochSecond(ZoneOffset.ofTotalSeconds(0)));
-                return parsedValue;
+                parsedValueTo = DateUtils.convertValue(dateString);
+                return parsedValueTo;
             } catch (DateTimeParseException e) {
                 return null;
             }
         }
         @Override
         public Object getConvertedValue() {
-            return this.parsedValue;
+            return parsedValueTo;
         }
 
     };
@@ -86,6 +95,11 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
     public final GridBasedCrudComponent<RentaHistory> crud = new GridBasedCrudComponent<>(RentaHistory.class, new HorizontalSplitCrudLayout());
     private PersonService personService;
     private VehicleService vehicleService;
+    @PostConstruct
+    private void init(){
+     summaTextField.setConverter(StringToDoubleConverter.class);
+        priceTextField.setConverter(StringToDoubleConverter.class);
+    }
 
     public RentaHistoryCrudView(RentaHistoryService service, PersonService personService, VehicleService vehicleService) {
         this.personService = personService;
@@ -126,6 +140,28 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
             List<String> persons = personService.findAllNames();
             persons.forEach(person -> comboBox.addItem(person));
         });
+        formFactory.setFieldProvider("price", new FieldProvider() {
+            @Override
+            public Field buildField() {
+                priceTextField.setConverter(StringToDoubleConverter.class);
+               // priceTextField.setConvertedValue(String.valueOf(price));
+                return priceTextField;
+            }
+        });
+//        crud.getAddButton().addClickListener(new Button.ClickListener() {
+//            @Override
+//            public void buttonClick(Button.ClickEvent event) {
+//                price = priceTextField.getValue()==null?null:Double.parseDouble(priceTextField.getValue());
+//               summa = summaTextField.getValue()==null?null: Double.parseDouble(summaTextField.getValue());
+//            }
+//        });
+        formFactory.setFieldProvider("summa", new FieldProvider() {
+            @Override
+            public Field buildField() {
+                summaTextField.setConverter(StringToDoubleConverter.class);
+                return summaTextField;
+            }
+        });
 
         formFactory.setFieldType("vehicle", ComboBox.class);
         formFactory.setFieldProvider("vehicle", () -> new ComboBox("vehicle", vehicleService.findAllNames()));
@@ -139,6 +175,7 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
                     String vehicle_nmbr = (String) comboBox.getValue();
                     price = vehicleService.findByVehicleNumber(vehicle_nmbr).getPrice();
                     if (priceTextField != null && price != 0) {
+                        priceTextField.setConverter(StringToDoubleConverter.class);
                         priceTextField.setValue(String.valueOf(price));
                         priceTextField.setEnabled(false);
                     }
@@ -146,6 +183,8 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
             });
         });
         crud.getGrid().getColumn("fromDate").setRenderer(new com.vaadin.v7.ui.renderers.DateRenderer("%1$te/%1$tm/%1$tY %1$tH:%1$tM:%1$tS"));
+
+
         formFactory.setFieldProvider("fromDate", new FieldProvider() {
             @Override
             public Field buildField() {
@@ -167,11 +206,14 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
                     public void componentEvent(Event event) {
                         Date dateFrom = fromDateDateField.getValue();
                         Date dateTo = toDateDateField.getValue();
+                        parsedValueFrom = DateUtils.getTimeStamp(dateFrom);
+                        parsedValueTo = DateUtils.getTimeStamp(dateTo);
                         if(dateFrom!=null && dateTo!=null && priceTextField!=null && priceTextField.getValue()!=null){
                             long countMinutes = (dateTo.getTime()-dateFrom.getTime())/1000/60/60;
-                           // price = Double.parseDouble(priceTextField.getValue());
                             if(summaTextField!=null && price!=null) {
-                                summaTextField.setValue(String.valueOf(price * countMinutes));
+                                summaTextField.setConverter(StringToDoubleConverter.class);
+                                summa = price * countMinutes;
+                                summaTextField.setValue(String.valueOf(summa));
                                 summaTextField.setEnabled(false);
                             }
                         }
@@ -180,14 +222,6 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
                 return toDateDateField;
             }
         });
-
-        formFactory.setFieldCreationListener("price", field -> {
-            priceTextField = (com.vaadin.v7.ui.TextField) field;
-        });
-        formFactory.setFieldCreationListener("summa", field -> {
-            summaTextField = (com.vaadin.v7.ui.TextField) field;
-        });
-
         crud.setCrudFormFactory(formFactory);
         crud.getGrid().setColumns("person", "vehicle", "fromDate", "toDate", "price", "summa", "paid");
 
