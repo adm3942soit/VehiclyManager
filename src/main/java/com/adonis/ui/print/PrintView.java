@@ -2,14 +2,17 @@ package com.adonis.ui.print;
 
 import com.adonis.data.service.PersonService;
 import com.adonis.data.service.RentaHistoryService;
+import com.adonis.ui.MainUI;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.BrowserWindowOpener;
 import com.vaadin.server.ThemeResource;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+
+import static com.adonis.ui.print.PrintPersonsUI.createXLS;
+import static com.adonis.ui.print.PrintRentaUI.createXLSRenta;
+import static com.adonis.ui.print.PrintVehiclesUI.createXLSVehicles;
 
 /**
  * Created by oksdud on 13.04.2017.
@@ -53,10 +56,45 @@ public class PrintView extends CustomComponent implements View {
                 new BrowserWindowOpener(PrintVehiclesUI.class);
         openerRenta.setFeatures("height=400,width=400,resizable");
         openerVehicles.extend(printVehicles);
-
-        viewLayout.addComponent(printPersons);
-        viewLayout.addComponent(printRenta);
-        viewLayout.addComponent(printVehicles);
+        HorizontalLayout horizontalLayout1 = new HorizontalLayout();
+        Button xlsPerson = new Button("xls");
+        xlsPerson.setPrimaryStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+        xlsPerson.setIcon(new ThemeResource("img/xls.jpg"));
+        xlsPerson.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                createXLS("persons.xls", MainUI.personsCrudView.objects);
+                Notification.show("Successfully!");
+            }
+        });
+        horizontalLayout1.addComponentsAndExpand(printPersons, xlsPerson);
+        HorizontalLayout horizontalLayout2 = new HorizontalLayout();
+        Button xlsRenta = new Button("xls");
+        xlsRenta.setPrimaryStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+        xlsRenta.setIcon(new ThemeResource("img/xls.jpg"));
+        xlsRenta.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                createXLSRenta("renta.xls", MainUI.rentaHistoryCrudView.objects);
+                Notification.show("Successfully!");
+            }
+        });
+        horizontalLayout2.addComponentsAndExpand(printRenta, xlsRenta);
+        HorizontalLayout horizontalLayout3 = new HorizontalLayout();
+        Button xlsVehicles = new Button("xls");
+        xlsVehicles.setIcon(new ThemeResource("img/xls.jpg"));
+        xlsVehicles.setPrimaryStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+        xlsVehicles.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                createXLSVehicles("vehicles.xls", MainUI.getVehiclesCrudView().objects);
+                Notification.show("Successfully!");
+            }
+        });
+        horizontalLayout3.addComponentsAndExpand(printVehicles, xlsVehicles);
+        viewLayout.addComponent(horizontalLayout1);
+        viewLayout.addComponent(horizontalLayout2);
+        viewLayout.addComponent(horizontalLayout3);
 
         setCompositionRoot(viewLayout);
     }

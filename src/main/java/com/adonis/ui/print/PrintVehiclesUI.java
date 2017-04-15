@@ -26,14 +26,14 @@ public class PrintVehiclesUI extends UI {
         table.setVisibleColumns("vehicleNmbr", "licenseNmbr", "make", "vehicleType", "model", "year", "status", "location","price","active");
         // Have some content to print
         setContent(table);
-        createXLS("vehicles.xls", MainUI.getVehiclesCrudView().objects);
+//        createXLS("vehicles.xls", MainUI.getVehiclesCrudView().objects);
         // Print automatically when the window opens
         JavaScript.getCurrent().execute(
                 "setTimeout(function() {" +
                         "  print(); self.close();}, 0);");
     }
-    int index = 0;
-    private void createXLS(String fileName, List<Vehicle> vehicles) {
+    public static int index = 1;
+    public static void createXLSVehicles(String fileName, List<Vehicle> vehicles) {
         try {
             HSSFWorkbook wb = new HSSFWorkbook();
             HSSFSheet sheet = wb.createSheet("Excel Sheet");

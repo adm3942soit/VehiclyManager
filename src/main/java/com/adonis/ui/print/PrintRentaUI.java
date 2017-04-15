@@ -26,16 +26,16 @@ public class PrintRentaUI extends UI {
         table.setVisibleColumns("person", "vehicle", "fromDate", "toDate", "price", "summa", "paid");
         // Have some content to print
         setContent(table);
-        createXLS("renta.xls", MainUI.rentaHistoryCrudView.objects);
+//        createXLS("renta.xls", MainUI.rentaHistoryCrudView.objects);
         // Print automatically when the window opens
         JavaScript.getCurrent().execute(
                 "setTimeout(function() {" +
                         "  print(); self.close();}, 0);");
     }
 
-    int index = 0;
+    public static int index = 1;
 
-    private void createXLS(String fileName, List<RentaHistory> rents) {
+    public static void createXLSRenta(String fileName, List<RentaHistory> rents) {
         try {
             HSSFWorkbook wb = new HSSFWorkbook();
             HSSFSheet sheet = wb.createSheet("Excel Sheet");

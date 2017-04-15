@@ -41,8 +41,8 @@ public class Person extends Audit
 	@Column(name = "LOGIN", nullable = true, unique = true)
 	private String login;
 
-	@NotNull(message="Please select a password")
-	@Length(min=5, max=10, message="Password should be between 5 - 10 charactes")
+//	@NotNull(message="Please select a password")
+//	@Length(min=5, max=10, message="Password should be between 5 - 10 charactes")
 	@Column(name = "PASSWORD", nullable = true)
 	private String password;
 

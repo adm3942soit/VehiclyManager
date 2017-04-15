@@ -26,16 +26,16 @@ public class PrintPersonsUI extends UI {
         table.setVisibleColumns("firstName", "lastName", "email", "birthDate", "phoneNumber");
         // Have some content to print
         setContent(table);
-        createXLS("persons.xls", MainUI.personsCrudView.objects);
+//        createXLS("persons.xls", MainUI.personsCrudView.objects);
         // Print automatically when the window opens
         JavaScript.getCurrent().execute(
                 "setTimeout(function() {" +
                         "  print(); self.close();}, 0);");
     }
 
-    int index = 1;
+    public static int index = 1;
 
-    private void createXLS(String fileName, List<Person> people) {
+    public static void createXLS(String fileName, List<Person> people) {
         try {
             HSSFWorkbook wb = new HSSFWorkbook();
             HSSFSheet sheet = wb.createSheet("Excel Sheet");

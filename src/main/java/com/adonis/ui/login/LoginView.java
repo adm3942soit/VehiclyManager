@@ -26,9 +26,11 @@ public class LoginView extends CssLayout implements View {
     PersonService service;
 
     public LoginView(PersonService personService, LoginListener loginListener){
+        setSizeFull();
         this.service = personService;
-//        addStyleName("login-screen");
+        addStyleName("login-screen");
         loginFormLayout = new HorizontalLayout();
+        loginFormLayout.setSizeFull();
         VerticalLayout centeringLayout = new VerticalLayout();
         centeringLayout.setStyleName("centering-layout");
         centeringLayout.setSizeFull();
@@ -36,7 +38,8 @@ public class LoginView extends CssLayout implements View {
 
         loginForm = new LoginForm();
         loginForm.setStyleName(ValoTheme.FORMLAYOUT_LIGHT);
-        loginForm.setSizeFull();
+        loginForm.setPrimaryStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
+
         updateCaption();
         loginForm.setSizeFull();
         loginForm.addLoginListener(new LoginForm.LoginListener() {
