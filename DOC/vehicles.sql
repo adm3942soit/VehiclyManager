@@ -1,5 +1,5 @@
 -- auto-generated definition
-create table vehicles
+create table carmanager.vehicles
 (
 	ID bigint not null auto_increment
 		primary key,

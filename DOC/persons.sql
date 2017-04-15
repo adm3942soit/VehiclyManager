@@ -1,6 +1,6 @@
 -- auto-generated definition
 -- auto-generated definition
-create table persons
+create table carmanager.persons
 (
 	ID bigint not null auto_increment
 		primary key,

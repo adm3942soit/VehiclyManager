@@ -1,4 +1,4 @@
-create table address
+create table carmanager.address
 (
 	ID bigint not null auto_increment
 		primary key,

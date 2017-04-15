@@ -1,4 +1,4 @@
-create table vehicle_models
+create table carmanager.vehicle_models
 (
 	ID bigint not null auto_increment
 		primary key,

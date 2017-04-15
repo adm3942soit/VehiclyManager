@@ -1,6 +1,6 @@
 -- auto-generated definition
 -- auto-generated definition
-create table renta_history
+create table carmanager.renta_history
 (
   ID bigint not null auto_increment
     primary key,
