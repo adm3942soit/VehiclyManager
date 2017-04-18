@@ -5,6 +5,9 @@ package com.adonis.ui.persons;
  */
 
 import com.adonis.data.persons.Address;
+import com.vaadin.event.Action;
+import com.vaadin.event.ShortcutAction;
+import com.vaadin.server.BrowserWindowOpener;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -20,13 +23,18 @@ import com.vaadin.v7.data.util.BeanItem;
 public class AddressPopup extends com.vaadin.v7.ui.CustomField<Address> {
 
     private FieldGroup fieldGroup = new BeanFieldGroup<Address>(Address.class);
+    public static  Address currentAddress;
     public AddressPopup() {
     }
+    static final Action esc = new ShortcutAction("Close window",
+            ShortcutAction.KeyCode.ESCAPE, null);
+    static final Action[] actions = new Action[] { esc };
+    FormLayout layout = new FormLayout();
+    final ClosableDialog window = new ClosableDialog("Edit address", layout);
 
     @Override
     protected Component initContent() {
-        FormLayout layout = new FormLayout();
-        final Window window = new Window("Edit address", layout);
+        window.setClosable(true);
         com.vaadin.v7.ui.TextArea street = new com.vaadin.v7.ui.TextArea("Street address:");
         com.vaadin.v7.ui.TextField zip = new com.vaadin.v7.ui.TextField("Zip code:");
         com.vaadin.v7.ui.TextField city = new com.vaadin.v7.ui.TextField("City:");
@@ -42,9 +50,14 @@ public class AddressPopup extends com.vaadin.v7.ui.CustomField<Address> {
         Button button = new Button("Open address editor", new ClickListener() {
 
             public void buttonClick(ClickEvent event) {
-                getUI().addWindow(window);
+
+//                getUI().addWindow(window);
+
             }
         });
+        BrowserWindowOpener browserWindowOpener = new BrowserWindowOpener(AddressUI.class);
+        browserWindowOpener.setFeatures("height=400,width=400,resizable");
+        browserWindowOpener.extend(button);
 
         window.addCloseListener(new CloseListener() {
             public void windowClose(CloseEvent e) {
@@ -56,14 +69,13 @@ public class AddressPopup extends com.vaadin.v7.ui.CustomField<Address> {
                     address.setStreet(street.getValue());
                     address.setZip(zip.getValue());
                     fieldGroup.commit();
-
                 } catch (FieldGroup.CommitException ex) {
                     ex.printStackTrace();
                 }
             }
         });
 
-        window.center();
+//        window.center();
         window.setWidth(null);
         layout.setWidth(null);
         layout.setMargin(true);
@@ -77,8 +89,36 @@ public class AddressPopup extends com.vaadin.v7.ui.CustomField<Address> {
 
     @Override
     public void setInternalValue(Address address) {
-        Address currentAddress = address!=null?address:new Address();
+        currentAddress = address!=null?address:new Address();
         super.setInternalValue(currentAddress);
         fieldGroup.setItemDataSource(new BeanItem<Address>(currentAddress));
+    }
+    class ClosableDialog extends Window implements Action.Handler {
+
+        ClosableDialog(String caption, Component component) {
+            setModal(true);
+            setCaption(caption);
+            addActionHandler(this);
+//            Button ok = new Button("Ok");
+//            addComponent(ok);
+//            ok.focus();
+            setContent(component);
+        }
+
+        public void handleAction(Action action, Object sender, Object target) {
+            if (action == esc) {
+//                ((Window) getParent()).removeWindow(this);
+                getUI().removeWindow(window);
+            }
+        }
+
+        public Action[] getActions(Object target, Object sender) {
+            return actions;
+        }
+        @Override
+        public void close()
+        {
+            getUI().removeWindow(window);
+        }
     }
 }

@@ -32,8 +32,10 @@ public class PersonsCrudView extends VerticalLayout implements View {
     public static final GridBasedCrudComponent<Person> personsCrud = new GridBasedCrudComponent<>(Person.class, new HorizontalSplitCrudLayout());
     public static final BeanItemContainer<Person> container = new BeanItemContainer<Person>(Person.class);
     public static List<Person> objects;
+    public PersonService personService;
 
     public PersonsCrudView(PersonService personService) {
+        this.personService = personService;
         setSizeFull();
         setStyleName(ValoTheme.FORMLAYOUT_LIGHT);
 
