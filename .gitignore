@@ -18,7 +18,12 @@
 
 ### NetBeans ###
 nbproject/private/
-build/
+build/classes/
+build/dependency-cache/
+build/reports
+build/resources
+build/test-results
+build/tmp
 nbbuild/
 dist/
 nbdist/
