@@ -52,7 +52,6 @@ public class MainScreen extends HorizontalLayout implements View {
         menu.addView(new VehicleModelsCrudView(ui.vehicleService), VehicleModelsCrudView.NAME, VehicleModelsCrudView.NAME, new ThemeResource("img/vehicle-model.jpg"));
         menu.addView(new VehicleTypesCrudView(ui.vehicleService), VehicleTypesCrudView.NAME, VehicleTypesCrudView.NAME, new ThemeResource("img/vehicle-type.jpg"));
         menu.addView(new VehiclesCrudView(ui.vehicleService), VehiclesCrudView.NAME, VehiclesCrudView.NAME, new ThemeResource("img/car.jpg"));//vehicles1
-        //new PersonsCrudView(ui.service)
         menu.addView(ui.getPersonsCrudView(), PersonsCrudView.NAME, PersonsCrudView.NAME, new ThemeResource("img/customers.jpg"));
         menu.addView(new RentaHistoryCrudView(ui.rentaHistoryService,ui.service, ui.vehicleService), RentaHistoryCrudView.NAME, RentaHistoryCrudView.NAME, new ThemeResource("img/for-rent.jpg"));
         menu.addView(new RentaChartView(ui.service, ui.rentaHistoryService, ui.vehicleService), RentaChartView.NAME, RentaChartView.NAME, new ThemeResource("img/chart.jpg"));
