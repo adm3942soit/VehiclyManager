@@ -33,12 +33,12 @@ import java.util.function.Consumer;
 @NoArgsConstructor
 public class MainScreen extends HorizontalLayout implements View {
     private Menu menu;
-
+    private MainUI mainUI;
     public static final String NAME = "MainScreen";
     LoginView loginView;
 
     public MainScreen(MainUI ui) {
-
+        mainUI = ui;
         setStyleName("main-screen");
 
         CssLayout viewContainer = new CssLayout();
@@ -56,11 +56,10 @@ public class MainScreen extends HorizontalLayout implements View {
         menu.addView(new RentaHistoryCrudView(ui.rentaHistoryService,ui.service, ui.vehicleService), RentaHistoryCrudView.NAME, RentaHistoryCrudView.NAME, new ThemeResource("img/for-rent.jpg"));
         menu.addView(new RentaChartView(ui.service, ui.rentaHistoryService, ui.vehicleService), RentaChartView.NAME, RentaChartView.NAME, new ThemeResource("img/chart.jpg"));
         menu.addView(new RegistrationUI(ui.service), "CUSTOMER REGISTRATION" , "CUSTOMER REGISTRATION", new ThemeResource("img/Register-Today.jpg"));
-        menu.addView(new PersonUI(ui.service, true), "PROFILE" , "PROFILE", new ThemeResource("img/user-icon.jpg"));
+        menu.addView(new PersonUI(ui.service, true, MainUI.loginPerson), "PROFILE" , "PROFILE", new ThemeResource("img/user-icon.jpg"));
         menu.addView(new PrintView(ui.service, ui.rentaHistoryService), "PRINT", "PRINT", new ThemeResource("img/print-icon.jpg"));
         menu.addView(new AboutView(), AboutView.VIEW_NAME, AboutView.VIEW_NAME, new ThemeResource("img/info.jpg"));
 //        menu.addView(ui.getLoginView(), "LOGOUT", "LOGOUT", new ThemeResource("img/logout.jpg"));
-
         navigator.addViewChangeListener(viewChangeListener);
 
         addComponent(menu);
@@ -75,8 +74,16 @@ public class MainScreen extends HorizontalLayout implements View {
 
         @Override
         public boolean beforeViewChange(ViewChangeEvent event) {
+                boolean isLoggedIn = MainUI.loginPerson!=null;
+                boolean isProfileView = event.getNewView() instanceof PersonUI;
+                if(isLoggedIn && isProfileView ) {
+                    PersonUI.grid.getSelectionModel().select(MainUI.loginPerson);
+                    return true;
+                }
             return true;
+
         }
+
 
         @Override
         public void afterViewChange(ViewChangeEvent event) {

@@ -13,6 +13,7 @@ import com.adonis.ui.persons.PersonsCrudView;
 import com.adonis.ui.persons.RegistrationUI;
 import com.adonis.ui.renta.RentaHistoryCrudView;
 import com.adonis.ui.vehicles.VehiclesCrudView;
+import com.adonis.utils.DatabaseUtils;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.navigator.Navigator;
@@ -48,7 +49,7 @@ public class MainUI extends UI {
     PersonUI personView;
     public LoginView loginView;
     RegistrationUI registrationUI;
-    MainScreen mainScreen;
+    public static MainScreen mainScreen;
     public static PersonsCrudView personsCrudView;
     public static RentaHistoryCrudView rentaHistoryCrudView;
     public static VehiclesCrudView vehiclesCrudView;
@@ -56,6 +57,11 @@ public class MainUI extends UI {
 
     @PostConstruct
     void load() {
+        try {
+            DatabaseUtils.createDatabase();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if(service.findTotalCustomer()==0) {
             service.loadData();
         }
@@ -69,7 +75,7 @@ public class MainUI extends UI {
             vehicleService.loadVechicleModels();
         }
 
-        personView = new PersonUI(service, false);
+        personView = new PersonUI(service, false, null);
         loginView = new LoginView(service, new LoginView.LoginListener() {
             @Override
             public void loginSuccessful() {
@@ -98,8 +104,6 @@ public class MainUI extends UI {
         getNavigator().addView(PersonUI.NAME, personView);
         getNavigator().addView(MainScreen.NAME, mainScreen);
         getNavigator().addView(PersonsCrudView.NAME, personsCrudView);
-
-
         if (!accessControl.isUserSignedIn()) {
             getNavigator().navigateTo(LoginView.NAME);
         } else {

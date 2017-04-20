@@ -2,7 +2,6 @@ package com.adonis.ui.persons;
 
 import com.adonis.data.persons.Person;
 import com.adonis.data.service.PersonService;
-import com.adonis.ui.MainUI;
 import com.google.common.collect.Lists;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -24,16 +23,19 @@ public class PersonUI extends CustomComponent implements View {
     Person customer;
     PersonView editor = new PersonView(this::savePerson, this::deletePerson, this::addPerson, true);
     List<Person> customers= Lists.newArrayList();
-    Grid<Person> grid = new Grid();
+    public static Grid<Person> grid = new Grid();
     HorizontalSplitPanel splitter = new HorizontalSplitPanel(grid, editor);
     // The view root layout
     HorizontalLayout viewLayout = new HorizontalLayout();
 
     Boolean selectLoginPerson = false;
 
-    public PersonUI (PersonService personService, Boolean selectLoginPerson){
+    Person selectedPerson;
+
+    public PersonUI (PersonService personService, Boolean selectLoginPerson, Person selectedPerson){
         this.service = personService;
         this.selectLoginPerson = selectLoginPerson;
+        this.selectedPerson = selectedPerson;
         setSizeFull();
         updateGrid();
         grid.addColumn(Person::getFirstName).setCaption("First name");
@@ -64,13 +66,15 @@ public class PersonUI extends CustomComponent implements View {
     private int findIndex(Person person){
         return customers.indexOf(person);
     }
+
     private void selectDefault() {
         if (!customers.isEmpty()) {
             if(!selectLoginPerson)
                grid.getSelectionModel().select((Person)this.customers.get(0));
             else {
-                if (MainUI.loginPerson != null)
-                    grid.getSelectionModel().select(customers.get(findIndex(MainUI.loginPerson)));
+                if (selectedPerson != null) {
+                    grid.getSelectionModel().select(customers.get(findIndex(selectedPerson)));
+                }
                 else grid.getSelectionModel().select((Person) this.customers.get(0));
             }
         }

@@ -70,7 +70,6 @@ public class LoginView extends CssLayout implements View {
         if((MainUI.loginPerson = service.findByCustomerLogin(user))!=null && service.findByCustomerLogin(user).getPassword().equals(password)){
             addStyleName(ValoTheme.UI_WITH_MENU);
             getUI().getNavigator().navigateTo(MainScreen.NAME);
-//            if(getUI()!=null && getUI().getPage()!=null)
             return;
         }else {
             addStyleName(ValoTheme.FORMLAYOUT_LIGHT);
