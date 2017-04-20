@@ -55,8 +55,8 @@ public class AddressUI extends UI {
                 }
             }
         });
-        Button cancel = new Button("Cancel");
-        inLayout.addComponents(cancel, close);
+//        Button cancel = new Button("Cancel");
+        inLayout.addComponents( close);
 
         layout.addComponent(street);
         layout.addComponent(zip);
