@@ -10,6 +10,8 @@ import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
+import java.io.File;
+
 import static com.adonis.ui.print.PrintPersonsUI.createXLS;
 import static com.adonis.ui.print.PrintRentaUI.createXLSRenta;
 import static com.adonis.ui.print.PrintVehiclesUI.createXLSVehicles;
@@ -29,6 +31,9 @@ public class PrintView extends CustomComponent implements View {
         setSizeFull();
         addStyleName(ValoTheme.LAYOUT_WELL);
 
+        com.vaadin.v7.ui.TextArea fieldResult = new com.vaadin.v7.ui.TextArea("Result");
+        fieldResult.setPrimaryStyleName(ValoTheme.TEXTAREA_SMALL);
+        fieldResult.setEnabled(false);
 
         final com.vaadin.ui.Button printPersons = new Button("Print customers");
         printPersons.setPrimaryStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
@@ -63,8 +68,9 @@ public class PrintView extends CustomComponent implements View {
         xlsPerson.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                createXLS("persons.xls", MainUI.personsCrudView.objects);
+                File file = createXLS("persons.xls", MainUI.personsCrudView.objects);
                 Notification.show("Successfully!");
+                fieldResult.setValue("Created file "+file.getAbsolutePath()+" successfully!");
             }
         });
         horizontalLayout1.addComponentsAndExpand(printPersons, xlsPerson);
@@ -75,8 +81,9 @@ public class PrintView extends CustomComponent implements View {
         xlsRenta.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                createXLSRenta("renta.xls", MainUI.rentaHistoryCrudView.objects);
+                File file = createXLSRenta("renta.xls", MainUI.rentaHistoryCrudView.objects);
                 Notification.show("Successfully!");
+                fieldResult.setValue("Created file "+file.getAbsolutePath()+" successfully!");
             }
         });
         horizontalLayout2.addComponentsAndExpand(printRenta, xlsRenta);
@@ -87,14 +94,17 @@ public class PrintView extends CustomComponent implements View {
         xlsVehicles.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                createXLSVehicles("vehicles.xls", MainUI.getVehiclesCrudView().objects);
+                File file = createXLSVehicles("vehicles.xls", MainUI.getVehiclesCrudView().objects);
                 Notification.show("Successfully!");
+                fieldResult.setValue("Created file "+file.getAbsolutePath()+" successfully!");
             }
         });
         horizontalLayout3.addComponentsAndExpand(printVehicles, xlsVehicles);
         viewLayout.addComponent(horizontalLayout1);
         viewLayout.addComponent(horizontalLayout2);
         viewLayout.addComponent(horizontalLayout3);
+
+        viewLayout.addComponent(fieldResult);
 
         setCompositionRoot(viewLayout);
     }

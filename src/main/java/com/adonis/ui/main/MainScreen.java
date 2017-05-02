@@ -13,6 +13,7 @@ import com.adonis.ui.renta.RentaHistoryCrudView;
 import com.adonis.ui.vehicles.VehicleModelsCrudView;
 import com.adonis.ui.vehicles.VehicleTypesCrudView;
 import com.adonis.ui.vehicles.VehiclesCrudView;
+import com.adonis.ui.xls.XlsView;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -58,6 +59,7 @@ public class MainScreen extends HorizontalLayout implements View {
         menu.addView(new RegistrationUI(ui.service), "CUSTOMER REGISTRATION" , "CUSTOMER REGISTRATION", new ThemeResource("img/Register-Today.jpg"));
         menu.addView(new PersonUI(ui.service, true, MainUI.loginPerson), "PROFILE" , "PROFILE", new ThemeResource("img/user-icon.jpg"));
         menu.addView(new PrintView(ui.service, ui.rentaHistoryService), "PRINT", "PRINT", new ThemeResource("img/print-icon.jpg"));
+        menu.addView(new XlsView(ui.service, ui.rentaHistoryService, ui.vehicleService), "LOAD", "LOAD", new ThemeResource("img/xls1.jpg"));
         menu.addView(new AboutView(), AboutView.VIEW_NAME, AboutView.VIEW_NAME, new ThemeResource("img/info.jpg"));
 //        menu.addView(ui.getLoginView(), "LOGOUT", "LOGOUT", new ThemeResource("img/logout.jpg"));
         navigator.addViewChangeListener(viewChangeListener);

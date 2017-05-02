@@ -467,9 +467,10 @@ public class VehicleService {
         }
     }
 
-    public void loadVechicleTypes() {
-
-        String csvFile = "VechycleType.csv";
+    public void loadVechicleTypes(String fileName) {
+        String csvFile;
+        if(Strings.isNullOrEmpty(fileName))csvFile = "VechycleType.csv";
+        else csvFile = fileName;
         BufferedReader br = null;
         String line = "";
         String cvsSplitBy = ",";
@@ -519,9 +520,12 @@ public class VehicleService {
         }
     }
 
-    public void loadVechicleModels() {
+    public void loadVechicleModels(String fileName) {
 
-        String csvFile = "VechycleModels.csv";
+        String csvFile;
+        if(Strings.isNullOrEmpty(fileName))csvFile = "VechycleModels.csv";
+        else  csvFile = fileName;
+
         BufferedReader br = null;
         String line = "";
         String cvsSplitBy = ",";

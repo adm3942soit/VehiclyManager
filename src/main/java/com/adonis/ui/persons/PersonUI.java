@@ -63,6 +63,7 @@ public class PersonUI extends CustomComponent implements View {
         setCompositionRoot(viewLayout);
         selectDefault();
     }
+
     private int findIndex(Person person){
         return customers.indexOf(person);
     }

@@ -11,6 +11,7 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
 
@@ -26,14 +27,13 @@ public class PrintVehiclesUI extends UI {
         table.setVisibleColumns("vehicleNmbr", "licenseNmbr", "make", "vehicleType", "model", "year", "status", "location","price","active");
         // Have some content to print
         setContent(table);
-//        createXLS("vehicles.xls", MainUI.getVehiclesCrudView().objects);
         // Print automatically when the window opens
         JavaScript.getCurrent().execute(
                 "setTimeout(function() {" +
                         "  print(); self.close();}, 0);");
     }
     public static int index = 1;
-    public static void createXLSVehicles(String fileName, List<Vehicle> vehicles) {
+    public static File createXLSVehicles(String fileName, List<Vehicle> vehicles) {
         try {
             HSSFWorkbook wb = new HSSFWorkbook();
             HSSFSheet sheet = wb.createSheet("Excel Sheet");
@@ -67,6 +67,7 @@ public class PrintVehiclesUI extends UI {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+     return new File(fileName);
     }
 
 }

@@ -11,6 +11,7 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class PrintPersonsUI extends UI {
 
     public static int index = 1;
 
-    public static void createXLS(String fileName, List<Person> people) {
+    public static File createXLS(String fileName, List<Person> people) {
         try {
             HSSFWorkbook wb = new HSSFWorkbook();
             HSSFSheet sheet = wb.createSheet("Excel Sheet");
@@ -68,6 +69,6 @@ public class PrintPersonsUI extends UI {
             ex.printStackTrace();
         }
 
-
+    return new File(fileName);
     }
 }

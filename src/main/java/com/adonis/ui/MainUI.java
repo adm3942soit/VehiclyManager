@@ -29,6 +29,8 @@ import javax.annotation.PostConstruct;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 
+import static com.adonis.install.VehicleManagerInstaller.createShortcat;
+
 /**
  * Created by oksdud on 03.04.2017.
  */
@@ -57,6 +59,7 @@ public class MainUI extends UI {
 
     @PostConstruct
     void load() {
+        createShortcat();
         try {
             DatabaseUtils.createDatabase();
         } catch (Exception e) {
@@ -69,10 +72,10 @@ public class MainUI extends UI {
             vehicleService.loadData();
         }
         if(vehicleService.findLastType()==null){
-            vehicleService.loadVechicleTypes();
+            vehicleService.loadVechicleTypes("");
         }
         if(vehicleService.findLastModel()==null){
-            vehicleService.loadVechicleModels();
+            vehicleService.loadVechicleModels("");
         }
 
         personView = new PersonUI(service, false, null);

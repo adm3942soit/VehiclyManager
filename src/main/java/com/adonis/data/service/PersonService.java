@@ -312,5 +312,65 @@ public class PersonService {
             }
         }
     }
+    public void loadPersons(String nameFile) {
+
+        String csvFile = nameFile;
+        BufferedReader br = null;
+        String line = "";
+        String cvsSplitBy = ",";
+
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(csvFile);
+        Reader reader = new InputStreamReader(inputStream);
+
+        try {
+            br = new BufferedReader(reader);
+
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yy");
+
+            while ((line = br.readLine()) != null) {
+                String[] person = line.split(cvsSplitBy);
+
+                Person entry = new Person();
+
+                entry.setFirstName(person[1]);
+                entry.setLastName(person[2]);
+                entry.setEmail(person[3]);
+                try {
+                    entry.setBirthDate(sdf.parse(person[4]));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                if (person.length == 6) entry.setPicture(person[5]);
+                if (person.length == 7) entry.setNotes(person[6]);
+                entry.setAddress(new Address());
+                entry.setPhoneNumber("");
+                entry.setGender("");
+                entry.setName(entry.getFirstName()+" "+entry.getLastName());
+                entry.setCreated(new Date());
+                entry.setUpdated(new Date());
+                try {
+                    insert(entry);
+                } catch (Exception e) {
+                    if (e.getMessage() != null && e.getMessage().contains("Duplicate entry")) {
+                        break;
+                    }
+                }
+
+
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
 }

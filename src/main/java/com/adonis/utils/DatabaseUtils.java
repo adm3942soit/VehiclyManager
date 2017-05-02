@@ -1,13 +1,15 @@
 package com.adonis.utils;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
  * Created by oksdud on 19.04.2017.
  */
+@Slf4j
 public class DatabaseUtils {
 
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
@@ -50,10 +52,8 @@ public class DatabaseUtils {
             stmt.execute(FileReader.readFromFileFromResources("renta_history.sql"));
             System.out.println("Table renta_history created successfully...");
 
-        } catch (SQLException se) {
-            se.printStackTrace();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Database exist already!");
         }
         return false;
     }
