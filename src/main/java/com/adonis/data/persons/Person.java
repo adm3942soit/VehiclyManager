@@ -6,11 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.util.Date;
 
 /**
  * A domain object example. In a real application this would probably be a JPA
@@ -47,7 +44,7 @@ public class Person extends Audit
 	private String password;
 
 	@Column(name = "BIRTH_DATE", nullable = true)
-	private Date birthDate;
+	private java.util.Date birthDate;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "ADDRESS")

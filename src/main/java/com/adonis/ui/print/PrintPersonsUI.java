@@ -2,6 +2,7 @@ package com.adonis.ui.print;
 
 import com.adonis.data.persons.Person;
 import com.adonis.ui.MainUI;
+import com.adonis.ui.converters.DateUtils;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.JavaScript;
@@ -54,7 +55,7 @@ public class PrintPersonsUI extends UI {
                         row.createCell((short) 0).setCellValue(person.getFirstName());
                         row.createCell((short) 1).setCellValue(person.getLastName());
                         row.createCell((short) 2).setCellValue(person.getEmail());
-                        row.createCell((short) 3).setCellValue(person.getBirthDate());
+                        row.createCell((short) 3).setCellValue(DateUtils.utilDateToString(person.getBirthDate()));
                         row.createCell((short) 4).setCellValue(person.getLogin());
                         row.createCell((short) 5).setCellValue(person.getPhoneNumber());
                         index++;

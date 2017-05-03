@@ -62,9 +62,9 @@ public class PrintView extends CustomComponent implements View {
         openerRenta.setFeatures("height=400,width=400,resizable");
         openerVehicles.extend(printVehicles);
         HorizontalLayout horizontalLayout1 = new HorizontalLayout();
-        Button xlsPerson = new Button("xls");
+        Button xlsPerson = new Button("db persons into xls");
         xlsPerson.setPrimaryStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
-        xlsPerson.setIcon(new ThemeResource("img/xls.jpg"));
+        xlsPerson.setIcon(new ThemeResource("img/xls2.jpg"));
         xlsPerson.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
@@ -75,9 +75,9 @@ public class PrintView extends CustomComponent implements View {
         });
         horizontalLayout1.addComponentsAndExpand(printPersons, xlsPerson);
         HorizontalLayout horizontalLayout2 = new HorizontalLayout();
-        Button xlsRenta = new Button("xls");
+        Button xlsRenta = new Button("db history_renta into xls");
         xlsRenta.setPrimaryStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
-        xlsRenta.setIcon(new ThemeResource("img/xls.jpg"));
+        xlsRenta.setIcon(new ThemeResource("img/xls2.jpg"));
         xlsRenta.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
@@ -88,8 +88,8 @@ public class PrintView extends CustomComponent implements View {
         });
         horizontalLayout2.addComponentsAndExpand(printRenta, xlsRenta);
         HorizontalLayout horizontalLayout3 = new HorizontalLayout();
-        Button xlsVehicles = new Button("xls");
-        xlsVehicles.setIcon(new ThemeResource("img/xls.jpg"));
+        Button xlsVehicles = new Button("db vehicles into xls");
+        xlsVehicles.setIcon(new ThemeResource("img/xls2.jpg"));
         xlsVehicles.setPrimaryStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
         xlsVehicles.addClickListener(new Button.ClickListener() {
             @Override

@@ -2,6 +2,7 @@ package com.adonis.ui.print;
 
 import com.adonis.data.renta.RentaHistory;
 import com.adonis.ui.MainUI;
+import com.adonis.ui.converters.DateUtils;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.JavaScript;
@@ -38,6 +39,8 @@ public class PrintRentaUI extends UI {
 
     public static File createXLSRenta(String fileName, List<RentaHistory> rents) {
         try {
+            File file = new File(fileName);
+            if(file.exists()) file.delete();
             HSSFWorkbook wb = new HSSFWorkbook();
             HSSFSheet sheet = wb.createSheet("Excel Sheet");
             HSSFRow rowhead = sheet.createRow((short) 0);
@@ -54,8 +57,8 @@ public class PrintRentaUI extends UI {
                         HSSFRow row = sheet.createRow((short) index);
                         row.createCell((short) 0).setCellValue(rentaHistory.getPerson());
                         row.createCell((short) 1).setCellValue(rentaHistory.getVehicle());
-                        row.createCell((short) 2).setCellValue(rentaHistory.getFromDate());
-                        row.createCell((short) 3).setCellValue(rentaHistory.getToDate());
+                        row.createCell((short) 2).setCellValue(DateUtils.utilDateToString(DateUtils.getUtilDate(rentaHistory.getFromDate())));
+                        row.createCell((short) 3).setCellValue(DateUtils.utilDateToString(DateUtils.getUtilDate(rentaHistory.getToDate())));
                         row.createCell((short) 4).setCellValue(rentaHistory.getPrice());
                         row.createCell((short) 5).setCellValue(rentaHistory.getSumma());
 //                        row.createCell((short) 6).setCellValue(rentaHistory.getPaid());

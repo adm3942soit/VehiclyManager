@@ -63,4 +63,14 @@ public class DateUtils {
        Timestamp parsedValueTo = new Timestamp(dateTime.toEpochSecond(ZoneOffset.ofTotalSeconds(0)));
        return parsedValueTo;
    }
+   public static java.util.Date convertSqlDate(java.sql.Date sqlDate){
+       return new java.util.Date(sqlDate.getTime());
+   }
+   public static String utilDateToString(java.util.Date utilDate){
+
+       return getUtilDate(getTimeStamp(utilDate)).toInstant()  // Convert `java.util.Date` to `Instant`.
+               .atOffset( ZoneOffset.UTC )  // Transform `Instant` to `OffsetDateTime`.
+               .format( DateTimeFormatter.ISO_LOCAL_DATE_TIME )  // Generate a String.
+               .replace( "T" , " " );  // Put a SPACE in the middle.
+   }
 }
