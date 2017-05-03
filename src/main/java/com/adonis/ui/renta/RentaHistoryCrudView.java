@@ -4,13 +4,13 @@ import com.adonis.data.renta.RentaHistory;
 import com.adonis.data.service.PersonService;
 import com.adonis.data.service.RentaHistoryService;
 import com.adonis.data.service.VehicleService;
+import com.adonis.ui.addFields.RentaPaymentField;
 import com.adonis.ui.converters.DateUtils;
 import com.adonis.ui.converters.StringOfInstantToSqlTimestampConverter;
 import com.vaadin.data.converter.StringToDoubleConverter;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import com.vaadin.v7.data.util.BeanItemContainer;
@@ -148,13 +148,18 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
                 return priceTextField;
             }
         });
-//        crud.getAddButton().addClickListener(new Button.ClickListener() {
-//            @Override
-//            public void buttonClick(Button.ClickEvent event) {
-//                price = priceTextField.getValue()==null?null:Double.parseDouble(priceTextField.getValue());
-//               summa = summaTextField.getValue()==null?null: Double.parseDouble(summaTextField.getValue());
-//            }
-//        });
+        formFactory.setFieldProvider("paid", new FieldProvider() {
+            @Override
+            public Field buildField() {
+                RentaPaymentField field =
+                        ((RentaHistory) crud.getGrid().getSelectedRow()) != null ?
+                                new RentaPaymentField(((RentaHistory) crud.getGrid().getSelectedRow()).getPaid(), ((RentaHistory) crud.getGrid().getSelectedRow())) :
+                                new RentaPaymentField();
+                if (((RentaHistory) crud.getGrid().getSelectedRow()) != null)
+                    field.setInternalValue((((RentaHistory) crud.getGrid().getSelectedRow()).getPaid()));
+                return field;
+            }
+        });
         formFactory.setFieldProvider("summa", new FieldProvider() {
             @Override
             public Field buildField() {

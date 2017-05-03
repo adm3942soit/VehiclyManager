@@ -6,8 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 
 /**
  * A domain object example. In a real application this would probably be a JPA
@@ -22,9 +25,11 @@ import javax.persistence.*;
 public class Person extends Audit
 {
 
+	@NotNull(message="Please enter first name")
 	@Column(name = "FIRST_NAME", nullable = false)
 	private String firstName;
 
+	@NotNull(message="Please enter last name")
 	@Column(name = "LAST_NAME", nullable = false)
 	private String lastName;
 
@@ -32,6 +37,7 @@ public class Person extends Audit
 	private String name;
 
 	@Email
+	@NotNull(message="Please enter email")
 	@Column(name = "EMAIL", unique = true, nullable = false)
 	private String email;
 
@@ -39,16 +45,18 @@ public class Person extends Audit
 	private String login;
 
 //	@NotNull(message="Please select a password")
-//	@Length(min=5, max=10, message="Password should be between 5 - 10 charactes")
+	@Length(min=5, max=10, message="Password should be between 5 - 10 charactes")
 	@Column(name = "PASSWORD", nullable = true)
 	private String password;
 
+	@Past
 	@Column(name = "BIRTH_DATE", nullable = true)
 	private java.util.Date birthDate;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "ADDRESS")
 	private Address address;
+
 
 	@Column(name = "PHONE_NUMBER", nullable = true)
 	private String phoneNumber;

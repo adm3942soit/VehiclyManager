@@ -273,6 +273,7 @@ public class PersonService {
 
                 entry.setFirstName(person[1]);
                 entry.setLastName(person[2]);
+                entry.setName(person[1]+" "+person[2]);
                 entry.setEmail(person[3]);
                 try {
                     entry.setBirthDate(sdf.parse(person[4]));
@@ -334,6 +335,7 @@ public class PersonService {
 
                 entry.setFirstName(person[1]);
                 entry.setLastName(person[2]);
+                entry.setName(person[1]+" "+person[2]);
                 entry.setEmail(person[3]);
                 try {
                     entry.setBirthDate(sdf.parse(person[4]));
