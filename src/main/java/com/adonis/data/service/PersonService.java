@@ -1,5 +1,6 @@
 package com.adonis.data.service;
 
+import com.adonis.data.payments.CreditCard;
 import com.adonis.data.persons.Address;
 import com.adonis.data.persons.Person;
 import com.adonis.data.persons.PersonDTO;
@@ -40,15 +41,17 @@ public class PersonService {
         }
         return customers;
     }
+
     public List<PersonDTO> findAllDTO() {
         List<Person> customers = findAll();
         List<PersonDTO> customersDao = Lists.newArrayList();
-        customers.forEach(customer->{
+        customers.forEach(customer -> {
             customersDao.add(dtoMapper.map(customer, PersonDTO.class));
         });
-       return customersDao;
+        return customersDao;
     }
-//
+
+    //
     public List<String> findAllNames() {
         List<Person> customers = findAll();
         if (customers == null || customers.isEmpty()) return Collections.EMPTY_LIST;
@@ -138,7 +141,7 @@ public class PersonService {
                         "WHERE ID=?",
                 customer.getFirstName(), customer.getLastName(), customer.getEmail(),
                 customer.getLogin(), customer.getPassword(), customer.getBirthDate(),
-                customer.getPicture(), customer.getNotes(), customer.getFirstName().trim()+" "+customer.getLastName().trim(),
+                customer.getPicture(), customer.getNotes(), customer.getFirstName().trim() + " " + customer.getLastName().trim(),
                 new Date(),
                 customer.getId());
     }
@@ -153,6 +156,18 @@ public class PersonService {
             return null;
         }
         return address;
+    }
+
+    public CreditCard findLastCard() {
+        String sql = "SELECT * FROM credit_card ORDER BY ID DESC LIMIT 1";
+        CreditCard creditCard;
+        try {
+            creditCard = (CreditCard) jdbcTemplate.queryForObject(
+                    sql, new Object[]{}, new BeanPropertyRowMapper(CreditCard.class));
+        } catch (Exception e) {
+            return null;
+        }
+        return creditCard;
     }
 
     public Person findLast() {
@@ -189,15 +204,38 @@ public class PersonService {
         return findLastAddress();
     }
 
+    public CreditCard insert(CreditCard creditCard) {
+        if (creditCard == null) return null;
+        try {
+            jdbcTemplate.update(
+                    "INSERT INTO credit_card (NUMBER, CVV2, TYPE, EXPIRE_YEAR, EXPIRE_MONTH, CREATED, UPDATED)" +
+                            "  VALUES " +
+                            "(?,?,?,?,?, ?, ?)",
+                    new Object[]{
+                            creditCard.getNumber(),
+                            creditCard.getCvv2(),
+                            creditCard.getType(),
+                            creditCard.getExpireYear(),
+                            creditCard.getExpireMonth(),
+                            new Date(), new Date()
+                    });
+        } catch (DataAccessException e) {
+            return null;
+        }
+        return findLastCard();
+    }
+
     public Person insert(Person customer) {
         if (customer == null) return null;
         Address address = null;
+        CreditCard creditCard = null;
         try {
             if (customer.getAddress() != null) address = insert(customer.getAddress());
+            if (customer.getCard() != null) creditCard = insert(customer.getCard());
             jdbcTemplate.update(
                     "INSERT INTO persons (FIRST_NAME, LAST_NAME, EMAIL, LOGIN, PASSWORD," +
-                            " PICTURE, NOTES, BIRTH_DATE, GENDER, PHONE_NUMBER, ADDRESS, NAME, CREATED, UPDATED) VALUES " +
-                            "(?,?,?,?,?,?,?,?, ?, ?,?, ?, ?, ?)",
+                            " PICTURE, NOTES, BIRTH_DATE, GENDER, PHONE_NUMBER, ADDRESS, CARD, NAME, CREATED, UPDATED) VALUES " +
+                            "(?,?,?,?,?,?,?,?, ?, ?,?, ?, ?, ?, ?)",
                     new Object[]{
                             customer.getFirstName(),
                             customer.getLastName(),
@@ -210,7 +248,8 @@ public class PersonService {
                             customer.getGender(),
                             customer.getPhoneNumber(),
                             address != null ? address.getId() : null,
-                            customer.getFirstName().trim()+" "+customer.getLastName().trim(),
+                            creditCard != null ? creditCard.getId() : null,
+                            customer.getFirstName().trim() + " " + customer.getLastName().trim(),
                             new Date(), new Date()
 
                     });
@@ -223,21 +262,26 @@ public class PersonService {
     public Person save(Person customer) {
         if (customer == null) return null;
         Address address = null;
+        CreditCard creditCard = null;
         try {
-            if (customer.getAddress() != null && customer.getAddress().getStreet()!=null)
-                                 address = insert(customer.getAddress());
+            if (customer.getAddress() != null && customer.getAddress().getStreet() != null)
+                address = insert(customer.getAddress());
+            if (customer.getCard() != null && customer.getCard().getNumber() != null)
+                creditCard = insert(customer.getCard());
+
             jdbcTemplate.update(
                     "UPDATE persons SET FIRST_NAME=?, LAST_NAME=?, EMAIL=? , LOGIN=?, PASSWORD=?, " +
-                            "BIRTH_DATE=?, PICTURE=?, NOTES=?, GENDER=?, PHONE_NUMBER=?, ADDRESS=?, NAME=?, UPDATED=? " +//
+                            "BIRTH_DATE=?, PICTURE=?, NOTES=?, GENDER=?, PHONE_NUMBER=?, ADDRESS=?, CARD=?, NAME=?, UPDATED=? " +//
                             "WHERE ID=?",
                     new Object[]{
-                    customer.getFirstName(), customer.getLastName(), customer.getEmail(),
-                    customer.getLogin(), customer.getPassword(), customer.getBirthDate(),
-                    customer.getPicture(), customer.getNotes(), customer.getGender(), customer.getPhoneNumber(),
-                    address != null ? address.getId() : null,
-                    customer.getFirstName().trim()+" "+customer.getLastName().trim(),
-                    new Date(),
-                    customer.getId()}//, Person.class
+                            customer.getFirstName(), customer.getLastName(), customer.getEmail(),
+                            customer.getLogin(), customer.getPassword(), customer.getBirthDate(),
+                            customer.getPicture(), customer.getNotes(), customer.getGender(), customer.getPhoneNumber(),
+                            address != null ? address.getId() : null,
+                            creditCard != null ? creditCard.getId() : null,
+                            customer.getFirstName().trim() + " " + customer.getLastName().trim(),
+                            new Date(),
+                            customer.getId()}//, Person.class
             );
         } catch (DataAccessException e) {
             return null;
@@ -273,7 +317,7 @@ public class PersonService {
 
                 entry.setFirstName(person[1]);
                 entry.setLastName(person[2]);
-                entry.setName(person[1]+" "+person[2]);
+                entry.setName(person[1] + " " + person[2]);
                 entry.setEmail(person[3]);
                 try {
                     entry.setBirthDate(sdf.parse(person[4]));
@@ -286,7 +330,7 @@ public class PersonService {
                 entry.setAddress(new Address());
                 entry.setPhoneNumber("");
                 entry.setGender("");
-                entry.setName(entry.getFirstName()+" "+entry.getLastName());
+                entry.setName(entry.getFirstName() + " " + entry.getLastName());
                 entry.setCreated(new Date());
                 entry.setUpdated(new Date());
                 try {
@@ -313,6 +357,7 @@ public class PersonService {
             }
         }
     }
+
     public void loadPersons(String nameFile) {
 
         String csvFile = nameFile;
@@ -335,7 +380,7 @@ public class PersonService {
 
                 entry.setFirstName(person[1]);
                 entry.setLastName(person[2]);
-                entry.setName(person[1]+" "+person[2]);
+                entry.setName(person[1] + " " + person[2]);
                 entry.setEmail(person[3]);
                 try {
                     entry.setBirthDate(sdf.parse(person[4]));
@@ -347,7 +392,7 @@ public class PersonService {
                 entry.setAddress(new Address());
                 entry.setPhoneNumber("");
                 entry.setGender("");
-                entry.setName(entry.getFirstName()+" "+entry.getLastName());
+                entry.setName(entry.getFirstName() + " " + entry.getLastName());
                 entry.setCreated(new Date());
                 entry.setUpdated(new Date());
                 try {

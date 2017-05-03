@@ -13,6 +13,8 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.v7.data.Property;
+import com.vaadin.v7.data.util.BeanItem;
 import com.vaadin.v7.data.util.BeanItemContainer;
 import com.vaadin.v7.shared.ui.datefield.Resolution;
 import com.vaadin.v7.ui.ComboBox;
@@ -41,13 +43,19 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
 
     Double price, summa;// = 0.0;
     Timestamp parsedValueFrom, parsedValueTo;
-    com.vaadin.v7.ui.TextField priceTextField = new TextField("price"){
+    BeanItem<RentaHistory> beanItem = new BeanItem<RentaHistory>(new RentaHistory());
+    final Property<Double> priceProperty = (Property<Double>) beanItem
+            .getItemProperty("price");
+
+    com.vaadin.v7.ui.TextField priceTextField = new TextField("price", priceProperty){
         @Override
         public Object getConvertedValue() {
             return price;
         }
     };
-    com.vaadin.v7.ui.TextField summaTextField = new TextField("summa"){
+    final Property<Double> summaProperty = (Property<Double>) beanItem
+            .getItemProperty("summa");
+    com.vaadin.v7.ui.TextField summaTextField = new TextField("summa", summaProperty){
         @Override
         public Object getConvertedValue() {
             return summa;
@@ -215,7 +223,7 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
                         parsedValueTo = DateUtils.getTimeStamp(dateTo);
                         if(dateFrom!=null && dateTo!=null && priceTextField!=null && priceTextField.getValue()!=null){
                             long countMinutes = (dateTo.getTime()-dateFrom.getTime())/1000/60/60;
-                            if(summaTextField!=null && price!=null) {
+                            if(summaTextField!=null && price!=null && summa==null) {
                                 summaTextField.setConverter(StringToDoubleConverter.class);
                                 summa = price * countMinutes;
                                 summaTextField.setValue(String.valueOf(summa));

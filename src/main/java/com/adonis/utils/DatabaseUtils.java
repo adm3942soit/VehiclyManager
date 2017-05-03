@@ -49,6 +49,8 @@ public class DatabaseUtils {
             System.out.println("Table models created successfully...");
             stmt.execute(FileReader.readFromFileFromResources("vehicles.sql"));
             System.out.println("Table vehicles created successfully...");
+            stmt.execute(FileReader.readFromFileFromResources("credit_card.sql"));
+            System.out.println("Table vehicles created successfully...");
             stmt.execute(FileReader.readFromFileFromResources("renta_history.sql"));
             System.out.println("Table renta_history created successfully...");
 

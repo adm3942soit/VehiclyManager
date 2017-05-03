@@ -58,7 +58,7 @@ public class PersonsCrudView extends VerticalLayout implements View {
         personsCrud.setFindAllOperation(() -> personService.findAll());
 
         GridLayoutCrudFormFactory<Person> formFactory = new GridLayoutCrudFormFactory<>(Person.class, 1, 10);
-        formFactory.setVisiblePropertyIds("picture", "firstName", "lastName", "email", "phoneNumber", "gender", "login", "password", "birthDate", "notes", "address");
+        formFactory.setVisiblePropertyIds("picture", "firstName", "lastName", "email", "phoneNumber", "gender", "login", "password", "birthDate", "notes", "address", "card");
         formFactory.setDisabledPropertyIds(CrudOperation.UPDATE, "id", "created", "updated");
         formFactory.setDisabledPropertyIds(CrudOperation.ADD, "id", "created", "updated");
 
@@ -85,6 +85,21 @@ public class PersonsCrudView extends VerticalLayout implements View {
                 address.setInternalValue(((Person) personsCrud.getGrid().getSelectedRow()).getAddress());
             address.setValidationVisible(true);
         });
+        formFactory.setFieldType("card", CardPopup.class);
+        formFactory.setFieldProvider("card", () -> new CardPopup(((Person) personsCrud.getGrid().getSelectedRow()) != null?
+                (Person) personsCrud.getGrid().getSelectedRow():new Person()));
+        formFactory.setFieldCreationListener("card", field -> {
+            CardPopup card = (CardPopup) field;
+
+            if (((Person) personsCrud.getGrid().getSelectedRow()) != null) {
+                card.setPerson((Person) personsCrud.getGrid().getSelectedRow());
+                card.setInternalValue(((Person) personsCrud.getGrid().getSelectedRow()).getCard());
+            }else {
+                card.setPerson(new Person());
+            }
+            card.setValidationVisible(true);
+        });
+
         formFactory.setFieldType("gender", com.vaadin.v7.ui.ComboBox.class);
         String[] gender = {"mail", "femail"};
         formFactory.setFieldProvider("gender", () -> new ComboBox("gender", Arrays.asList(gender)));

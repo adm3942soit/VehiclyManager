@@ -2,6 +2,7 @@ package com.adonis.data.persons;
 
 
 import com.adonis.data.Audit;
+import com.adonis.data.payments.CreditCard;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -57,6 +58,9 @@ public class Person extends Audit
 	@JoinColumn(name = "ADDRESS")
 	private Address address;
 
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "CARD")
+	private CreditCard card;
 
 	@Column(name = "PHONE_NUMBER", nullable = true)
 	private String phoneNumber;
