@@ -67,10 +67,16 @@ public class DateUtils {
        return new java.util.Date(sqlDate.getTime());
    }
    public static String utilDateToString(java.util.Date utilDate){
-
-       return getUtilDate(getTimeStamp(utilDate)).toInstant()  // Convert `java.util.Date` to `Instant`.
+       return new java.util.Date(utilDate.getTime()).toInstant()  // Convert `java.util.Date` to `Instant`.
                .atOffset( ZoneOffset.UTC )  // Transform `Instant` to `OffsetDateTime`.
-               .format( DateTimeFormatter.ISO_LOCAL_DATE_TIME )  // Generate a String.
+               .format( DateTimeFormatter.ISO_LOCAL_DATE )  // Generate a String.
                .replace( "T" , " " );  // Put a SPACE in the middle.
    }
+    public static String timestampToString(java.sql.Timestamp timestamp){
+        return getUtilDate(timestamp).toInstant()  // Convert `java.util.Date` to `Instant`.
+                .atOffset( ZoneOffset.UTC )  // Transform `Instant` to `OffsetDateTime`.
+                .format( DateTimeFormatter.ISO_LOCAL_DATE_TIME )  // Generate a String.
+                .replace( "T" , " " );  // Put a SPACE in the middle.
+    }
+
 }
