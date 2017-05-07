@@ -29,7 +29,7 @@ cd $OPENSHIFT_REPO_DIR
 
 #cd $OPENSHIFT_REPO_DIR
 export GRADLE_USER_HOME=$OPENSHIFT_DATA_DIR/gradle-3.5/bin
-./gradlew project:modules:jruby:run
+$GRADLE_USER_HOME/gradle clean build
 
 
 #$M2/mvn --version
