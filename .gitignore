@@ -1,5 +1,9 @@
 .gradle
 !gradle/wrapper/gradle-wrapper.jar
+.openshift
+gradle
+gradlew
+gradlew.bat
 
 ### STS ###
 .apt_generated
