@@ -99,7 +99,13 @@ public class DateUtils {
         calendar.add(Calendar.DAY_OF_MONTH, -1);
         return calendar.getTime();
     }
+    public static Date addDays(Date date, int count){
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        calendar.add(Calendar.DATE, count);
+        return calendar.getTime();
 
+    }
     private static Calendar beginningOfTheDay(Calendar calendar) {
         calendar.set(Calendar.HOUR_OF_DAY, calendar.getMinimum(Calendar.HOUR_OF_DAY));
         calendar.set(Calendar.MINUTE, calendar.getMinimum(Calendar.MINUTE));
