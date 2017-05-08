@@ -151,4 +151,8 @@ public class MainUI extends UI {
     public void markAsDirty() {
 
     }
+
+    public PersonService getService() {
+        return service;
+    }
 }

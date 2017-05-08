@@ -2,11 +2,13 @@ package com.adonis.ui.addFields;
 
 import com.adonis.data.persons.Person;
 import com.adonis.data.renta.RentaHistory;
+import com.adonis.ui.MainUI;
 import com.adonis.utils.PaymentsUtils;
 import com.vaadin.server.ExternalResource;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.themes.ValoTheme;
 
 /**
@@ -58,9 +60,13 @@ public class RentaPaymentField extends com.vaadin.v7.ui.CustomField<Boolean> {
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 try {
-                    value = paymentsUtils.payWithPaypalAcc(person, summa.longValue(), null);
+                    value = paymentsUtils.payWithPaypalAcc(
+                            rentaHistory!=null? MainUI.getRentaHistoryCrudView().getPersonService().findByName(rentaHistory.getPerson()):
+                            person!=null?person:null, summa.longValue(), "access_token$sandbox$dkfqgn25cxb7z4t5$29193a5f4e04ed44168c1ccdf45ad5ff");
+                    Notification.show("Successfully!");
                 } catch (Exception e) {
                     e.printStackTrace();
+                    Notification.show(e.getMessage());
                     value = false;
                 }
                 field.setValue(value);

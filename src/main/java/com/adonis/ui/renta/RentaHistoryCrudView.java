@@ -262,4 +262,8 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
     public void enter(ViewChangeListener.ViewChangeEvent event) {
 
     }
+
+    public PersonService getPersonService() {
+        return personService;
+    }
 }

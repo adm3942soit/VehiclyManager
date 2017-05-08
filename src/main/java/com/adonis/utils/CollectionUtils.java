@@ -3,6 +3,8 @@ package com.adonis.utils;
 import com.google.common.collect.Maps;
 
 import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 
 /**
  * Created by oksdud on 08.05.2017.
@@ -15,4 +17,12 @@ public class CollectionUtils {
         return map;
 
     }
+
+    public static Map<String, String> map(Set<String> keys, Properties properties){
+        Map<String, String> map = Maps.newHashMap();
+        keys.forEach(key->{map.put(key, String.valueOf(properties.get(key)));});
+        return map;
+
+    }
+
 }

@@ -3,6 +3,8 @@ package com.adonis.utils;
 import com.adonis.data.persons.Person;
 import com.google.common.collect.Lists;
 import com.paypal.api.payments.*;
+import com.paypal.base.Constants;
+import com.paypal.base.HttpConfiguration;
 import com.paypal.base.rest.APIContext;
 import com.paypal.core.rest.OAuthTokenCredential;
 import com.paypal.core.rest.PayPalRESTException;
@@ -42,9 +44,27 @@ public class PaymentsUtils {
         systemConfig.put("paypal_failUri", "manager/");
         systemConfig.put("paypal_accessTokenLiveTime", "28800");
         systemConfig.put("ip", geoService.getIpAdress());
-        config.put("clientID", "");
-        config.put("clientSecret", "");
-        PayPalResource.initConfig(config);
+
+//        config.put("clientID", "");
+//        config.put("clientSecret", "");
+//        PayPalResource.initConfig(config);
+        HttpConfiguration httpConfiguration = new HttpConfiguration();
+        httpConfiguration.setMaxRetry(2);
+        httpConfiguration.setProxyUserName("oksdud");
+        httpConfiguration.setProxyHost("10.15.0.37");
+        httpConfiguration.setProxyPort(8080);
+        httpConfiguration.setProxyPassword("301064September");
+        config.put(Constants.HTTP_PROXY_USERNAME, httpConfiguration.getProxyUserName());
+        config.put(Constants.HTTP_PROXY_HOST, httpConfiguration.getProxyHost());
+        config.put(Constants.HTTP_PROXY_PORT, String.valueOf(httpConfiguration.getProxyPort()));
+        config.put(Constants.HTTP_PROXY_PASSWORD, httpConfiguration.getProxyPassword());
+        config.put(Constants.MODE, Constants.SANDBOX);
+        try {
+            PayPalResource.initializeToDefault();
+            PayPalResource.initConfig(config);
+        } catch (PayPalRESTException e) {
+            e.printStackTrace();
+        }
 
 //        try {
 //            updateAccessToken();
@@ -108,6 +128,7 @@ public class PaymentsUtils {
         });
     }
     public boolean payWithPaypalAcc(Person user, long val, String accessToken) throws Exception {
+        if(Objects.isNull(user)){ com.vaadin.ui.Notification.show("User not entered!"); return false;}//systemConfig.getProperty("httpsServerUrl")+systemConfig.getProperty("paypal_failUri");
         com.adonis.data.persons.Address address = user.getAddress();
         com.adonis.data.payments.CreditCard card = user.getCard();
         if(Objects.isNull(address)){ com.vaadin.ui.Notification.show("Please, enter address!"); return false;}//systemConfig.getProperty("httpsServerUrl")+systemConfig.getProperty("paypal_failUri");
@@ -172,9 +193,9 @@ public class PaymentsUtils {
             redirectUrls.setReturnUrl(systemConfig.getProperty("httpsServerUrl")+systemConfig.getProperty("paypal_successUri"));
             redirectUrls.setCancelUrl(systemConfig.getProperty("httpsServerUrl")+systemConfig.getProperty("paypal_failUri"));
             payment.setRedirectUrls(redirectUrls);
-
-
-            Payment createdPayment = payment.create(new APIContext(accessToken));
+            APIContext apiContext = new APIContext(accessToken, "sandbox");
+            apiContext.addConfigurations(map(config.stringPropertyNames(), config));
+            Payment createdPayment = payment.create(apiContext);
             Iterator<Links> links = createdPayment.getLinks().iterator();
             while (links.hasNext()) {
                 Links link = links.next();
