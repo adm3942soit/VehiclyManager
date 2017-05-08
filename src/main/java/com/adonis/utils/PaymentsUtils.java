@@ -41,7 +41,7 @@ public class PaymentsUtils {
         systemConfig.put("paypal_successUri", "manager/");
         systemConfig.put("paypal_failUri", "manager/");
         systemConfig.put("paypal_accessTokenLiveTime", "28800");
-        systemConfig.put("ip", GeoService.getIpAdress());
+        systemConfig.put("ip", geoService.getIpAdress());
         config.put("clientID", "");
         config.put("clientSecret", "");
         PayPalResource.initConfig(config);

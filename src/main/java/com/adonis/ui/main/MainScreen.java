@@ -14,6 +14,7 @@ import com.adonis.ui.vehicles.VehicleModelsCrudView;
 import com.adonis.ui.vehicles.VehicleTypesCrudView;
 import com.adonis.ui.vehicles.VehiclesCrudView;
 import com.adonis.ui.xls.XlsView;
+import com.adonis.utils.VaadinUtils;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -61,7 +62,7 @@ public class MainScreen extends HorizontalLayout implements View {
         menu.addView(new PrintView(ui.service, ui.rentaHistoryService), "PRINT", "PRINT", new ThemeResource("img/print-icon.jpg"));
         menu.addView(new XlsView(ui.service, ui.rentaHistoryService, ui.vehicleService), "LOAD", "LOAD", new ThemeResource("img/xls1.jpg"));
         menu.addView(new AboutView(), AboutView.VIEW_NAME, AboutView.VIEW_NAME, new ThemeResource("img/info.jpg"));
-//        menu.addView(ui.getLoginView(), "LOGOUT", "LOGOUT", new ThemeResource("img/logout.jpg"));
+        menu.addView(ui.getLoginView(), "LOGOUT", "LOGOUT", new ThemeResource("img/logout.jpg"));
         navigator.addViewChangeListener(viewChangeListener);
 
         addComponent(menu);
@@ -81,6 +82,11 @@ public class MainScreen extends HorizontalLayout implements View {
                 if(isLoggedIn && isProfileView ) {
                     PersonUI.grid.getSelectionModel().select(MainUI.loginPerson);
                     return true;
+                }
+                boolean exitNeeded = event.getNewView() instanceof LoginView;
+                if(isLoggedIn && exitNeeded){
+                    VaadinUtils.getSession().invalidate();
+                    VaadinUtils.getPage().reload();
                 }
             return true;
 

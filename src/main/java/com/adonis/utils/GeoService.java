@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -25,11 +26,16 @@ public class GeoService {
 
     private DatabaseReader readerCity;
     private DatabaseReader readerCountry;
-
+    private String ip;
+    private InetAddress ipAddress;
+    private EnterpriseResponse enterpriseResponse;
+    private CountryResponse countryResponse;
     private GeoService() {
         try {
-            readerCity = new DatabaseReader.Builder(new File("GeoLite2-City.mmdb")).build();
-            readerCountry = new DatabaseReader.Builder(new File("GeoIP2-Country.mmdb")).build();
+            readerCity = new DatabaseReader.Builder(new File(this.getClass().getClassLoader().getResource("GeoLite2-City.mmdb").getPath())).build();
+            readerCountry = new DatabaseReader.Builder(new File(this.getClass().getClassLoader().getResource("GeoIP2-Country.mmdb").getPath())).build();
+            ip = getIpAdress();
+            ipAddress = getIpInetAdress();
         } catch (IOException e) {
             log.error("Exception:", e);
             throw new RuntimeException(e);
@@ -73,13 +79,31 @@ public class GeoService {
             return cr.getCity().getName();
         } catch (UnknownHostException e) {
             log.error("Exception:", e);
+            return "";
         } catch (IOException e) {
             log.error("Exception:", e);
+            return "";
         } catch (GeoIp2Exception e) {
             log.error("Exception:", e);
+            return "";
         }
-        return "";
     }
+    public String getCity(InetAddress ip){
+        try {
+            CityResponse cr = readerCity.city(ip);
+            return cr.getCity().getName();
+        } catch (UnknownHostException e) {
+            log.error("Exception:", e);
+            return "";
+        } catch (IOException e) {
+            log.error("Exception:", e);
+            return "";
+        } catch (GeoIp2Exception e) {
+            log.error("Exception:", e);
+            return "";
+        }
+    }
+
     //    public String getIsp(String ip) {
 //        try {
 //            CityIspOrgResponse ci = readerCity.cityIspOrg(InetAddress.getByName(ip));
@@ -93,6 +117,25 @@ public class GeoService {
 //        }
 //        return "--";
 //    }
+    public String getCountry(InetAddress ipAddress) {
+        try {
+            countryResponse = readerCountry.country(ipAddress);
+
+            return countryResponse.getCountry().getName();
+        } catch (IOException | GeoIp2Exception ex) {
+            log.info("Could not get country for IP " + ipAddress);
+            try {
+                countryResponse = readerCountry.country(InetAddress.getByName(VaadinUtils.getIpAddress()));
+                return countryResponse.getCountry().getName();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (GeoIp2Exception e) {
+                e.printStackTrace();
+            }
+            return "ZZZ";
+        }
+
+    }
     public String getIpCountry(InetAddress ipAddress) {
         try {
             CountryResponse countryResponse = readerCountry.country(ipAddress);
@@ -105,7 +148,7 @@ public class GeoService {
     }
     public EnterpriseResponse getInfo(InetAddress ipAddress){
         try {
-            EnterpriseResponse enterpriseResponse = readerCountry.enterprise(ipAddress);
+            enterpriseResponse = readerCountry.enterprise(ipAddress);
             return enterpriseResponse;
         } catch (IOException e) {
             log.error("Exception:", e);
@@ -123,21 +166,42 @@ public class GeoService {
         return "ZZZ";
     }
 
-    public static String getIpAdress(){
+    public String getIpAdress(){
         try {
-            return InetAddress.getLocalHost().getHostAddress();
+            return Inet4Address.getLocalHost().getHostAddress();
         } catch (UnknownHostException e) {
             log.error("UnknownHostException:", e);;
+            return VaadinUtils.getIpAddress();
         }
-        return "";
     }
-    public static InetAddress getIpInetAdress(){
+    public InetAddress getIpInetAdress(){
         try {
-            return InetAddress.getLocalHost();
+            return Inet4Address.getLocalHost();
         } catch (UnknownHostException e) {
             log.error("UnknownHostException:", e);;
+            try {
+                InetAddress inetAddress = InetAddress.getByName(VaadinUtils.getIpAddress());
+                return  inetAddress;
+            } catch (UnknownHostException e1) {
+                e1.printStackTrace();
+            }
         }
         return null;
     }
 
+    public String getIp() {
+        return ip;
+    }
+
+    public InetAddress getIpAddress() {
+        return ipAddress;
+    }
+
+    public EnterpriseResponse getEnterpriseResponse() {
+        return enterpriseResponse;
+    }
+
+    public CountryResponse getCountryResponse() {
+        return countryResponse;
+    }
 }
