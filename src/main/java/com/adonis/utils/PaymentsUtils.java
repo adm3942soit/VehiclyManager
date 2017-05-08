@@ -45,9 +45,6 @@ public class PaymentsUtils {
         systemConfig.put("paypal_accessTokenLiveTime", "28800");
         systemConfig.put("ip", geoService.getIpAdress());
 
-//        config.put("clientID", "");
-//        config.put("clientSecret", "");
-//        PayPalResource.initConfig(config);
         HttpConfiguration httpConfiguration = new HttpConfiguration();
         httpConfiguration.setMaxRetry(2);
         httpConfiguration.setProxyUserName("oksdud");
@@ -59,6 +56,8 @@ public class PaymentsUtils {
         config.put(Constants.HTTP_PROXY_PORT, String.valueOf(httpConfiguration.getProxyPort()));
         config.put(Constants.HTTP_PROXY_PASSWORD, httpConfiguration.getProxyPassword());
         config.put(Constants.MODE, Constants.SANDBOX);
+        config.put(Constants.CLIENT_ID, "Af3KIZBjGjUQDMBBxmjuq2cYlCY9xEMjGCQxc2Q1QsmmwWlS744tz0wyeBSllxT8JP2ZalXUgXqj4HVg");
+        config.put(Constants.CLIENT_SECRET, "EE8A11iseI7UCHaLnYFeRCc3rV73ekCNMAgoOosbixgVUi-aqGrcXriJOmvaPgPop0DWqkIMkJEVV9Uo");
         try {
             PayPalResource.initializeToDefault();
             PayPalResource.initConfig(config);
@@ -109,8 +108,8 @@ public class PaymentsUtils {
         if(accessTokenLastUse != oldLastTime) return;
 
         accessToken = new OAuthTokenCredential(
-                config.getProperty("clientID"),
-                config.getProperty("clientSecret"),
+                config.getProperty(Constants.CLIENT_ID),
+                config.getProperty(Constants.CLIENT_SECRET),
                 new HashMap(config)).getAccessToken();
 
         accessTokenLastUse = currentTimeMillis() + Long.valueOf(systemConfig.getProperty("paypal_accessTokenLiveTime"));
