@@ -77,6 +77,21 @@ public class PersonService {
 
 
     }
+    public CreditCard findByCardId(Long id) {
+        if (id == null) return null;
+        String sql = "SELECT * FROM credit_card WHERE ID = ?";
+        CreditCard creditCard = null;
+        try {
+            creditCard = (CreditCard) jdbcTemplate.queryForObject(
+                    sql, new Object[]{id}, new BeanPropertyRowMapper(CreditCard.class));
+        } catch (Exception e) {
+            return null;
+        }
+
+        return creditCard;
+
+
+    }
 
     public Person findByCustomerId(Long custId) {
         if (custId == null) return null;
@@ -108,6 +123,18 @@ public class PersonService {
         }
 
         return customer;
+    }
+    public Person findByName(String name) {
+        Person person = null;
+        try {
+            person = (Person) jdbcTemplate.queryForObject(
+                    "SELECT * FROM persons p WHERE p.NAME = ?",
+                    new Object[]{name}, new PersonRowMapper(this)
+            );
+        } catch (Exception e) {
+            return null;
+        }
+        return person;
     }
 
     public Person findByFirstLastNameEmail(String firstName, String lastName, String email) {
@@ -220,11 +247,22 @@ public class PersonService {
                             new Date(), new Date()
                     });
         } catch (DataAccessException e) {
-            return null;
+            return findCardByNumber(creditCard.getNumber());
         }
         return findLastCard();
     }
+    public CreditCard findCardByNumber(String number){
+        String sql = "SELECT * FROM credit_card WHERE NUMBER = ? ORDER BY ID DESC LIMIT 1";
+        CreditCard creditCard;
+        try {
+            creditCard = (CreditCard) jdbcTemplate.queryForObject(
+                    sql, new Object[]{number}, new BeanPropertyRowMapper(CreditCard.class));
+        } catch (Exception e) {
+            return null;
+        }
+        return creditCard;
 
+    }
     public Person insert(Person customer) {
         if (customer == null) return null;
         Address address = null;

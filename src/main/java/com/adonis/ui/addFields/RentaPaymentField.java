@@ -1,6 +1,8 @@
 package com.adonis.ui.addFields;
 
+import com.adonis.data.persons.Person;
 import com.adonis.data.renta.RentaHistory;
+import com.adonis.utils.PaymentsUtils;
 import com.vaadin.server.ExternalResource;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -17,44 +19,76 @@ public class RentaPaymentField extends com.vaadin.v7.ui.CustomField<Boolean> {
     private RentaHistory rentaHistory;
     private FormLayout layout = new FormLayout();
     private com.vaadin.v7.ui.CheckBox field = new com.vaadin.v7.ui.CheckBox("");
-
-    public RentaPaymentField() {
-    }
-
-    public RentaPaymentField(Boolean value, RentaHistory rentaHistory) {
-        this.value = value;
-        this.rentaHistory = rentaHistory;
-        if(value!=null) {
-            paypal = new Button(null, new ExternalResource("https://www.paypal.com/en_US/i/btn/btn_dg_pay_w_paypal.gif"));//new ExternalResource(value));
-            field.setValue(value);
-
+    private PaymentsUtils paymentsUtils = PaymentsUtils.getInstance();
+    private Double summa;
+    public RentaPaymentField(Person person, Double summa) {
+        this.person = person;
+        this.summa = summa;
+        this.value = false;
+        initCheckBox();
+        if (!this.value) {
+            initButton();
         }
 
     }
+
+    private Person person;
+
+    public RentaPaymentField(Boolean value, RentaHistory rentaHistory, Person person) {
+        this.value = value;
+        this.summa = rentaHistory!=null?rentaHistory.getSumma():0.00;
+        this.person = person;
+        this.rentaHistory = rentaHistory;
+        initCheckBox();
+        if (!this.value) {
+            initButton();
+        }
+
+    }
+
     @Override
     public Object getConvertedValue() {
         return this.value;
     }
 
-    @Override
-    protected Component initContent() {
-        if(value!=null) {
-            paypal = new Button(null, new ExternalResource("https://www.paypal.com/en_US/i/btn/btn_dg_pay_w_paypal.gif"));//new ExternalResource(value));
-            field.setValue(value);
+    private void initButton() {
+        paypal = new Button(null, new ExternalResource("https://www.paypal.com/en_US/i/btn/btn_dg_pay_w_paypal.gif"));//new ExternalResource(value));
+        paypal.setPrimaryStyleName(ValoTheme.BUTTON_ICON_ONLY);
+        paypal.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                try {
+                    value = paymentsUtils.payWithPaypalAcc(person, summa.longValue(), null);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    value = false;
+                }
+                field.setValue(value);
+            }
+        });
 
-        }
-        if(paypal!=null) {
-            paypal.setPrimaryStyleName(ValoTheme.BUTTON_ICON_ONLY);
-            layout.addComponent(paypal);
-        }
-        layout.addComponent(field);
+    }
+
+    private void initCheckBox() {
+        if (this.value == null) this.value = false;
+        field.setValue(this.value);
+        field.setEnabled(false);
         field.addListener(new Listener() {
             @Override
             public void componentEvent(Event event) {
-                      RentaPaymentField.super.setInternalValue(field.getValue());
-                      setInternalValue(field.getValue());
+                RentaPaymentField.super.setInternalValue(field.getValue());
+                setInternalValue(field.getValue());
             }
         });
+
+    }
+
+    @Override
+    protected Component initContent() {
+        initCheckBox();
+        initButton();
+        if (!this.value) layout.addComponent(paypal);
+        layout.addComponent(field);
         return layout;
     }
 
@@ -68,9 +102,21 @@ public class RentaPaymentField extends com.vaadin.v7.ui.CustomField<Boolean> {
     public void setInternalValue(Boolean paid) {
         super.setInternalValue(paid);
         this.value = paid;
-        if( paypal == null ) paypal = new Button(null, new ExternalResource("https://www.paypal.com/en_US/i/btn/btn_dg_pay_w_paypal.gif"));//new ExternalResource(value));
-        field.setValue(value);
+        field.setEnabled(false);
+        if (this.value == null) this.value = false;
+        field.setValue(this.value);
+        if (!this.value) {
+            if (paypal == null) initButton();
+        }
+
 
     }
 
+    public void setPerson(Person person) {
+        this.person = person;
+    }
+
+    public void setSumma(Double summa) {
+        this.summa = summa;
+    }
 }

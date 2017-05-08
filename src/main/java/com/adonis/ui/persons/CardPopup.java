@@ -36,6 +36,7 @@ public class CardPopup extends com.vaadin.v7.ui.CustomField<CreditCard> {
 
     public CardPopup(Person person) {
         this.person = person;
+        currentCreditCard = person.getCard();
     }
 
     @Override
@@ -135,5 +136,6 @@ public class CardPopup extends com.vaadin.v7.ui.CustomField<CreditCard> {
 
     public static void setPerson(Person person) {
         CardPopup.person = person;
+        CardPopup.currentCreditCard = person.getCard();
     }
 }

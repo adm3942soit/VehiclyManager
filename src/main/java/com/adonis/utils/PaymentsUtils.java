@@ -46,27 +46,27 @@ public class PaymentsUtils {
         config.put("clientSecret", "");
         PayPalResource.initConfig(config);
 
-        try {
-            updateAccessToken();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            updateAccessToken();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
-    public PaymentsUtils getInstance(){
+    public static PaymentsUtils getInstance(){
         return ResourceHolder.paymentsUtils;
     }
 
     private <T> T invoke(Callable<T> body) throws Exception{
         try {
 
-            updateAccessTokenIfNeed();
+//            updateAccessTokenIfNeed();
 
             return body.call();
 
         }catch(PayPalRESTException e){
             String msg = e.getMessage();
             if(hasText(msg) && msg.contains(ERROR_CODE_401)){
-                updateAccessToken();
+//                updateAccessToken();
                 return body.call();
             }
             throw e;
@@ -107,16 +107,16 @@ public class PaymentsUtils {
             return hist;
         });
     }
-    public String payWithPaypalAcc(Person user, long val, String accessToken) throws Exception {
+    public boolean payWithPaypalAcc(Person user, long val, String accessToken) throws Exception {
         com.adonis.data.persons.Address address = user.getAddress();
         com.adonis.data.payments.CreditCard card = user.getCard();
-        if(Objects.isNull(address)) return systemConfig.getProperty("httpsServerUrl")+systemConfig.getProperty("paypal_failUri");
-        if(Objects.isNull(card)) return systemConfig.getProperty("httpsServerUrl")+systemConfig.getProperty("paypal_failUri");
+        if(Objects.isNull(address)){ com.vaadin.ui.Notification.show("Please, enter address!"); return false;}//systemConfig.getProperty("httpsServerUrl")+systemConfig.getProperty("paypal_failUri");
+        if(Objects.isNull(card)){ com.vaadin.ui.Notification.show("Please, enter credit card!"); return false;}//systemConfig.getProperty("httpsServerUrl")+systemConfig.getProperty("paypal_failUri");
 
-        return invoke(()->{
+        return !(invoke(()->{
             Address billingAddress = new Address();
             billingAddress.setCity(address.getCity());
-            billingAddress.setCountryCode(geoService.getCountryCode(systemConfig.getProperty("ip")));
+            billingAddress.setCountryCode(geoService.getCountryISOCode(address.getCountry()));//geoService.getCountryCode(systemConfig.getProperty("ip")));
             billingAddress.setLine1(address.getStreet());//"52 N Main ST");
             billingAddress.setPostalCode(address.getZip());
             billingAddress.setState("NA");
@@ -184,7 +184,7 @@ public class PaymentsUtils {
             }
 
             throw new IllegalStateException("No approval_url in payment resp: "+createdPayment.toJSON());
-        });
+        })!=null);
     }
 
 }

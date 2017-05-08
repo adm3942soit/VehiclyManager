@@ -20,6 +20,7 @@ public class PersonRowMapper implements RowMapper {
         Person customer = new Person();
         customer.setId(rs.getLong("ID"));
         customer.setAddress(personService.findByAddressId(rs.getLong("ADDRESS")));
+        customer.setCard(personService.findByCardId(rs.getLong("CARD")));
         customer.setFirstName(rs.getString("FIRST_NAME"));
         customer.setLastName(rs.getString("LAST_NAME"));
         customer.setEmail(rs.getString("EMAIL"));

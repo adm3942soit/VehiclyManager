@@ -1,5 +1,6 @@
 package com.adonis.ui.renta;
 
+import com.adonis.data.persons.Person;
 import com.adonis.data.renta.RentaHistory;
 import com.adonis.data.service.PersonService;
 import com.adonis.data.service.RentaHistoryService;
@@ -41,6 +42,7 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
     public static final BeanItemContainer<RentaHistory> container = new BeanItemContainer<RentaHistory>(RentaHistory.class);
     public static List<RentaHistory> objects;
 
+    RentaPaymentField rentaPaymentField;
     Double price, summa;// = 0.0;
     Timestamp parsedValueFrom, parsedValueTo;
     BeanItem<RentaHistory> beanItem = new BeanItem<RentaHistory>(new RentaHistory());
@@ -103,6 +105,7 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
     public final GridBasedCrudComponent<RentaHistory> crud = new GridBasedCrudComponent<>(RentaHistory.class, new HorizontalSplitCrudLayout());
     private PersonService personService;
     private VehicleService vehicleService;
+    private Person person;
     @PostConstruct
     private void init(){
      summaTextField.setConverter(StringToDoubleConverter.class);
@@ -147,6 +150,12 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
             ComboBox comboBox = (ComboBox) field;
             List<String> persons = personService.findAllNames();
             persons.forEach(person -> comboBox.addItem(person));
+            comboBox.addListener(new Listener() {
+                @Override
+                public void componentEvent(Event event) {
+                    person = personService.findByName((String) comboBox.getValue());
+                }
+            });
         });
         formFactory.setFieldProvider("price", new FieldProvider() {
             @Override
@@ -159,13 +168,14 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
         formFactory.setFieldProvider("paid", new FieldProvider() {
             @Override
             public Field buildField() {
-                RentaPaymentField field =
+                rentaPaymentField =
                         ((RentaHistory) crud.getGrid().getSelectedRow()) != null ?
-                                new RentaPaymentField(((RentaHistory) crud.getGrid().getSelectedRow()).getPaid(), ((RentaHistory) crud.getGrid().getSelectedRow())) :
-                                new RentaPaymentField();
-                if (((RentaHistory) crud.getGrid().getSelectedRow()) != null)
-                    field.setInternalValue((((RentaHistory) crud.getGrid().getSelectedRow()).getPaid()));
-                return field;
+                                new RentaPaymentField(((RentaHistory) crud.getGrid().getSelectedRow()).getPaid(), ((RentaHistory) crud.getGrid().getSelectedRow()), person) :
+                                new RentaPaymentField(person, summa);
+                if (((RentaHistory) crud.getGrid().getSelectedRow()) != null) {
+                    rentaPaymentField.setInternalValue((((RentaHistory) crud.getGrid().getSelectedRow()).getPaid()));
+                }
+                return rentaPaymentField;
             }
         });
         formFactory.setFieldProvider("summa", new FieldProvider() {
@@ -191,6 +201,7 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
                         priceTextField.setConverter(StringToDoubleConverter.class);
                         priceTextField.setValue(String.valueOf(price));
                         priceTextField.setEnabled(false);
+
                     }
                 }
             });
@@ -228,6 +239,11 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
                                 summa = price * countMinutes;
                                 summaTextField.setValue(String.valueOf(summa));
                                 summaTextField.setEnabled(false);
+                                if(rentaPaymentField!=null) {
+                                    rentaPaymentField.setPerson(person!=null?personService.findByCustomerId(person.getId()):null);
+                                    rentaPaymentField.setSumma(summa);
+                                }
+
                             }
                         }
                     }

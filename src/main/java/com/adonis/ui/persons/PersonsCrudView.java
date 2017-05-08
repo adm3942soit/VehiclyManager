@@ -87,13 +87,14 @@ public class PersonsCrudView extends VerticalLayout implements View {
         });
         formFactory.setFieldType("card", CardPopup.class);
         formFactory.setFieldProvider("card", () -> new CardPopup(((Person) personsCrud.getGrid().getSelectedRow()) != null?
-                (Person) personsCrud.getGrid().getSelectedRow():new Person()));
+                personService.findByCustomerId(((Person) personsCrud.getGrid().getSelectedRow()).getId()):new Person()));
         formFactory.setFieldCreationListener("card", field -> {
             CardPopup card = (CardPopup) field;
 
             if (((Person) personsCrud.getGrid().getSelectedRow()) != null) {
-                card.setPerson((Person) personsCrud.getGrid().getSelectedRow());
-                card.setInternalValue(((Person) personsCrud.getGrid().getSelectedRow()).getCard());
+                Person person = personService.findByCustomerId(((Person) personsCrud.getGrid().getSelectedRow()).getId());
+                card.setPerson(person);
+                card.setInternalValue(person.getCard());
             }else {
                 card.setPerson(new Person());
             }

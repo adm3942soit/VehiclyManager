@@ -30,6 +30,8 @@ public class CreditCardUI extends UI {
     @Override
     protected void init(VaadinRequest request) {
         personService = MainUI.personsCrudView.personService;
+        fieldGroup.setItemDataSource(new BeanItem<CreditCard>(CardPopup.currentCreditCard, CreditCard.class));
+
         number.addValidator( new Validator() {
             @Override
             public void validate(Object value) throws InvalidValueException {
@@ -40,7 +42,6 @@ public class CreditCardUI extends UI {
             }
         });
         number.setImmediate(true);
-        fieldGroup.setItemDataSource(new BeanItem<CreditCard>(CardPopup.currentCreditCard, CreditCard.class));
 
         fieldGroup.bind(number, "number");
         fieldGroup.bind(cvv2, "cvv2");
