@@ -126,7 +126,7 @@ public class PaymentsUtils {
             return hist;
         });
     }
-    public boolean payWithPaypalAcc(Person user, long val, String accessToken) throws Exception {
+    public boolean payWithPaypalAcc(Person user, long val) throws Exception {//, String accessToken
         if(Objects.isNull(user)){ com.vaadin.ui.Notification.show("User not entered!"); return false;}//systemConfig.getProperty("httpsServerUrl")+systemConfig.getProperty("paypal_failUri");
         com.adonis.data.persons.Address address = user.getAddress();
         com.adonis.data.payments.CreditCard card = user.getCard();
@@ -177,9 +177,9 @@ public class PaymentsUtils {
             fundingInstruments.add(fundingInstrument);
 
             Payer payer = new Payer();
-//            payer.setPaymentMethod("paypal");
+            payer.setPaymentMethod("paypal");
             payer.setFundingInstruments(fundingInstruments);
-            payer.setPaymentMethod("credit_card");
+//            payer.setPaymentMethod("credit_card");
 
             Payment payment = new Payment();
 //            payment.setIntent("authorize");
@@ -192,8 +192,13 @@ public class PaymentsUtils {
             redirectUrls.setReturnUrl(systemConfig.getProperty("httpsServerUrl")+systemConfig.getProperty("paypal_successUri"));
             redirectUrls.setCancelUrl(systemConfig.getProperty("httpsServerUrl")+systemConfig.getProperty("paypal_failUri"));
             payment.setRedirectUrls(redirectUrls);
-            APIContext apiContext = new APIContext(accessToken, "sandbox");
-            apiContext.addConfigurations(map(config.stringPropertyNames(), config));
+            accessToken = new OAuthTokenCredential(
+                    config.getProperty(Constants.CLIENT_ID),
+                    config.getProperty(Constants.CLIENT_SECRET),
+                    new HashMap(config)).getAccessToken();
+
+            APIContext apiContext = new APIContext(accessToken);//, "sandbox");
+//            apiContext.addConfigurations(map(config.stringPropertyNames(), config));
             Payment createdPayment = payment.create(apiContext);
             Iterator<Links> links = createdPayment.getLinks().iterator();
             while (links.hasNext()) {

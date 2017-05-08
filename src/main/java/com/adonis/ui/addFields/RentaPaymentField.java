@@ -62,7 +62,7 @@ public class RentaPaymentField extends com.vaadin.v7.ui.CustomField<Boolean> {
                 try {
                     value = paymentsUtils.payWithPaypalAcc(
                             rentaHistory!=null? MainUI.getRentaHistoryCrudView().getPersonService().findByName(rentaHistory.getPerson()):
-                            person!=null?person:null, summa.longValue(), "access_token$sandbox$dkfqgn25cxb7z4t5$29193a5f4e04ed44168c1ccdf45ad5ff");
+                            person!=null?person:null, summa.longValue());//, "access_token$sandbox$dkfqgn25cxb7z4t5$29193a5f4e04ed44168c1ccdf45ad5ff");
                     Notification.show("Successfully!");
                 } catch (Exception e) {
                     e.printStackTrace();
