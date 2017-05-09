@@ -4,13 +4,14 @@ import com.adonis.data.persons.Person;
 import com.google.common.collect.Lists;
 import com.paypal.api.payments.*;
 import com.paypal.base.Constants;
-import com.paypal.base.HttpConfiguration;
 import com.paypal.base.rest.APIContext;
-import com.paypal.base.util.ResourceLoader;
+import com.paypal.core.ConfigManager;
 import com.paypal.core.rest.OAuthTokenCredential;
 import com.paypal.core.rest.PayPalRESTException;
 import com.paypal.core.rest.PayPalResource;
+import org.apache.poi.util.IOUtils;
 
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -32,11 +33,30 @@ public class PaymentsUtils {
     Properties systemConfig = new Properties();
     Properties config = new Properties();
     GeoService geoService = GeoService.getInstance();
-
+    static String PAYPAL_ACCESS_TOKEN;
+    static String clientID;
+    static String clientSecret;
     private static class ResourceHolder {
         private static final PaymentsUtils paymentsUtils = new PaymentsUtils();
     }
-
+    private static void initPayPal() {
+        InputStream is = null;
+        try {
+            is = PaymentsUtils.class.getClassLoader().getResourceAsStream(Constants.DEFAULT_CONFIGURATION_FILE);
+//                    IS_PRODUCTION ? "/my_paypal_sdk_config.properties" : "/my_paypal_sdk_config_test.properties");
+            Properties props = new Properties();
+            props.load(is);
+            PayPalResource.initConfig(props);
+            ConfigManager.getInstance().load(props);
+            clientID = ConfigManager.getInstance().getConfigurationMap().get("clientID");
+            clientSecret = ConfigManager.getInstance().getConfigurationMap().get("clientSecret");
+            PAYPAL_ACCESS_TOKEN = new OAuthTokenCredential(clientID, clientSecret).getAccessToken();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            IOUtils.closeQuietly(is);
+        }
+    }
 
     private PaymentsUtils() {
 
@@ -45,27 +65,29 @@ public class PaymentsUtils {
         systemConfig.put("paypal_failUri", "manager/");
         systemConfig.put("paypal_accessTokenLiveTime", "28800");
         systemConfig.put("ip", geoService.getIpAdress());
-        ResourceLoader resourceLoader = new ResourceLoader(
-                Constants.DEFAULT_CONFIGURATION_FILE);
-        HttpConfiguration httpConfiguration = new HttpConfiguration();
-        httpConfiguration.setMaxRetry(2);
-        httpConfiguration.setProxyUserName("oksdud");
-        httpConfiguration.setProxyHost("10.15.0.37");
-        httpConfiguration.setProxyPort(8080);
-        httpConfiguration.setProxyPassword("301064September");
-        config.put(Constants.HTTP_PROXY_USERNAME, httpConfiguration.getProxyUserName());
-        config.put(Constants.HTTP_PROXY_HOST, httpConfiguration.getProxyHost());
-        config.put(Constants.HTTP_PROXY_PORT, String.valueOf(httpConfiguration.getProxyPort()));
-        config.put(Constants.HTTP_PROXY_PASSWORD, httpConfiguration.getProxyPassword());
-        config.put(Constants.MODE, Constants.SANDBOX);
-        config.put(Constants.CLIENT_ID, "Af3KIZBjGjUQDMBBxmjuq2cYlCY9xEMjGCQxc2Q1QsmmwWlS744tz0wyeBSllxT8JP2ZalXUgXqj4HVg");
-        config.put(Constants.CLIENT_SECRET, "EE8A11iseI7UCHaLnYFeRCc3rV73ekCNMAgoOosbixgVUi-aqGrcXriJOmvaPgPop0DWqkIMkJEVV9Uo");
-        try {
-            PayPalResource.initializeToDefault();
-            PayPalResource.initConfig(config);
-        } catch (PayPalRESTException e) {
-            e.printStackTrace();
-        }
+        initPayPal();
+//        ResourceLoader resourceLoader = new ResourceLoader(
+//                Constants.DEFAULT_CONFIGURATION_FILE);
+//        HttpConfiguration httpConfiguration = new HttpConfiguration();
+//        httpConfiguration.setMaxRetry(2);
+//        httpConfiguration.setProxyUserName("oksdud");
+//        httpConfiguration.setProxyHost("10.15.0.37");
+//        httpConfiguration.setProxyPort(8080);
+//        httpConfiguration.setProxyPassword("301064September");
+
+//        config.put(Constants.HTTP_PROXY_USERNAME, httpConfiguration.getProxyUserName());
+//        config.put(Constants.HTTP_PROXY_HOST, httpConfiguration.getProxyHost());
+//        config.put(Constants.HTTP_PROXY_PORT, String.valueOf(httpConfiguration.getProxyPort()));
+//        config.put(Constants.HTTP_PROXY_PASSWORD, httpConfiguration.getProxyPassword());
+//        config.put(Constants.MODE, Constants.SANDBOX);
+//        config.put(Constants.CLIENT_ID, "Af3KIZBjGjUQDMBBxmjuq2cYlCY9xEMjGCQxc2Q1QsmmwWlS744tz0wyeBSllxT8JP2ZalXUgXqj4HVg");
+//        config.put(Constants.CLIENT_SECRET, "EE8A11iseI7UCHaLnYFeRCc3rV73ekCNMAgoOosbixgVUi-aqGrcXriJOmvaPgPop0DWqkIMkJEVV9Uo");
+//        try {
+//            PayPalResource.initializeToDefault();
+//            PayPalResource.initConfig(config);
+//        } catch (PayPalRESTException e) {
+//            e.printStackTrace();
+//        }
 
 //        try {
 //            updateAccessToken();
@@ -194,12 +216,12 @@ public class PaymentsUtils {
             redirectUrls.setReturnUrl(systemConfig.getProperty("httpsServerUrl")+systemConfig.getProperty("paypal_successUri"));
             redirectUrls.setCancelUrl(systemConfig.getProperty("httpsServerUrl")+systemConfig.getProperty("paypal_failUri"));
             payment.setRedirectUrls(redirectUrls);
-            accessToken = new OAuthTokenCredential(
-                    config.getProperty(Constants.CLIENT_ID),
-                    config.getProperty(Constants.CLIENT_SECRET),
-                    new HashMap(config)).getAccessToken();
+//            accessToken = new OAuthTokenCredential(
+//                    config.getProperty(Constants.CLIENT_ID),
+//                    config.getProperty(Constants.CLIENT_SECRET),
+//                    new HashMap(config)).getAccessToken();
 
-            APIContext apiContext = new APIContext(accessToken);//, "sandbox");
+            APIContext apiContext = new APIContext(clientID, clientSecret, "sandbox");
 //            apiContext.addConfigurations(map(config.stringPropertyNames(), config));
             Payment createdPayment = payment.create(apiContext);
             Iterator<Links> links = createdPayment.getLinks().iterator();
