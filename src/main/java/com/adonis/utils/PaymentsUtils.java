@@ -6,6 +6,7 @@ import com.paypal.api.payments.*;
 import com.paypal.base.Constants;
 import com.paypal.base.HttpConfiguration;
 import com.paypal.base.rest.APIContext;
+import com.paypal.base.util.ResourceLoader;
 import com.paypal.core.rest.OAuthTokenCredential;
 import com.paypal.core.rest.PayPalRESTException;
 import com.paypal.core.rest.PayPalResource;
@@ -44,7 +45,8 @@ public class PaymentsUtils {
         systemConfig.put("paypal_failUri", "manager/");
         systemConfig.put("paypal_accessTokenLiveTime", "28800");
         systemConfig.put("ip", geoService.getIpAdress());
-
+        ResourceLoader resourceLoader = new ResourceLoader(
+                Constants.DEFAULT_CONFIGURATION_FILE);
         HttpConfiguration httpConfiguration = new HttpConfiguration();
         httpConfiguration.setMaxRetry(2);
         httpConfiguration.setProxyUserName("oksdud");

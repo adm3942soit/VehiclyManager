@@ -22,6 +22,8 @@ public class RentaPaymentField extends com.vaadin.v7.ui.CustomField<Boolean> {
     private FormLayout layout = new FormLayout();
     private com.vaadin.v7.ui.CheckBox field = new com.vaadin.v7.ui.CheckBox("");
     private PaymentsUtils paymentsUtils = PaymentsUtils.getInstance();
+    com.vaadin.v7.ui.TextArea fieldResult = new com.vaadin.v7.ui.TextArea("");
+
     private Double summa;
     public RentaPaymentField(Person person, Double summa) {
         this.person = person;
@@ -31,6 +33,9 @@ public class RentaPaymentField extends com.vaadin.v7.ui.CustomField<Boolean> {
         if (!this.value) {
             initButton();
         }
+        fieldResult.setPrimaryStyleName(ValoTheme.TEXTAREA_SMALL);
+        fieldResult.setEnabled(false);
+
 
     }
 
@@ -45,6 +50,8 @@ public class RentaPaymentField extends com.vaadin.v7.ui.CustomField<Boolean> {
         if (!this.value) {
             initButton();
         }
+        fieldResult.setPrimaryStyleName(ValoTheme.TEXTAREA_SMALL);
+        fieldResult.setEnabled(false);
 
     }
 
@@ -64,9 +71,13 @@ public class RentaPaymentField extends com.vaadin.v7.ui.CustomField<Boolean> {
                             rentaHistory!=null? MainUI.getRentaHistoryCrudView().getPersonService().findByName(rentaHistory.getPerson()):
                             person!=null?person:null, summa.longValue());//, "access_token$sandbox$dkfqgn25cxb7z4t5$29193a5f4e04ed44168c1ccdf45ad5ff");
                     Notification.show("Successfully!");
+                    fieldResult.setValue("Successfully!");
+                    fieldResult.setVisible(true);
+
                 } catch (Exception e) {
                     e.printStackTrace();
                     Notification.show(e.getMessage());
+                    fieldResult.setValue(e.getMessage());
                     value = false;
                 }
                 field.setValue(value);
@@ -95,6 +106,7 @@ public class RentaPaymentField extends com.vaadin.v7.ui.CustomField<Boolean> {
         initButton();
         if (!this.value) layout.addComponent(paypal);
         layout.addComponent(field);
+        if (!this.value) layout.addComponent(fieldResult);
         return layout;
     }
 

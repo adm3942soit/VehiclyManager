@@ -60,7 +60,6 @@ public class CreditCardUI extends UI {
                 creditCard.setExpireYear(expireYear.getValue());
                 creditCard.setExpireMonth(expireMonth.getValue());
                 creditCard.setType(type.getValue());
-//                creditCard.setPersonId(CardPopup.person.getId());
                 try {
                     fieldGroup.commit();
                     JavaScript.eval("close()");
@@ -74,7 +73,6 @@ public class CreditCardUI extends UI {
                 }
             }
         });
-//        Button cancel = new Button("Cancel");
         inLayout.addComponents( close);
 
         layout.addComponent(number);
