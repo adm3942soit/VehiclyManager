@@ -3,6 +3,7 @@ package com.adonis.install;
 import com.adonis.utils.FileReader;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -12,17 +13,19 @@ import java.util.List;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
+import static com.adonis.utils.FileReader.getCurrentDirectory;
+
 /**
  * Created by oksdud on 21.04.2017.
  */
 public class VehicleManagerInstaller {
 
     public static String rootDir;
-    private static File output = new File(FileReader.getCurrentDirectory() + System.getProperty("file.separator") + "install"
+    private static File output = new File(getCurrentDirectory() + System.getProperty("file.separator") + "install"
             + System.getProperty("file.separator") + "install.zip");
 
     public static void installJdk() {
-        File jdkFile = new File(FileReader.getCurrentDirectory() + File.separator + "install/jdk/jdk-8u131-windows-x64.exe");
+        File jdkFile = new File(getCurrentDirectory() + File.separator + "install/jdk/jdk-8u131-windows-x64.exe");
         if (jdkFile.exists()) {
             String[] command = new String[7];
             command[0] = "MSIEXEC";
@@ -34,7 +37,7 @@ public class VehicleManagerInstaller {
             command[6] = " Setup.log";
 
             ProcessBuilder pb = new ProcessBuilder(command[0], command[1], command[2], command[3], command[4], command[5], command[6]);
-            pb.directory(new File(FileReader.getCurrentDirectory()));
+            pb.directory(new File(getCurrentDirectory()));
             try {
                 Process process = pb.start();
                 //process.waitFor();
@@ -48,11 +51,36 @@ public class VehicleManagerInstaller {
     public static void createShortcat() {
 
         String nameRunBat = "run.bat";
-        String pathFuture = System.getProperty("user.home")+File.separator+"Desktop"+File.separator+"carmanager.lnk";
-        String pathToIcon = FileReader.getCurrentDirectory()+File.separator+"install";//"carmanagerico.jpg";
-        FileReader.createShortcutVehiclyManager(nameRunBat, FileReader.getCurrentDirectory(), pathToIcon);
+        String pathFuture = System.getProperty("user.home") + File.separator + "Desktop" + File.separator + "carmanager.lnk";
+        String pathToIcon = getCurrentDirectory() + File.separator + "install";
+        File runFile = new File(getCurrentDirectory() + File.separator + nameRunBat);
+
         try {
-            Files.copy(Paths.get(FileReader.getCurrentDirectory()+File.separator+"carmanager.lnk"), Paths.get(pathFuture), StandardCopyOption.REPLACE_EXISTING);
+            if (!runFile.exists()) runFile.createNewFile();
+            FileWriter fileWriter = new FileWriter(runFile);
+            fileWriter.write(
+                    "#!/bin/sh\n" +
+                            "#\n" +
+                            "# ---------------------------------------------------------------------\n" +
+                            "# VehiclyManager startup script.\n" +
+                            "# ---------------------------------------------------------------------\n" +
+                            "#\n" +
+                            "cd " + getCurrentDirectory() + "\n" +
+                            "java -jar VehiclyManager-1.0.0.jar");//build/libs/
+            fileWriter.flush();
+            fileWriter.close();
+//            Filer.setRights(runFile, "777", true, false);
+//            Filer.setRights(new File(getCurrentDirectory() + System.getProperty("file.separator") + "VehyclyManager-0.0.1.jar"), "777", true, false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        FileReader.createShortcutVehiclyManager(nameRunBat, getCurrentDirectory(), pathToIcon);
+        try {
+            Files.copy(
+                    Paths.get(getCurrentDirectory() + File.separator + "carmanager.lnk"),
+                    Paths.get(pathFuture),
+                    StandardCopyOption.REPLACE_EXISTING
+            );
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -61,7 +89,7 @@ public class VehicleManagerInstaller {
     public static void createInstallZip() {
         System.err.println("createRootDirectory");
         if (FileReader.createRootDirectory("C://VehiclyManager"))
-            rootDir = FileReader.getCurrentDirectory() + System.getProperty("file.separator") + rootDir;
+            rootDir = getCurrentDirectory() + System.getProperty("file.separator") + rootDir;
 
         File root = new File(rootDir);
 

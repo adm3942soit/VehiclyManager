@@ -53,7 +53,7 @@ public class FileReader {
        ShellLink sl = ShellLink.createLink(pathToExistingFile)
                .setWorkingDir(pathToTheFutureLink)
                .setIconLocation("%SystemRoot%\\system32\\SHELL32.dll");//pathToTheIcon
-       sl.getHeader().setIconIndex(128);
+       sl.getHeader().setIconIndex(137);//128
        sl.getConsoleData()
                .setFont(mslinks.extra.ConsoleData.Font.Consolas)
                .setFontSize(24)

@@ -13,7 +13,6 @@ import com.adonis.ui.persons.PersonsCrudView;
 import com.adonis.ui.persons.RegistrationUI;
 import com.adonis.ui.renta.RentaHistoryCrudView;
 import com.adonis.ui.vehicles.VehiclesCrudView;
-import com.adonis.utils.DatabaseUtils;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.navigator.Navigator;
@@ -28,8 +27,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.annotation.PostConstruct;
 import java.util.Spliterator;
 import java.util.function.Consumer;
-
-import static com.adonis.install.VehicleManagerInstaller.createShortcat;
 
 /**
  * Created by oksdud on 03.04.2017.
@@ -59,12 +56,6 @@ public class MainUI extends UI {
 
     @PostConstruct
     void load() {
-        createShortcat();
-        try {
-            DatabaseUtils.createDatabase();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         if(service.findTotalCustomer()==0) {
             service.loadData();
         }
