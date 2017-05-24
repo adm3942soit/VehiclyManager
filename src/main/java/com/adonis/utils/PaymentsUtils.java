@@ -50,7 +50,7 @@ public class PaymentsUtils {
             ConfigManager.getInstance().load(props);
             clientID = ConfigManager.getInstance().getConfigurationMap().get("clientID");
             clientSecret = ConfigManager.getInstance().getConfigurationMap().get("clientSecret");
-            PAYPAL_ACCESS_TOKEN = new OAuthTokenCredential(clientID, clientSecret).getAccessToken();
+            /*PAYPAL_ACCESS_TOKEN = new OAuthTokenCredential(clientID, clientSecret).getAccessToken();*/
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
@@ -66,28 +66,6 @@ public class PaymentsUtils {
         systemConfig.put("paypal_accessTokenLiveTime", "28800");
         systemConfig.put("ip", geoService.getIpAdress());
         initPayPal();
-//        ResourceLoader resourceLoader = new ResourceLoader(
-//                Constants.DEFAULT_CONFIGURATION_FILE);
-//        HttpConfiguration httpConfiguration = new HttpConfiguration();
-//        httpConfiguration.setMaxRetry(2);
-//        httpConfiguration.setProxyUserName("oksdud");
-//        httpConfiguration.setProxyHost("10.15.0.37");
-//        httpConfiguration.setProxyPort(8080);
-//        httpConfiguration.setProxyPassword("301064September");
-
-//        config.put(Constants.HTTP_PROXY_USERNAME, httpConfiguration.getProxyUserName());
-//        config.put(Constants.HTTP_PROXY_HOST, httpConfiguration.getProxyHost());
-//        config.put(Constants.HTTP_PROXY_PORT, String.valueOf(httpConfiguration.getProxyPort()));
-//        config.put(Constants.HTTP_PROXY_PASSWORD, httpConfiguration.getProxyPassword());
-//        config.put(Constants.MODE, Constants.SANDBOX);
-//        config.put(Constants.CLIENT_ID, "Af3KIZBjGjUQDMBBxmjuq2cYlCY9xEMjGCQxc2Q1QsmmwWlS744tz0wyeBSllxT8JP2ZalXUgXqj4HVg");
-//        config.put(Constants.CLIENT_SECRET, "EE8A11iseI7UCHaLnYFeRCc3rV73ekCNMAgoOosbixgVUi-aqGrcXriJOmvaPgPop0DWqkIMkJEVV9Uo");
-//        try {
-//            PayPalResource.initializeToDefault();
-//            PayPalResource.initConfig(config);
-//        } catch (PayPalRESTException e) {
-//            e.printStackTrace();
-//        }
 
 //        try {
 //            updateAccessToken();
@@ -216,14 +194,13 @@ public class PaymentsUtils {
             redirectUrls.setReturnUrl(systemConfig.getProperty("httpsServerUrl")+systemConfig.getProperty("paypal_successUri"));
             redirectUrls.setCancelUrl(systemConfig.getProperty("httpsServerUrl")+systemConfig.getProperty("paypal_failUri"));
             payment.setRedirectUrls(redirectUrls);
-//            accessToken = new OAuthTokenCredential(
-//                    config.getProperty(Constants.CLIENT_ID),
-//                    config.getProperty(Constants.CLIENT_SECRET),
-//                    new HashMap(config)).getAccessToken();
-
             APIContext apiContext = new APIContext(clientID, clientSecret, "sandbox");
-//            apiContext.addConfigurations(map(config.stringPropertyNames(), config));
-            Payment createdPayment = payment.create(apiContext);
+            Payment createdPayment = null;
+            try {
+                createdPayment = payment.create(apiContext);
+            } catch (com.paypal.base.rest.PayPalRESTException e) {
+                throw new IllegalStateException("No access token!");
+            }
             Iterator<Links> links = createdPayment.getLinks().iterator();
             while (links.hasNext()) {
                 Links link = links.next();

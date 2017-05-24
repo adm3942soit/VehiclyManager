@@ -11,7 +11,7 @@ import static com.adonis.install.InstallConstants.INSTALL;
 import static com.adonis.install.VehicleManagerInstaller.createShortcat;
 
 @Configuration
-@ComponentScan
+@ComponentScan(value = "com.adonis")
 @EnableAutoConfiguration
 @SpringBootApplication
 public class VehiclyManagerApplication {
