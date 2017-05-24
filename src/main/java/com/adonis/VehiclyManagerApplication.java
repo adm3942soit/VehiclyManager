@@ -2,11 +2,17 @@ package com.adonis;
 
 import com.adonis.utils.DatabaseUtils;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 
 import static com.adonis.install.InstallConstants.INSTALL;
 import static com.adonis.install.VehicleManagerInstaller.createShortcat;
 
+@Configuration
+@ComponentScan
+@EnableAutoConfiguration
 @SpringBootApplication
 public class VehiclyManagerApplication {
 
