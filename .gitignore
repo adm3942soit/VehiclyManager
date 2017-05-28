@@ -28,4 +28,4 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
-gradle.properties
+gradle.properties'.idea' 
