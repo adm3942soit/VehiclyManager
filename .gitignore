@@ -19,10 +19,13 @@ nbproject/private/
 build/classes/
 build/dependency-cache/
 build/reports
+build/libs
 build/resources
 build/test-results
 build/tmp
+build
 nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+gradle.properties

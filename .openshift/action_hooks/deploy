@@ -11,7 +11,7 @@ if [ ! -d $OPENSHIFT_DATA_DIR/gradle-3.5 ]
 then
     wget -P $OPENSHIFT_DATA_DIR https://services.gradle.org/distributions/gradle-3.5-bin.zip
     unzip -j gradle-3.5-bin.zip
-    rm -f $OPENSHIFT_DATA_DIR/gradle-3.5-bin.zip
+#    rm -f $OPENSHIFT_DATA_DIR/gradle-3.5-bin.zip
 fi
 if [ ! -d jdk1.8.0_05 ]; then
   wget --no-check-certificate --no-cookies --header "Cookie:    oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u5-b13/jdk-8u5-linux-x64.tar.gz
