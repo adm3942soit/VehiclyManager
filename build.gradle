@@ -52,6 +52,27 @@ dependencies {
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('ma.glasnost.orika:orika-core:1.4.3')
 }
+configurations.all {
+	resolutionStrategy {
+		failOnVersionConflict()
+		force 'com.google:guava:18.0',
+				'com.fasterxml.jackson.core:jackson-databind:2.8.1',
+				'com.fasterxml.jackson.core:jackson-core:2.8.1',
+				'com.fasterxml.jackson.core:jackson-annotations:2.8.1'
+		//  *replace existing forced modules with new ones:
+		forcedModules = ['com.google:guava:18.0',
+						 'com.fasterxml.jackson.core:jackson-databind:2.8.1',
+						 'com.fasterxml.jackson.core:jackson-core:2.8.1',
+						 'com.fasterxml.jackson.core:jackson-annotations:2.8.1'
+		]
+	}
+	resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+		if (details.requested.group + ":" + details.requested.name == 'com.google:guava') {
+			details.useVersion "18.0"
+			details.useTarget "com.google:guava:18.0"
+		}
+	}
+}
 
 dependencyManagement {
 	imports {
