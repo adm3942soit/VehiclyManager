@@ -26,9 +26,7 @@ public class PrintPersonsUI extends UI {
         Table table = new Table();
         table.setContainerDataSource(MainUI.personsCrudView.container);
         table.setVisibleColumns("firstName", "lastName", "email", "birthDate", "phoneNumber");
-        // Have some content to print
         setContent(table);
-//        createXLS("persons.xls", MainUI.personsCrudView.objects);
         // Print automatically when the window opens
         JavaScript.getCurrent().execute(
                 "setTimeout(function() {" +

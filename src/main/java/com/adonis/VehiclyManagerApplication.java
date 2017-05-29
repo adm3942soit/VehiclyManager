@@ -10,9 +10,9 @@ import org.springframework.context.annotation.Configuration;
 import static com.adonis.install.InstallConstants.INSTALL;
 import static com.adonis.install.VehicleManagerInstaller.createShortcat;
 
-@Configuration
-@ComponentScan(value = "com.adonis")
-@EnableAutoConfiguration
+//@Configuration
+//@ComponentScan(value = "com.adonis")
+//@EnableAutoConfiguration
 @SpringBootApplication
 public class VehiclyManagerApplication {
 

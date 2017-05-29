@@ -4,20 +4,26 @@ package com.adonis.utils;
  * Created by oksdud on 08.05.2017.
  */
 
+import com.google.common.base.Strings;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.json.helper.JsonHelper;
 import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.maxmind.geoip2.model.CityResponse;
 import com.maxmind.geoip2.model.CountryResponse;
 import com.maxmind.geoip2.model.EnterpriseResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONArray;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class GeoService {
@@ -36,9 +42,9 @@ public class GeoService {
 
     private GeoService() {
         try {
+            countryCodes = new CountryCodes();
             readerCity = new DatabaseReader.Builder(new File(this.getClass().getClassLoader().getResource("GeoLite2-City.mmdb").getPath())).build();
             readerCountry = new DatabaseReader.Builder(new File(this.getClass().getClassLoader().getResource("GeoIP2-Country.mmdb").getPath())).build();
-            countryCodes = new CountryCodes();
         } catch (Exception e) {
             log.error("Exception:", e);
         }
@@ -96,6 +102,8 @@ public class GeoService {
             return "";
         }
     }
+
+
     public String getCity(InetAddress ip){
         try {
             CityResponse cr = readerCity.city(ip);
@@ -111,6 +119,7 @@ public class GeoService {
             return "Riga";
         }
     }
+
 
     public String getCountry(InetAddress ipAddress) {
         try {
@@ -129,7 +138,6 @@ public class GeoService {
             }finally {
                 return "Latvia";
             }
-//            return "ZZZ";
         }
 
     }
@@ -140,7 +148,6 @@ public class GeoService {
             return countryResponse.getCountry().getIsoCode();
         } catch (IOException | GeoIp2Exception ex) {
             log.info("Could not get country for IP " + ipAddress);
-//            return "ZZZ";
             return countryCodes.map.get("Latvia");
         }
     }
@@ -161,7 +168,6 @@ public class GeoService {
         } catch (UnknownHostException ex) {
             log.info("Bad ip address " + ipAddress, ex);
         }
-//        return "ZZZ";
         return countryCodes.map.get("Latvia");
     }
 
@@ -186,6 +192,27 @@ public class GeoService {
             }
         }
         return null;
+    }
+
+    public List<String> getCitiesByCountry(String countryName) {
+        if(Strings.isNullOrEmpty(countryName)) countryName = "Latvia";
+        JSONArray jsonArray = ((JSONArray) JsonHelper.getObjectValueByKey(ResourcesUtils.getFileContentFromResources("countriesToCities.json"), countryName));
+        if(jsonArray==null) return Collections.EMPTY_LIST;
+        Gson gson = new Gson();
+        Type listType = new TypeToken<List<String>>() {}.getType();
+        List<String> list = gson.fromJson(jsonArray.toString(), listType);
+        return list;
+    }
+
+    public String getCityByCountry(String countryName) {
+        String city = null;
+        try {
+            city = getCitiesByCountry(countryName).get(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            return Strings.isNullOrEmpty(city)?"Riga":city;
+        }
     }
 
     public String getIp() {
@@ -449,7 +476,9 @@ public class GeoService {
             map.put("Zimbabwe", "ZW");
 
         }
-
+        public Set<String> getCountries(){
+           return map.keySet();
+        }
         public String getCode(String country){
             String countryFound = map.get(country);
             if(countryFound==null){
@@ -462,6 +491,11 @@ public class GeoService {
     public CountryCodes getCountryCodes() {
         return countryCodes;
     }
+
+    public List<String> getCountries(){
+      return countryCodes.getCountries().stream().collect(Collectors.toList());
+    }
+
     public String getCountryISOCode(String nameCountry) {
         return countryCodes.getCode(nameCountry);
     }

@@ -17,13 +17,17 @@ import com.vaadin.v7.data.util.BeanItem;
 @Widgetset("com.vaadin.v7.Vaadin7WidgetSet")
 public class AddressUI extends UI {
 
+    private GeoService geoService = GeoService.getInstance();
+
     public FieldGroup fieldGroup = new BeanFieldGroup<Address>(Address.class);
     public FormLayout layout = new FormLayout();
     public com.vaadin.v7.ui.TextArea street = new com.vaadin.v7.ui.TextArea("Street address:");
     public com.vaadin.v7.ui.TextField zip = new com.vaadin.v7.ui.TextField("Postal zip code:");
-    public com.vaadin.v7.ui.TextField city = new com.vaadin.v7.ui.TextField("City:");
-    public com.vaadin.v7.ui.TextField country = new com.vaadin.v7.ui.TextField("Country:");
-    private GeoService geoService = GeoService.getInstance();
+
+    public com.vaadin.v7.ui.ComboBox country = new com.vaadin.v7.ui.ComboBox("Country:", geoService.getCountries());
+    public com.vaadin.v7.ui.ComboBox city = new com.vaadin.v7.ui.ComboBox("City:");
+    public String countryName="Latvia";
+    public String cityName="Riga";
     PersonService personService;
     @Override
     protected void init(VaadinRequest request) {
@@ -34,9 +38,22 @@ public class AddressUI extends UI {
         fieldGroup.bind(city, "city");
         fieldGroup.bind(country, "country");
 
-        if(country.getValue()==null)country.setValue(geoService.getCountry(geoService.getIpInetAdress()));
-        if(city.getValue()==null)city.setValue(geoService.getCity(geoService.getIpInetAdress()));
-//        if(zip.getValue()==null)zip.setValue(geoService.getEnterpriseResponse().getPostal().getCode());
+        country.addListener(new Listener() {
+            @Override
+            public void componentEvent(Event event) {
+                countryName = (String) country.getValue();
+//                if(country.getValue()==null)country.setValue(geoService.getCountry(geoService.getIpInetAdress()));
+                if(countryName!=null)city.addItems(geoService.getCitiesByCountry(countryName));
+            }
+        });
+
+        city.addListener(new Listener() {
+            @Override
+            public void componentEvent(Event event) {
+                cityName = (String) city.getValue();
+            }
+        });
+
 
         HorizontalLayout inLayout = new HorizontalLayout();
         Button close = new Button("Ok");
@@ -44,8 +61,8 @@ public class AddressUI extends UI {
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 Address address = new Address();
-                address.setCity(city.getValue());
-                address.setCountry(country.getValue());
+                address.setCity(cityName);
+                address.setCountry(countryName);
                 address.setStreet(street.getValue());
                 address.setZip(zip.getValue());
                 try {
@@ -66,8 +83,8 @@ public class AddressUI extends UI {
 
         layout.addComponent(street);
         layout.addComponent(zip);
-        layout.addComponent(city);
         layout.addComponent(country);
+        layout.addComponent(city);
         layout.addComponent(inLayout);
         fieldGroup.bind(street, "street");
         fieldGroup.bind(zip, "zip");
