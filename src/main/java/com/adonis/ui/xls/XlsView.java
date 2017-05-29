@@ -95,7 +95,7 @@ public class XlsView extends CustomComponent implements View {
 //        fieldResult2.setPrimaryStyleName(ValoTheme.TEXTAREA_SMALL);
 //        fieldResult2.setEnabled(false);
         f.addField("name2", fieldName2);
-        f.getLayout().addComponent(new Upload("CSV with models of vehicles", new Upload.Receiver() {
+        f.getLayout().addComponent(new Upload("CSV with types of vehicles", new Upload.Receiver() {
 
             public OutputStream receiveUpload(String filename, String MIMEType) {
                 fieldName2.setValue(filename);
