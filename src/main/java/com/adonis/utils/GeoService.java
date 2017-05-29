@@ -31,18 +31,22 @@ public class GeoService {
     private String ip;
     private InetAddress ipAddress;
     private CountryCodes countryCodes;
-//    private EnterpriseResponse enterpriseResponse;
+
     private static CountryResponse countryResponse;
+
     private GeoService() {
         try {
             readerCity = new DatabaseReader.Builder(new File(this.getClass().getClassLoader().getResource("GeoLite2-City.mmdb").getPath())).build();
             readerCountry = new DatabaseReader.Builder(new File(this.getClass().getClassLoader().getResource("GeoIP2-Country.mmdb").getPath())).build();
+            countryCodes = new CountryCodes();
+        } catch (Exception e) {
+            log.error("Exception:", e);
+        }
+        try {
             ip = getIpAdress();
             ipAddress = getIpInetAdress();
-            countryCodes = new CountryCodes();
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error("Exception:", e);
-            throw new RuntimeException(e);
         }
     }
 
@@ -98,29 +102,16 @@ public class GeoService {
             return cr.getCity().getName();
         } catch (UnknownHostException e) {
             log.error("Exception:", e);
-            return "";
+            return "Riga";
         } catch (IOException e) {
             log.error("Exception:", e);
-            return "";
+            return "Riga";
         } catch (GeoIp2Exception e) {
             log.error("Exception:", e);
-            return "";
+            return "Riga";
         }
     }
 
-    //    public String getIsp(String ip) {
-//        try {
-//            CityIspOrgResponse ci = readerCity.cityIspOrg(InetAddress.getByName(ip));
-//            return ci.getTraits().getIsp();
-//        } catch (UnknownHostException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (GeoIp2Exception e) {
-//            e.printStackTrace();
-//        }
-//        return "--";
-//    }
     public String getCountry(InetAddress ipAddress) {
         try {
             countryResponse = readerCountry.country(ipAddress);
@@ -135,8 +126,10 @@ public class GeoService {
                 e.printStackTrace();
             } catch (GeoIp2Exception e) {
                 e.printStackTrace();
+            }finally {
+                return "Latvia";
             }
-            return "ZZZ";
+//            return "ZZZ";
         }
 
     }
@@ -147,7 +140,8 @@ public class GeoService {
             return countryResponse.getCountry().getIsoCode();
         } catch (IOException | GeoIp2Exception ex) {
             log.info("Could not get country for IP " + ipAddress);
-            return "ZZZ";
+//            return "ZZZ";
+            return countryCodes.map.get("Latvia");
         }
     }
     public EnterpriseResponse getInfo(InetAddress ipAddress){
@@ -167,7 +161,8 @@ public class GeoService {
         } catch (UnknownHostException ex) {
             log.info("Bad ip address " + ipAddress, ex);
         }
-        return "ZZZ";
+//        return "ZZZ";
+        return countryCodes.map.get("Latvia");
     }
 
     public String getIpAdress(){
@@ -200,10 +195,6 @@ public class GeoService {
     public InetAddress getIpAddress() {
         return ipAddress;
     }
-
-//    public EnterpriseResponse getEnterpriseResponse() {
-//        return enterpriseResponse;
-//    }
 
     public CountryResponse getCountryResponse() {
         return countryResponse;
