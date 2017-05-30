@@ -10,6 +10,7 @@ import com.vaadin.server.StreamResource;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import org.vaadin.simplefiledownloader.SimpleFileDownloader;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -29,10 +30,10 @@ public class PrintView extends CustomComponent implements View {
     File personsFile = null;
     File historyFile = null;
     File vehiclesFile = null;
-//    SimpleFileDownloader downloader = new SimpleFileDownloader();
+    SimpleFileDownloader downloader = new SimpleFileDownloader();
 
     public PrintView(PersonService personService, RentaHistoryService rentaHistoryService) {
-//        addExtension(downloader);
+        addExtension(downloader);
         this.personService = personService;
         this.rentaHistoryService = rentaHistoryService;
         setSizeFull();
@@ -91,8 +92,8 @@ public class PrintView extends CustomComponent implements View {
                         return new ByteArrayInputStream("This is test clicked on button".getBytes());
                     }, personsFile.getAbsolutePath());
 
-//                    downloader.setFileDownloadResource(resource);
-//                    downloader.download();
+                    downloader.setFileDownloadResource(resource);
+                    downloader.download();
                     Notification.show("Successfully!");
                     fieldResult.setValue("Downloaded  file " + personsFile.getAbsolutePath() + " successfully!");
                 }
@@ -124,8 +125,8 @@ public class PrintView extends CustomComponent implements View {
                         return new ByteArrayInputStream("This is test clicked on button".getBytes());
                     }, historyFile.getAbsolutePath());
 
-//                    downloader.setFileDownloadResource(resource);
-//                    downloader.download();
+                    downloader.setFileDownloadResource(resource);
+                    downloader.download();
                     Notification.show("Successfully!");
                     fieldResult.setValue("Downloaded  file " + historyFile.getAbsolutePath() + " successfully!");
                 }
@@ -158,8 +159,8 @@ public class PrintView extends CustomComponent implements View {
                         return new ByteArrayInputStream("This is test clicked on button".getBytes());
                     }, vehiclesFile.getAbsolutePath());
 
-//                    downloader.setFileDownloadResource(resource);
-//                    downloader.download();
+                    downloader.setFileDownloadResource(resource);
+                    downloader.download();
                     Notification.show("Successfully!");
                     fieldResult.setValue("Downloaded  file " + vehiclesFile.getAbsolutePath() + " successfully!");
                 }
