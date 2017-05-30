@@ -29,9 +29,11 @@ import org.vaadin.crudui.layout.impl.HorizontalSplitCrudLayout;
 
 import javax.annotation.PostConstruct;
 import java.sql.Timestamp;
+import java.text.NumberFormat;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by oksdud on 06.04.2017.
@@ -41,7 +43,7 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
     public static final String NAME = "RENTA HISTORY VIEW";
     public static final BeanItemContainer<RentaHistory> container = new BeanItemContainer<RentaHistory>(RentaHistory.class);
     public static List<RentaHistory> objects;
-
+    public static RentaHistory selectedRentaHistoryRecord = null;
     RentaPaymentField rentaPaymentField;
     Double price, summa;// = 0.0;
     Timestamp parsedValueFrom, parsedValueTo;
@@ -49,7 +51,7 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
     final Property<Double> priceProperty = (Property<Double>) beanItem
             .getItemProperty("price");
 
-    com.vaadin.v7.ui.TextField priceTextField = new TextField("price", priceProperty){
+    com.vaadin.v7.ui.TextField priceTextField = new TextField("price", priceProperty) {
         @Override
         public Object getConvertedValue() {
             return price;
@@ -57,7 +59,7 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
     };
     final Property<Double> summaProperty = (Property<Double>) beanItem
             .getItemProperty("summa");
-    com.vaadin.v7.ui.TextField summaTextField = new TextField("summa", summaProperty){
+    com.vaadin.v7.ui.TextField summaTextField = new TextField("summa", summaProperty) {
         @Override
         public Object getConvertedValue() {
             return summa;
@@ -76,6 +78,7 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
                 return null;
             }
         }
+
         @Override
         public Object getConvertedValue() {
             return parsedValueFrom;
@@ -95,6 +98,7 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
                 return null;
             }
         }
+
         @Override
         public Object getConvertedValue() {
             return parsedValueTo;
@@ -106,9 +110,10 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
     private PersonService personService;
     private VehicleService vehicleService;
     private Person person;
+
     @PostConstruct
-    private void init(){
-     summaTextField.setConverter(StringToDoubleConverter.class);
+    private void init() {
+        summaTextField.setConverter(StringToDoubleConverter.class);
         priceTextField.setConverter(StringToDoubleConverter.class);
     }
 
@@ -132,10 +137,37 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
 
     }
 
+    private RentaHistory insert(RentaHistoryService service, RentaHistory history) {
+        try {
+            price = NumberFormat.getNumberInstance(Locale.getDefault()).parse(priceTextField.getValue()).doubleValue();
+            summa = NumberFormat.getNumberInstance(Locale.getDefault()).parse(summaTextField.getValue()).doubleValue();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        history.setPrice(price);
+        history.setSumma(summa);
+        return service.insert(history);
+    }
+
+    private RentaHistory update(RentaHistoryService service, RentaHistory history) {
+        try {
+            price = NumberFormat.getNumberInstance(Locale.getDefault()).parse(priceTextField.getValue()).doubleValue();
+            summa = NumberFormat.getNumberInstance(Locale.getDefault()).parse(summaTextField.getValue()).doubleValue();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        history.setPrice(price);
+        history.setSumma(summa);
+        return service.save(history);
+    }
+
     public void setCrudProperties(RentaHistoryService service) {
-        crud.setAddOperation(person -> service.insert(person));
-        crud.setUpdateOperation(person -> service.save(person));
-        crud.setDeleteOperation(person -> service.delete(person));
+        crud.setAddOperation(history -> insert(service, history));
+        crud.setUpdateOperation(history -> update(service, history));
+        crud.setDeleteOperation(history -> service.delete(history));
         crud.setFindAllOperation(() -> service.findAll());
 
         GridLayoutCrudFormFactory<RentaHistory> formFactory = new GridLayoutCrudFormFactory<>(RentaHistory.class, 1, 10);
@@ -161,19 +193,23 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
             @Override
             public Field buildField() {
                 priceTextField.setConverter(StringToDoubleConverter.class);
-               // priceTextField.setConvertedValue(String.valueOf(price));
+                // priceTextField.setConvertedValue(String.valueOf(price));
                 return priceTextField;
             }
         });
         formFactory.setFieldProvider("paid", new FieldProvider() {
             @Override
             public Field buildField() {
+                selectedRentaHistoryRecord = (RentaHistory) crud.getGrid().getSelectedRow();
                 rentaPaymentField =
-                        ((RentaHistory) crud.getGrid().getSelectedRow()) != null ?
-                                new RentaPaymentField(((RentaHistory) crud.getGrid().getSelectedRow()).getPaid(), ((RentaHistory) crud.getGrid().getSelectedRow()), person) :
+                        selectedRentaHistoryRecord != null ?
+                                new RentaPaymentField(
+                                        selectedRentaHistoryRecord.getPaid(),
+                                        selectedRentaHistoryRecord,
+                                        person) :
                                 new RentaPaymentField(person, summa);
-                if (((RentaHistory) crud.getGrid().getSelectedRow()) != null) {
-                    rentaPaymentField.setInternalValue((((RentaHistory) crud.getGrid().getSelectedRow()).getPaid()));
+                if (selectedRentaHistoryRecord != null) {
+                    rentaPaymentField.setInternalValue(selectedRentaHistoryRecord.getPaid());
                 }
                 return rentaPaymentField;
             }
@@ -213,7 +249,7 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
             @Override
             public Field buildField() {
                 fromDateDateField.setResolution(Resolution.SECOND);
-                fromDateDateField.setDateFormat( "yyyy-MM-dd HH:mm:ss");
+                fromDateDateField.setDateFormat("yyyy-MM-dd HH:mm:ss");
                 fromDateDateField.setConverter(StringOfInstantToSqlTimestampConverter.class);
                 return fromDateDateField;
             }
@@ -232,16 +268,21 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
                         Date dateTo = toDateDateField.getValue();
                         parsedValueFrom = DateUtils.getTimeStamp(dateFrom);
                         parsedValueTo = DateUtils.getTimeStamp(dateTo);
-                        if(dateFrom!=null && dateTo!=null && priceTextField!=null && priceTextField.getValue()!=null){
-                            long countMinutes = (dateTo.getTime()-dateFrom.getTime())/1000/60/60;
-                            if(summaTextField!=null && price!=null && summa==null) {
+                        if (dateFrom != null && dateTo != null && priceTextField != null && priceTextField.getValue() != null) {
+                            long countMinutes = (dateTo.getTime() - dateFrom.getTime()) / 1000 / 60 / 60;
+                            if (summaTextField != null && price != null) {
                                 summaTextField.setConverter(StringToDoubleConverter.class);
                                 summa = price * countMinutes;
                                 summaTextField.setValue(String.valueOf(summa));
                                 summaTextField.setEnabled(false);
-                                if(rentaPaymentField!=null) {
-                                    rentaPaymentField.setPerson(person!=null?personService.findByCustomerId(person.getId()):null);
+                                if (rentaPaymentField != null) {
+                                    rentaPaymentField.setPerson(person != null ? personService.findByCustomerId(person.getId()) : null);
                                     rentaPaymentField.setSumma(summa);
+                                    if (selectedRentaHistoryRecord != null) {
+                                        selectedRentaHistoryRecord.setSumma(summa);
+                                        selectedRentaHistoryRecord.setPrice(price);
+                                    }
+
                                 }
 
                             }
