@@ -81,7 +81,7 @@ public class PrintView extends CustomComponent implements View {
                 fieldResult.setValue("Created file " + personsFile.getAbsolutePath() + " successfully!");
             }
         });
-        Button xlsPersonDownload = new Button("db persons xls download");
+        Button xlsPersonDownload = new Button("persons.xls download");
         xlsPersonDownload.setPrimaryStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
         xlsPersonDownload.setIcon(new ThemeResource("img/cloud-download.png"));
         xlsPersonDownload.addClickListener(new Button.ClickListener() {
@@ -114,7 +114,7 @@ public class PrintView extends CustomComponent implements View {
                 fieldResult.setValue("Created file " + historyFile.getAbsolutePath() + " successfully!");
             }
         });
-        Button xlsRentaDownload = new Button("db history_renta xls download");
+        Button xlsRentaDownload = new Button("history_renta.xls download");
         xlsRentaDownload.setPrimaryStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
         xlsRentaDownload.setIcon(new ThemeResource("img/cloud-download.png"));
         xlsRentaDownload.addClickListener(new Button.ClickListener() {
@@ -148,7 +148,7 @@ public class PrintView extends CustomComponent implements View {
             }
         });
 
-        Button xlsVehiclesDownload = new Button("db vehicles xls download");
+        Button xlsVehiclesDownload = new Button("vehicles.xls download");
         xlsVehiclesDownload.setPrimaryStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
         xlsVehiclesDownload.setIcon(new ThemeResource("img/cloud-download.png"));
         xlsVehiclesDownload.addClickListener(new Button.ClickListener() {
