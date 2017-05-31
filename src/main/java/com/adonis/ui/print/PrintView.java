@@ -5,14 +5,10 @@ import com.adonis.data.service.RentaHistoryService;
 import com.adonis.ui.MainUI;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.server.BrowserWindowOpener;
-import com.vaadin.server.StreamResource;
-import com.vaadin.server.ThemeResource;
+import com.vaadin.server.*;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
-import org.vaadin.simplefiledownloader.SimpleFileDownloader;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 
 import static com.adonis.ui.print.PrintPersonsUI.createXLS;
@@ -30,10 +26,16 @@ public class PrintView extends CustomComponent implements View {
     File personsFile = null;
     File historyFile = null;
     File vehiclesFile = null;
-    SimpleFileDownloader downloader = new SimpleFileDownloader();
+
+    FileDownloader personsFileDownloader = null;
+    Resource resourcePersonsFile = null;
+    FileDownloader historyFileDownloader = null;
+    Resource resourceHistoryFile = null;
+    FileDownloader vehiclesFileDownloader = null;
+    Resource resourceVehiclesFile = null;
 
     public PrintView(PersonService personService, RentaHistoryService rentaHistoryService) {
-        addExtension(downloader);
+//        addExtension(downloader);
         this.personService = personService;
         this.rentaHistoryService = rentaHistoryService;
         setSizeFull();
@@ -71,38 +73,34 @@ public class PrintView extends CustomComponent implements View {
         openerVehicles.extend(printVehicles);
         HorizontalLayout horizontalLayout1 = new HorizontalLayout();
         Button xlsPerson = new Button("db persons into xls");
+        Button xlsPersonDownload = new Button("persons.xls download");
+        xlsPersonDownload.setPrimaryStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+        xlsPersonDownload.setIcon(new ThemeResource("img/cloud-download.png"));
+        xlsPersonDownload.setEnabled(false);
         xlsPerson.setPrimaryStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
         xlsPerson.setIcon(new ThemeResource("img/xls2.jpg"));
         xlsPerson.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 personsFile = createXLS("persons.xls", MainUI.personsCrudView.objects);
+                resourcePersonsFile = new FileResource(new File(personsFile.getAbsolutePath()));
+                personsFileDownloader = new FileDownloader(resourcePersonsFile);
+                xlsPersonDownload.setEnabled(true);
+                personsFileDownloader.extend(xlsPersonDownload);
                 Notification.show("Successfully!");
                 fieldResult.setValue("Created file " + personsFile.getAbsolutePath() + " successfully!");
             }
         });
-        Button xlsPersonDownload = new Button("persons.xls download");
-        xlsPersonDownload.setPrimaryStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
-        xlsPersonDownload.setIcon(new ThemeResource("img/cloud-download.png"));
-        xlsPersonDownload.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                if (personsFile != null) {
-                    final StreamResource resource = new StreamResource(() -> {
-                        return new ByteArrayInputStream("This is test clicked on button".getBytes());
-                    }, personsFile.getAbsolutePath());
 
-                    downloader.setFileDownloadResource(resource);
-                    downloader.download();
-                    Notification.show("Successfully!");
-                    fieldResult.setValue("Downloaded  file " + personsFile.getAbsolutePath() + " successfully!");
-                }
-            }
-        });
 
 
         horizontalLayout1.addComponentsAndExpand(printPersons, xlsPerson, xlsPersonDownload);
         HorizontalLayout horizontalLayout2 = new HorizontalLayout();
+        Button xlsRentaDownload = new Button("history_renta.xls download");
+        xlsRentaDownload.setPrimaryStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+        xlsRentaDownload.setIcon(new ThemeResource("img/cloud-download.png"));
+        xlsRentaDownload.setEnabled(false);
+
         Button xlsRenta = new Button("db history_renta into xls");
         xlsRenta.setPrimaryStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
         xlsRenta.setIcon(new ThemeResource("img/xls2.jpg"));
@@ -110,32 +108,22 @@ public class PrintView extends CustomComponent implements View {
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 historyFile = createXLSRenta("renta.xls", MainUI.rentaHistoryCrudView.objects);
+                resourceHistoryFile = new FileResource(new File(historyFile.getAbsolutePath()));
+                historyFileDownloader = new FileDownloader(resourceHistoryFile);
+                xlsRentaDownload.setEnabled(true);
+                historyFileDownloader.extend(xlsRentaDownload);
                 Notification.show("Successfully!");
                 fieldResult.setValue("Created file " + historyFile.getAbsolutePath() + " successfully!");
             }
         });
-        Button xlsRentaDownload = new Button("history_renta.xls download");
-        xlsRentaDownload.setPrimaryStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
-        xlsRentaDownload.setIcon(new ThemeResource("img/cloud-download.png"));
-        xlsRentaDownload.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                if (historyFile != null) {
-                    final StreamResource resource = new StreamResource(() -> {
-                        return new ByteArrayInputStream("This is test clicked on button".getBytes());
-                    }, historyFile.getAbsolutePath());
-
-                    downloader.setFileDownloadResource(resource);
-                    downloader.download();
-                    Notification.show("Successfully!");
-                    fieldResult.setValue("Downloaded  file " + historyFile.getAbsolutePath() + " successfully!");
-                }
-            }
-        });
-
         horizontalLayout2.addComponentsAndExpand(printRenta, xlsRenta, xlsRentaDownload);
 
         HorizontalLayout horizontalLayout3 = new HorizontalLayout();
+
+        Button xlsVehiclesDownload = new Button("vehicles.xls download");
+        xlsVehiclesDownload.setPrimaryStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+        xlsVehiclesDownload.setIcon(new ThemeResource("img/cloud-download.png"));
+
         Button xlsVehicles = new Button("db vehicles into xls");
         xlsVehicles.setIcon(new ThemeResource("img/xls2.jpg"));
         xlsVehicles.setPrimaryStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
@@ -143,27 +131,12 @@ public class PrintView extends CustomComponent implements View {
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 vehiclesFile = createXLSVehicles("vehicles.xls", MainUI.getVehiclesCrudView().objects);
+                resourceVehiclesFile = new FileResource(new File(vehiclesFile.getAbsolutePath()));
+                vehiclesFileDownloader = new FileDownloader(resourceVehiclesFile);
+                xlsVehiclesDownload.setEnabled(true);
+                vehiclesFileDownloader.extend(xlsVehiclesDownload);
                 Notification.show("Successfully!");
                 fieldResult.setValue("Created file " + vehiclesFile.getAbsolutePath() + " successfully!");
-            }
-        });
-
-        Button xlsVehiclesDownload = new Button("vehicles.xls download");
-        xlsVehiclesDownload.setPrimaryStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
-        xlsVehiclesDownload.setIcon(new ThemeResource("img/cloud-download.png"));
-        xlsVehiclesDownload.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                if (vehiclesFile != null) {
-                    final StreamResource resource = new StreamResource(() -> {
-                        return new ByteArrayInputStream("This is test clicked on button".getBytes());
-                    }, vehiclesFile.getAbsolutePath());
-
-                    downloader.setFileDownloadResource(resource);
-                    downloader.download();
-                    Notification.show("Successfully!");
-                    fieldResult.setValue("Downloaded  file " + vehiclesFile.getAbsolutePath() + " successfully!");
-                }
             }
         });
 
