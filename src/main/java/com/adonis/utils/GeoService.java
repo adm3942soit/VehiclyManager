@@ -16,7 +16,6 @@ import com.maxmind.geoip2.model.EnterpriseResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.Inet4Address;
