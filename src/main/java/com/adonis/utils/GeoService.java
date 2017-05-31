@@ -36,8 +36,10 @@ public class GeoService {
     private String ip;
     private InetAddress ipAddress;
     private CountryCodes countryCodes;
-
+    private static String defaultCountryName = "Latvia";
+    private static String defaultCityName = "Riga";
     private static CountryResponse countryResponse;
+    private static String JsonCountriesCitiesString = ResourcesUtils.getFileContentFromResources("countriesToCities.json");
 
     private GeoService() {
         try {
@@ -86,7 +88,8 @@ public class GeoService {
         }
         return "--";
     }
-    public String getCity(String ip){
+
+    public String getCity(String ip) {
         try {
             CityResponse cr = readerCity.city(InetAddress.getByName(ip));
             return cr.getCity().getName();
@@ -103,20 +106,21 @@ public class GeoService {
     }
 
 
-    public String getCity(InetAddress ip){
+    public String getCity(InetAddress ip) {
         try {
             CityResponse cr = readerCity.city(ip);
             return cr.getCity().getName();
         } catch (UnknownHostException e) {
             log.error("Exception:", e);
-            return "Riga";
+
         } catch (IOException e) {
             log.error("Exception:", e);
-            return "Riga";
+
         } catch (GeoIp2Exception e) {
             log.error("Exception:", e);
-            return "Riga";
+
         }
+        return defaultCityName;
     }
 
 
@@ -134,12 +138,13 @@ public class GeoService {
                 e.printStackTrace();
             } catch (GeoIp2Exception e) {
                 e.printStackTrace();
-            }finally {
-                return "Latvia";
             }
+
         }
+        return defaultCountryName;
 
     }
+
     public String getIpCountry(InetAddress ipAddress) {
         try {
             CountryResponse countryResponse = readerCountry.country(ipAddress);
@@ -147,12 +152,13 @@ public class GeoService {
             return countryResponse.getCountry().getIsoCode();
         } catch (IOException | GeoIp2Exception ex) {
             log.info("Could not get country for IP " + ipAddress);
-            return countryCodes.map.get("Latvia");
+            return countryCodes.map.get(defaultCountryName);
         }
     }
-    public EnterpriseResponse getInfo(InetAddress ipAddress){
+
+    public EnterpriseResponse getInfo(InetAddress ipAddress) {
         try {
-           EnterpriseResponse enterpriseResponse = readerCountry.enterprise(ipAddress);
+            EnterpriseResponse enterpriseResponse = readerCountry.enterprise(ipAddress);
             return enterpriseResponse;
         } catch (IOException e) {
             log.error("Exception:", e);
@@ -161,31 +167,35 @@ public class GeoService {
         }
         return null;
     }
+
     public String getIpCountry(String ipAddress) {
         try {
             return getIpCountry(InetAddress.getByName(ipAddress));
         } catch (UnknownHostException ex) {
             log.info("Bad ip address " + ipAddress, ex);
         }
-        return countryCodes.map.get("Latvia");
+        return countryCodes.map.get(defaultCountryName);
     }
 
-    public String getIpAdress(){
+    public String getIpAdress() {
         try {
             return Inet4Address.getLocalHost().getHostAddress();
         } catch (UnknownHostException e) {
-            log.error("UnknownHostException:", e);;
+            log.error("UnknownHostException:", e);
+            ;
             return VaadinUtils.getIpAddress();
         }
     }
-    public InetAddress getIpInetAdress(){
+
+    public InetAddress getIpInetAdress() {
         try {
             return Inet4Address.getLocalHost();
         } catch (UnknownHostException e) {
-            log.error("UnknownHostException:", e);;
+            log.error("UnknownHostException:", e);
+            ;
             try {
                 InetAddress inetAddress = InetAddress.getByName(VaadinUtils.getIpAddress());
-                return  inetAddress;
+                return inetAddress;
             } catch (UnknownHostException e1) {
                 e1.printStackTrace();
             }
@@ -194,11 +204,12 @@ public class GeoService {
     }
 
     public List<String> getCitiesByCountry(String countryName) {
-        if(Strings.isNullOrEmpty(countryName)) countryName = "Latvia";
-        JSONArray jsonArray = ((JSONArray) JsonHelper.getObjectValueByKey(ResourcesUtils.getFileContentFromResources("countriesToCities.json"), countryName));
-        if(jsonArray==null) return Collections.EMPTY_LIST;
+        if (Strings.isNullOrEmpty(countryName)) countryName = defaultCountryName;
+        JSONArray jsonArray = ((JSONArray) JsonHelper.getObjectValueByKey(JsonCountriesCitiesString, countryName));
+        if (jsonArray == null) return Collections.EMPTY_LIST;
         Gson gson = new Gson();
-        Type listType = new TypeToken<List<String>>() {}.getType();
+        Type listType = new TypeToken<List<String>>() {
+        }.getType();
         List<String> list = gson.fromJson(jsonArray.toString(), listType);
         return list;
     }
@@ -209,8 +220,8 @@ public class GeoService {
             city = getCitiesByCountry(countryName).get(0);
         } catch (Exception e) {
             e.printStackTrace();
-        }finally {
-            return Strings.isNullOrEmpty(city)?"Riga":city;
+        } finally {
+            return Strings.isNullOrEmpty(city) ? defaultCityName : city;
         }
     }
 
@@ -225,8 +236,10 @@ public class GeoService {
     public CountryResponse getCountryResponse() {
         return countryResponse;
     }
+
     private class CountryCodes {
         final Map<String, String> map = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
+
         public CountryCodes() {
 
             map.put("Andorra, Principality Of", "AD");
@@ -475,13 +488,15 @@ public class GeoService {
             map.put("Zimbabwe", "ZW");
 
         }
-        public Set<String> getCountries(){
-           return map.keySet();
+
+        public Set<String> getCountries() {
+            return map.keySet();
         }
-        public String getCode(String country){
+
+        public String getCode(String country) {
             String countryFound = map.get(country);
-            if(countryFound==null){
-                countryFound="LV";
+            if (countryFound == null) {
+                countryFound = "LV";
             }
             return countryFound;
         }
@@ -491,8 +506,8 @@ public class GeoService {
         return countryCodes;
     }
 
-    public List<String> getCountries(){
-      return countryCodes.getCountries().stream().collect(Collectors.toList());
+    public List<String> getCountries() {
+        return countryCodes.getCountries().stream().collect(Collectors.toList());
     }
 
     public String getCountryISOCode(String nameCountry) {
