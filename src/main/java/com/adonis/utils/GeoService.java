@@ -43,8 +43,8 @@ public class GeoService {
     private GeoService() {
         try {
             countryCodes = new CountryCodes();
-            readerCity = new DatabaseReader.Builder(new File(this.getClass().getClassLoader().getResource("GeoLite2-City.mmdb").getPath())).build();
-            readerCountry = new DatabaseReader.Builder(new File(this.getClass().getClassLoader().getResource("GeoIP2-Country.mmdb").getPath())).build();
+            readerCity = new DatabaseReader.Builder(ResourcesUtils.getFileFromResources("GeoLite2-City.mmdb")).build();
+            readerCountry = new DatabaseReader.Builder(ResourcesUtils.getFileFromResources("GeoIP2-Country.mmdb")).build();
         } catch (Exception e) {
             log.error("Exception:", e);
         }
