@@ -24,7 +24,7 @@ import org.dussan.vaadin.dcharts.options.SeriesDefaults;
  */
 public class RentaDChartView extends CustomComponent implements View {
 
-    public static final String NAME = "RENTA CHART VIEW";
+    public static final String NAME = "VEHICLES CHART VIEW";
     PersonService service;
     RentaHistoryService rentaHistoryService;
     VehicleService vehicleService;
