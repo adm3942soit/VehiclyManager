@@ -20,8 +20,8 @@ public class RentaHistoryService {
 
     public List<RentaHistory> findAll() {
         String sql = "SELECT * FROM renta_history";
-        List<RentaHistory> customers = jdbcTemplate.query(sql, new BeanPropertyRowMapper(RentaHistory.class));
-        return customers;
+        List<RentaHistory> histories = jdbcTemplate.query(sql, new BeanPropertyRowMapper(RentaHistory.class));
+        return histories;
     }
     public List<String> findAllWorking() {
         String sql = "SELECT DISTINCT r.VEHICLE FROM renta_history r WHERE NOW() BETWEEN r.FROM_DATE AND r.TO_DATE";

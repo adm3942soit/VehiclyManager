@@ -31,21 +31,20 @@ public class VehicleService {
 
     public List<Vehicle> findAll() {
         String sql = "SELECT * FROM vehicles";
-        List<Vehicle> customers = jdbcTemplate.query(sql,
+        List<Vehicle> vehicles = jdbcTemplate.query(sql,
                 new BeanPropertyRowMapper(Vehicle.class));
-        return customers;
+        return vehicles;
     }
-    public List<Vehicle> findAllActive() {
-        String sql = "SELECT * FROM vehicles WHERE ACTIVE = 1";
-        List<Vehicle> customers = jdbcTemplate.query(sql,
-                new BeanPropertyRowMapper(Vehicle.class));
-        return customers;
+    public List<Integer> findAllActive() {
+        String sql = "SELECT DISTINCT v.ID FROM vehicles v WHERE v.ACTIVE = 1";
+        List<Integer> vehicles = jdbcTemplate.query(sql,  new BeanPropertyRowMapper(Vehicle.class));
+        return vehicles;
     }
-    public List<Vehicle> findAllNotActive() {
-        String sql = "SELECT * FROM vehicles WHERE ACTIVE = 0";
-        List<Vehicle> customers = jdbcTemplate.query(sql,
+    public List<Integer> findAllNotActive() {
+        String sql = "SELECT v.ID FROM vehicles v WHERE v.ACTIVE = 0";
+        List<Integer> vehicles = jdbcTemplate.query(sql,
                 new BeanPropertyRowMapper(Vehicle.class));
-        return customers;
+        return vehicles;
     }
 
     public List<String> findAllNames() {
