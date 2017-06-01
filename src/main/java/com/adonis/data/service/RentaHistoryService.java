@@ -24,9 +24,9 @@ public class RentaHistoryService {
         return customers;
     }
     public List<String> findAllWorking() {
-        String sql = "SELECT r.VEHICLE FROM renta_history r WHERE NOW() BETWEEN FROM_DATE AND TO_DATE";
-        List<String> customers = jdbcTemplate.query(sql, new BeanPropertyRowMapper(RentaHistory.class));
-        return customers;
+        String sql = "SELECT DISTINCT r.VEHICLE FROM renta_history r WHERE NOW() BETWEEN r.FROM_DATE AND r.TO_DATE";
+        List<String> vehiclesIds = jdbcTemplate.query(sql, new BeanPropertyRowMapper(RentaHistory.class));
+        return vehiclesIds;
     }
 
     public RentaHistory findById(Long id) {
