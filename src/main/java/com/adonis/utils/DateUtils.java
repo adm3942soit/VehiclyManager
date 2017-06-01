@@ -93,19 +93,22 @@ public class DateUtils {
         calendar.set(Calendar.DAY_OF_MONTH, calendar.getMaximum(Calendar.DAY_OF_MONTH));
         return calendar.getTime();
     }
+
     public static Date yesterday() {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(new Date());
         calendar.add(Calendar.DAY_OF_MONTH, -1);
         return calendar.getTime();
     }
-    public static Date addDays(Date date, int count){
+
+    public static Date addDays(Date date, int count) {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(date);
         calendar.add(Calendar.DATE, count);
         return calendar.getTime();
 
     }
+
     private static Calendar beginningOfTheDay(Calendar calendar) {
         calendar.set(Calendar.HOUR_OF_DAY, calendar.getMinimum(Calendar.HOUR_OF_DAY));
         calendar.set(Calendar.MINUTE, calendar.getMinimum(Calendar.MINUTE));
@@ -130,7 +133,7 @@ public class DateUtils {
         for (SimpleDateFormat format : dateFormats) {
             try {
                 format.setLenient(false);
-                date = (Date)format.parseObject(input);
+                date = (Date) format.parseObject(input);
             } catch (ParseException e) {
                 log.error("Try other date formats");
             }
@@ -302,7 +305,7 @@ public class DateUtils {
     }
 
     public static Date transformStringToDate(String input, SimpleDateFormat format) {
-        if(Strings.isNullOrEmpty(input)  || format == null) return null;
+        if (Strings.isNullOrEmpty(input) || format == null) return null;
         String source = input;
 
         if (format.equals(dateFormats.get(3))) {
@@ -327,4 +330,22 @@ public class DateUtils {
 
         return newDate;
     }
+
+    public static boolean between(java.util.Date dateFrom, java.util.Date dateTo, Date currentDate) {
+        if (dateFrom == null || dateTo == null || currentDate == null) return false;
+
+        Calendar calendarOld = GregorianCalendar.getInstance();
+        calendarOld.setTime(dateFrom);
+        Calendar calendarNew = GregorianCalendar.getInstance();
+        calendarNew.setTime(dateTo);
+        Calendar calendarCurrent = GregorianCalendar.getInstance();
+        calendarCurrent.setTime(currentDate);
+
+        if ((calendarCurrent.getTime().compareTo(calendarNew.getTime())>=0)
+                &&
+           (calendarCurrent.getTime().compareTo(calendarOld.getTime())<=0))
+            return true;
+        return false;
+    }
+
 }

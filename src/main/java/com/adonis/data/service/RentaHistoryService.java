@@ -1,6 +1,8 @@
 package com.adonis.data.service;
 
 import com.adonis.data.renta.RentaHistory;
+import com.adonis.utils.DateUtils;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -23,10 +25,24 @@ public class RentaHistoryService {
         List<RentaHistory> histories = jdbcTemplate.query(sql, new BeanPropertyRowMapper(RentaHistory.class));
         return histories;
     }
+
     public List<String> findAllWorking() {
         String sql = "SELECT DISTINCT r.VEHICLE FROM renta_history r WHERE NOW() BETWEEN r.FROM_DATE AND r.TO_DATE";
         List<String> vehiclesIds = jdbcTemplate.query(sql, new BeanPropertyRowMapper(RentaHistory.class));
         return vehiclesIds;
+    }
+
+    public Integer findCountTripsByDate(Date dateTrip) {
+        List<RentaHistory> foundHistories = Lists.newArrayList();
+        List<RentaHistory> histories = findAll();
+        histories.forEach(rentaHistory -> {
+                    if (DateUtils.between(rentaHistory.getFromDate(), rentaHistory.getToDate(), dateTrip )) {
+                        foundHistories.add(rentaHistory);
+                    }
+                }
+        );
+
+        return foundHistories.size();
     }
 
     public RentaHistory findById(Long id) {
