@@ -12,9 +12,7 @@ import com.adonis.data.service.RentaHistoryService;
 import com.adonis.data.service.VehicleService;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.*;
 
 /**
  * Created by oksdud on 12.04.2017.
@@ -28,44 +26,84 @@ public class RentaChartView extends CustomComponent implements View {
     // The view root layout
     HorizontalLayout viewLayout = new HorizontalLayout();
     ChartConfiguration rentaConfiguration = new ChartConfiguration();
+    PieChartSeries pieVehicles = new PieChartSeries("Vehicles");
 
     public RentaChartView(PersonService personService, RentaHistoryService rentaHistoryService, VehicleService vehicleService){
         this.service = personService;
         this.rentaHistoryService = rentaHistoryService;
         this.vehicleService = vehicleService;
+
         setSizeFull();
+
         rentaConfiguration.setTitle("TestRenta");
         rentaConfiguration.setChartType(ChartType.PIE);
         rentaConfiguration.setBackgroundColor(Colors.WHITE);
+
+        VerticalLayout verticalLayout = new VerticalLayout();
+
+        HighChart pieChart = initChart();
+
+        if(pieChart!=null){
+            verticalLayout.addComponent(pieChart);
+            verticalLayout.setComponentAlignment(pieChart, Alignment.MIDDLE_CENTER);
+        }
+
+        Button refresh = new Button("Refresh data");
+        refresh.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                verticalLayout.removeComponent(pieChart);
+                HighChart pieChart = initChart();
+
+                if(pieChart!=null){
+                    verticalLayout.addComponent(pieChart);
+                    verticalLayout.setComponentAlignment(pieChart, Alignment.MIDDLE_CENTER);
+                }
+
+            }
+        });
+
+        verticalLayout.addComponent(refresh);
+        verticalLayout.setComponentAlignment(refresh, Alignment.BOTTOM_CENTER);
+
+        viewLayout.addComponent(verticalLayout);
+        viewLayout.setComponentAlignment(verticalLayout, Alignment.MIDDLE_CENTER);
+        viewLayout.setSizeFull();
+        setCompositionRoot(viewLayout);
+
+    }
+
+    private HighChart initChart(){
+        pieVehicles.getData().clear();
+
+
         Double working = Double.valueOf(rentaHistoryService.findAllWorking().size());
         Double active = Double.valueOf(vehicleService.findAllActive().size());
         Double all = Double.valueOf(vehicleService.findAll().size());
         Double notActive = all - active;
         if(!all.equals(0.0)) {
-            PieChartSeries pieVehicles = new PieChartSeries("Vehicles");
+
             PieChartData workingVehicles = new PieChartData("Working", Double.valueOf((working / all) * 100));
             PieChartData notWorkingVehicles = new PieChartData("Not working", Double.valueOf(((active - working) / all) * 100));
             PieChartData notActiveVehicles = new PieChartData("Not active", Double.valueOf((notActive / all) * 100));
+
             pieVehicles.getData().add(workingVehicles);
             pieVehicles.getData().add(notActiveVehicles);
             pieVehicles.getData().add(notWorkingVehicles);
 
-
             rentaConfiguration.getSeriesList().add(pieVehicles);
+
             try {
                 HighChart pieChart = HighChartFactory.renderChart(rentaConfiguration);
                 pieChart.setHeight(80, UNITS_PERCENTAGE);
                 pieChart.setWidth(80, UNITS_PERCENTAGE);
                 System.out.println("PieChart Script : " + rentaConfiguration.getHighChartValue());
-                viewLayout.addComponent(pieChart);
-                viewLayout.setComponentAlignment(pieChart, Alignment.MIDDLE_CENTER);
+                return pieChart;
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        viewLayout.setSizeFull();
-        setCompositionRoot(viewLayout);
-
+       return null;
     }
 
     @Override
