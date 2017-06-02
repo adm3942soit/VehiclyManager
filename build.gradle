@@ -36,6 +36,7 @@ dependencies {
 	compile ('com.vaadin:vaadin-compatibility-shared:8.0.0')
 	compile ('com.vaadin:vaadin-compatibility-themes:8.0.0')
 	compile ('com.vaadin:vaadin-themes:8.0.0')
+
 	compile libs.login
 	compile libs.json
 //	compile ('org.apache.commons:commons-io:1.3.2')
