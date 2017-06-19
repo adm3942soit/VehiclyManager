@@ -26,8 +26,8 @@ public class RentaChartView extends CustomComponent implements View {
     // The view root layout
     HorizontalLayout viewLayout = new HorizontalLayout();
     ChartConfiguration rentaConfiguration = new ChartConfiguration();
-    PieChartSeries pieVehicles = new PieChartSeries("Vehicles");
-
+    static PieChartSeries pieVehicles = new PieChartSeries("Vehicles");
+    static HighChart pieChart;
     public RentaChartView(PersonService personService, RentaHistoryService rentaHistoryService, VehicleService vehicleService){
         this.service = personService;
         this.rentaHistoryService = rentaHistoryService;
@@ -41,7 +41,7 @@ public class RentaChartView extends CustomComponent implements View {
 
         VerticalLayout verticalLayout = new VerticalLayout();
 
-        HighChart pieChart = initChart();
+        pieChart = initChart();
 
         if(pieChart!=null){
             verticalLayout.addComponent(pieChart);
@@ -53,11 +53,17 @@ public class RentaChartView extends CustomComponent implements View {
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 verticalLayout.removeComponent(pieChart);
-                HighChart pieChart = initChart();
+                viewLayout.removeComponent(verticalLayout);
+                pieChart = initChart();
 
                 if(pieChart!=null){
                     verticalLayout.addComponent(pieChart);
                     verticalLayout.setComponentAlignment(pieChart, Alignment.MIDDLE_CENTER);
+                    viewLayout.addComponent(verticalLayout);
+                    viewLayout.setComponentAlignment(verticalLayout, Alignment.MIDDLE_CENTER);
+                    viewLayout.setSizeFull();
+                    setCompositionRoot(viewLayout);
+
                 }
 
             }
@@ -94,7 +100,7 @@ public class RentaChartView extends CustomComponent implements View {
             rentaConfiguration.getSeriesList().add(pieVehicles);
 
             try {
-                HighChart pieChart = HighChartFactory.renderChart(rentaConfiguration);
+                pieChart = HighChartFactory.renderChart(rentaConfiguration);
                 pieChart.setHeight(80, UNITS_PERCENTAGE);
                 pieChart.setWidth(80, UNITS_PERCENTAGE);
                 System.out.println("PieChart Script : " + rentaConfiguration.getHighChartValue());
