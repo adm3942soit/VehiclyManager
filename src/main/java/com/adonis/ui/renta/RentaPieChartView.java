@@ -17,7 +17,7 @@ import com.vaadin.ui.*;
 /**
  * Created by oksdud on 12.04.2017.
  */
-public class RentaChartView extends CustomComponent implements View {
+public class RentaPieChartView extends CustomComponent implements View {
 
     public static final String NAME =  "RENTA CHART VIEW";
     PersonService service;
@@ -28,7 +28,7 @@ public class RentaChartView extends CustomComponent implements View {
     ChartConfiguration rentaConfiguration = new ChartConfiguration();
     static PieChartSeries pieVehicles = new PieChartSeries("Vehicles");
     static HighChart pieChart;
-    public RentaChartView(PersonService personService, RentaHistoryService rentaHistoryService, VehicleService vehicleService){
+    public RentaPieChartView(PersonService personService, RentaHistoryService rentaHistoryService, VehicleService vehicleService){
         this.service = personService;
         this.rentaHistoryService = rentaHistoryService;
         this.vehicleService = vehicleService;

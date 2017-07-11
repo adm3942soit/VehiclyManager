@@ -40,6 +40,7 @@ public class VehicleService {
         List<Integer> vehicles = jdbcTemplate.query(sql,  new BeanPropertyRowMapper(Vehicle.class));
         return vehicles;
     }
+
     public List<Integer> findAllNotActive() {
         String sql = "SELECT v.ID FROM vehicles v WHERE v.ACTIVE = 0";
         List<Integer> vehicles = jdbcTemplate.query(sql,
@@ -53,6 +54,17 @@ public class VehicleService {
         if(vehicles==null || vehicles.isEmpty()) return Collections.EMPTY_LIST;
         List<String> names = Lists.newArrayList();
         vehicles.forEach(vehicle -> {names.add(vehicle.getVehicleNmbr());});
+        return names;
+    }
+
+    public List<String> findAllActiveNumbers() {
+        List<Vehicle> vehicles = findAll();
+        if(vehicles==null || vehicles.isEmpty()) return Collections.EMPTY_LIST;
+        List<String> names = Lists.newArrayList();
+        vehicles.forEach(vehicle -> {
+            if(vehicle.getActive()){
+                names.add(vehicle.getVehicleNmbr());
+            }});
         return names;
     }
 
