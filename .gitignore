@@ -1,5 +1,5 @@
 .gradle
-!gradle/wrapper/gradle-wrapper.jar
+gradle/wrapper/gradle-wrapper.jar
 ### STS ###
 .apt_generated
 .classpath
@@ -29,3 +29,5 @@ dist/
 nbdist/
 .nb-gradle/
 gradle.properties'.idea' 
+rest/
+OPENSHIFT_LOG_DIR_IS_UNDEFINED/kp-apps.log

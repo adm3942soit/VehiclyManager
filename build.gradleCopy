@@ -1,0 +1,135 @@
+buildscript {
+	ext {
+		springBootVersion = '1.5.2.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'war'
+
+version = '1.0.0'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+webAppDirName = 'webapp'
+def gwtBuildDir = "$projectDir/src/main/"+webAppDirName+'/VAADIN'+'/widgetsets'
+def widgetsetClass = 'org.dussan.vaadin.dcharts.DchartsWidgetset.gwt.xml'
+
+repositories {
+	mavenCentral()
+	maven { url "http://maven.vaadin.com/vaadin-addons" }
+	maven { url "https://mvnrepository.com/"}
+}
+def libs = [
+		login: fileTree(dir: 'lib', include: '*.jar'),
+		gwt: fileTree(dir: 'lib/gwt', include: '*.jar'),
+		json: fileTree(dir: 'lib/json', include: '*.jar'),
+		vaadinClient: fileTree(dir: 'lib/client', include: '*.jar')
+]
+
+dependencies {
+	compile('org.projectlombok:lombok:1.16.10')
+	compile('ma.glasnost.orika:orika-core:1.4.3')
+	compile('com.google.guava:guava:18.0')
+	compile ('org.apache.commons:commons-lang3:3.5')
+	compile ('javax.servlet:javax.servlet-api:3.1.0')
+
+	compile('com.vaadin:vaadin-compatibility-server:8.0.0')
+	compile ('com.vaadin:vaadin-compatibility-shared:8.0.0')
+	compile ('com.vaadin:vaadin-compatibility-themes:8.0.0')
+	compile ('com.vaadin:vaadin-themes:8.0.0')
+
+
+	compile libs.login
+	compile libs.gwt
+	compile libs.json
+	compile libs.vaadinClient
+
+
+	compile group: 'com.paypal.sdk', name: 'paypal-core', version: '1.7.2'
+	compile 'com.paypal.sdk:rest-api-sdk:1.13.1'
+
+	compile('org.springframework.boot:spring-boot-starter-data-jpa')
+	compile('org.springframework.boot:spring-boot-starter-data-rest')
+	compile('com.vaadin:vaadin-spring-boot-starter')
+
+	compile('com.maxmind.geoip2:geoip2:2.8.1')
+
+	runtime('mysql:mysql-connector-java')
+
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+	testCompile('ma.glasnost.orika:orika-core:1.4.3')
+}
+configurations.all {
+	resolutionStrategy {
+		failOnVersionConflict()
+		force 'com.google:guava:18.0',
+				'com.fasterxml.jackson.core:jackson-databind:2.8.1',
+				'com.fasterxml.jackson.core:jackson-core:2.8.1',
+				'com.fasterxml.jackson.core:jackson-annotations:2.8.1'
+		forcedModules = ['com.google:guava:18.0',
+						 'com.fasterxml.jackson.core:jackson-databind:2.8.1',
+						 'com.fasterxml.jackson.core:jackson-core:2.8.1',
+						 'com.fasterxml.jackson.core:jackson-annotations:2.8.1'
+		]
+	}
+	resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+		if (details.requested.group + ":" + details.requested.name == 'com.google:guava') {
+			details.useVersion "18.0"
+			details.useTarget "com.google:guava:18.0"
+		}
+	}
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "com.vaadin:vaadin-bom:8.0.0"
+	}
+}
+jar {
+	manifest {
+		attributes 'Main-Class': 'com.adonis.VehiclyManagerApplication'
+	}
+	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
+// Widgetset compilation
+task widgetset << {
+	// Create widgetset directory (if needed)
+//	created = new File(gwtBuildDir).mkdirs();
+
+	// Compile
+	ant.java(classname:'com.google.gwt.dev.Compiler', failOnError: 'yes', fork: 'true', maxmemory: '512m')
+			{
+				classpath {
+					pathElement(path: configurations.compile.asPath)
+					pathElement(path: sourceSets.main.runtimeClasspath.asPath)
+					sourceSets.main.java.srcDirs.each{
+						pathelement(location:it.absolutePath)
+					}
+				}
+
+				arg(line: '-war ' + gwtBuildDir)
+				arg(line: '-logLevel INFO')
+				arg(line: '-style OBF')
+				arg(line: '-localWorkers 2')
+				arg(line: widgetsetClass)
+
+				jvmarg(value: '-Djava.awt.headless=true')
+				jvmarg(value: '-XX:MaxPermSize=256M')
+				jvmarg(value: '-Xmx184M')
+			}
+}
+
+// Require widgetset compilation before WAR is built
+war.dependsOn widgetset
+
+springBoot {
+	mainClass = "com.adonis.VehiclyManagerApplication"
+}

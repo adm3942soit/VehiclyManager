@@ -1,8 +1,8 @@
 package com.adonis.ui.login;
 
+import com.adonis.data.service.PersonService;
 import com.adonis.ui.MainUI;
 import com.adonis.ui.main.MainScreen;
-import com.adonis.data.service.PersonService;
 import com.adonis.ui.persons.RegistrationUI;
 import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.View;
@@ -18,6 +18,7 @@ import java.util.function.Consumer;
  * Created by oksdud on 03.04.2017.
  */
 @Theme("mytheme")
+//@SpringView(name = LoginView.NAME)
 public class LoginView extends CssLayout implements View {
 
     private HorizontalLayout loginFormLayout;
