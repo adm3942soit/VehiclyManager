@@ -4,15 +4,21 @@ buildscript {
 	}
 	repositories {
 		mavenCentral()
+//		maven {
+//			url 'http://dl.bintray.com/steffenschaefer/maven'
+//		}
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+//		classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.6'
+//		classpath "fi.jasoft.plugin:gradle-vaadin-plugin:1.1.6"
 	}
 }
-
+//apply from: 'http://plugins.jasoft.fi/vaadin.plugin'
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
+//apply plugin: 'fi.jasoft.plugin.vaadin'
 
 version = '1.0.0'
 sourceCompatibility = 1.8
@@ -21,35 +27,35 @@ repositories {
 	mavenCentral()
 	maven { url "http://maven.vaadin.com/vaadin-addons" }
 	maven { url "https://mvnrepository.com/"}
+	maven { url 'http://nebula.lpb.lv/nexus/content/groups/public/' }
+//	maven { url "https://plugins.gradle.org/m2/"}
 }
 def libs = [
 		login: fileTree(dir: 'lib', include: '*.jar'),
 		gwt: fileTree(dir: 'lib/gwt', include: '*.jar'),
 		json: fileTree(dir: 'lib/json', include: '*.jar'),
-//		vaadinClient: fileTree(dir: 'lib/client', include: '*.jar')
+		vaadinClient: fileTree(dir: 'lib/client', include: '*.jar')
 ]
 
-def vaadinVersion = '8.0.0'
+//def vaadinVersion = '8.0.0'
 
 dependencies {
-	compile('org.projectlombok:lombok:1.16.10')
+//	compile('org.projectlombok:lombok:1.16.10')
+	compile libs.login
+//	compile libs.gwt
+	compile libs.json
+//	compile libs.vaadinClient
 	compile('ma.glasnost.orika:orika-core:1.4.3')
 	compile('com.google.guava:guava:18.0')
 	compile ('org.apache.commons:commons-lang3:3.5')
 	compile ('javax.servlet:javax.servlet-api:3.1.0')
 
-	compile group: 'com.vaadin', name:'vaadin-compatibility-server', version:vaadinVersion
-	compile group: 'com.vaadin', name:'vaadin-compatibility-shared', version:vaadinVersion
-	compile group: 'com.vaadin', name:'vaadin-compatibility-themes', version:vaadinVersion
-	compile group: 'com.vaadin', name:'vaadin-themes', version:vaadinVersion
-	/*compile ('com.vaadin:vaadin-client-compiler:8.0.0')*/
-
-
-	compile libs.login
-//	compile libs.gwt
-	compile libs.json
-//	compile libs.vaadinClient
-
+	compile('com.vaadin:vaadin-compatibility-server:8.0.0')
+	compile ('com.vaadin:vaadin-compatibility-client-compiled:8.0.0')
+	compile ('com.vaadin:vaadin-compatibility-shared:8.0.0')
+	compile ('com.vaadin:vaadin-compatibility-themes:8.0.0')
+	compile ('com.vaadin:vaadin-themes:8.0.0')
+/*	compile ('com.vaadin:vaadin-client-compiler:8.0.0')*/
 
 	compile group: 'com.paypal.sdk', name: 'paypal-core', version: '1.7.2'
 	compile 'com.paypal.sdk:rest-api-sdk:1.13.1'
@@ -92,10 +98,9 @@ configurations.all {
 		}
 	}
 }
-
 dependencyManagement {
 	imports {
-		mavenBom "com.vaadin:vaadin-bom:$vaadinVersion"
+		mavenBom "com.vaadin:vaadin-bom:8.0.0"
 	}
 }
 jar {
@@ -110,3 +115,6 @@ springBoot {
 	mainClass = "com.adonis.VehiclyManagerApplication"
 }
 
+task wrapper(type: Wrapper) {
+	gradleVersion = '4.0'
+}
