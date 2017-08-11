@@ -14,6 +14,7 @@ import at.downdrown.vaadinaddons.highchartsapi.model.series.ColumnChartSeries;
 import com.adonis.data.service.PersonService;
 import com.adonis.data.service.RentaHistoryService;
 import com.adonis.data.service.VehicleService;
+import com.adonis.utils.DateUtils;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.*;
@@ -108,17 +109,22 @@ public class RentaCalendarView extends CustomComponent implements View {
         List<ColumnChartSeries> barChartSeriesList = new ArrayList<>();
         List<String> dates = new ArrayList<>();
         List<String> labels = new ArrayList<>();
+        Date lastData = rentaHistoryService.getAvailableDate(numbers.get(0));
+        Date monthAgo = DateUtils.anyDaysAgo(lastData, 30);
         for (String number : numbers) {
             Date lastAvailableData = rentaHistoryService.getAvailableDate(number);
+
             List<HighChartsData> dataVehiclesNumbers = new ArrayList<>();
-            StringDoubleData stringDoubleData = new StringDoubleData(number+ " last available date : "+sdf.format(lastAvailableData),
-                    rentaHistoryService.getAvailableDate(number).getTime());
-            dataVehiclesNumbers.add(stringDoubleData
-                    );
+            StringDoubleData stringDoubleData = new StringDoubleData(
+                    number+ " last available date : "+sdf.format(lastAvailableData),
+                    rentaHistoryService.getAvailableDate(number).getTime() - monthAgo.getTime());
+            dataVehiclesNumbers.add(stringDoubleData);
 
             labels.add(stringDoubleData.getHighChartValue());
 
-            ColumnChartSeries numbersBar = new ColumnChartSeries(vehicleService.findByVehicleNumber(number).getModel()+" "+number+" available date :"+sdf.format(lastAvailableData), dataVehiclesNumbers);
+            ColumnChartSeries numbersBar = new ColumnChartSeries(
+       vehicleService.findByVehicleNumber(number).getModel()+" "+number+" available date :"+sdf.format(lastAvailableData),
+                    dataVehiclesNumbers);
             lists.add(dataVehiclesNumbers);
             barChartSeriesList.add(numbersBar);
             dates.add(sdf.format(lastAvailableData));
@@ -131,22 +137,20 @@ public class RentaCalendarView extends CustomComponent implements View {
         rentaConfiguration.setTooltipEnabled(true);
         rentaConfiguration.setCreditsEnabled(true);
 
-        /*dates*/
-        rentaConfiguration.getxAxis().setCategories(dates);
-        rentaConfiguration.getxAxis().setAxisValueType(DATETIME);
-        rentaConfiguration.getxAxis().setLabelsEnabled(true);
-        rentaConfiguration.getxAxis().setShowFirstLabel(false);
-        rentaConfiguration.getxAxis().setShowLastLabel(false);
+
+        rentaConfiguration.getxAxis().setLabelsEnabled(false);
 
         rentaConfiguration.getxAxis().setTitle("Available dates");
-        /*numbers*/
-        rentaConfiguration.getyAxis().setCategories(numbers);
+
+        /*dates*/
+        rentaConfiguration.getyAxis().setCategories(dates);
+        rentaConfiguration.getyAxis().setAxisValueType(DATETIME);
         rentaConfiguration.getyAxis().setLabelsEnabled(false);
 
 
 //        rentaConfiguration.removeBackgroundLines();
         rentaConfiguration.setBackgroundColor(Colors.LIGHTCYAN);
-        rentaConfiguration.setChartMargin(new Margin(150, 50, 100, 120));
+        rentaConfiguration.setChartMargin(new Margin(50, 20, 10, 120));
         rentaConfiguration.setLegendEnabled(true);
 
         ColumnChartPlotOptions barChartPlotOptions = new ColumnChartPlotOptions();

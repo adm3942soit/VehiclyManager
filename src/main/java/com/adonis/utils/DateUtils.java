@@ -347,5 +347,8 @@ public class DateUtils {
             return true;
         return false;
     }
+    public static Date anyDaysAgo(Date date, int countDaysAgo) {
+        return sub(date, countDaysAgo, DAY);
+    }
 
 }
