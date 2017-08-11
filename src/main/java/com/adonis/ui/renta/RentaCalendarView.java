@@ -51,6 +51,7 @@ public class RentaCalendarView extends CustomComponent implements View {
         chart = initChart();
 
         VerticalLayout verticalLayout = new VerticalLayout();
+        verticalLayout.setSizeFull();
 
         if (chart != null) {
             verticalLayout.addComponent(chart);
@@ -80,8 +81,8 @@ public class RentaCalendarView extends CustomComponent implements View {
             }
         });
 
-        verticalLayout.addComponent(refresh);
-        verticalLayout.setComponentAlignment(refresh, Alignment.BOTTOM_CENTER);
+//        verticalLayout.addComponent(refresh);
+//        verticalLayout.setComponentAlignment(refresh, Alignment.BOTTOM_CENTER);
 
         viewLayout.addComponent(verticalLayout);
         viewLayout.setComponentAlignment(verticalLayout, Alignment.MIDDLE_CENTER);
@@ -159,8 +160,8 @@ public class RentaCalendarView extends CustomComponent implements View {
 
         try {
         chart = HighChartFactory.renderChart(rentaConfiguration);
-        chart.setHeight(90, Unit.PERCENTAGE);
-        chart.setWidth(90, Unit.PERCENTAGE);
+        chart.setHeight(100, Unit.PERCENTAGE);
+        chart.setWidth(100, Unit.PERCENTAGE);
 
         }catch (Exception ex){
             ex.printStackTrace();
