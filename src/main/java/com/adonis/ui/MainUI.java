@@ -32,10 +32,9 @@ import java.util.function.Consumer;
  * Created by oksdud on 03.04.2017.
  */
 @SpringUI
-//@SpringViewDisplay
 @Theme("mytheme")
 @Widgetset("com.vaadin.v7.Vaadin7WidgetSet")
-public class MainUI extends UI {//implements ViewDisplay
+public class MainUI extends UI {
 
     @Autowired
     public PersonService service;

@@ -37,7 +37,7 @@ public class RentaPieChartView extends CustomComponent implements View {
 
         rentaConfiguration.setTitle("TestRenta");
         rentaConfiguration.setChartType(ChartType.PIE);
-        rentaConfiguration.setBackgroundColor(Colors.WHITE);
+        rentaConfiguration.setBackgroundColor(Colors.LIGHTCYAN);
 
         VerticalLayout verticalLayout = new VerticalLayout();
 

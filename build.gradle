@@ -4,21 +4,22 @@ buildscript {
 	}
 	repositories {
 		mavenCentral()
-//		maven {
-//			url 'http://dl.bintray.com/steffenschaefer/maven'
-//		}
+		maven { url "https://repo.spring.io/libs-milestone" }
+		maven { url "https://plugins.gradle.org/m2/" }
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-//		classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.6'
-//		classpath "fi.jasoft.plugin:gradle-vaadin-plugin:1.1.6"
+//		classpath ("org.springframework:springloaded:${springBootVersion}")
 	}
 }
-//apply from: 'http://plugins.jasoft.fi/vaadin.plugin'
+
+plugins {
+//	id 'io.franzbecker.gradle-lombok' version '1.8'
+	id 'java'
+}
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
-//apply plugin: 'fi.jasoft.plugin.vaadin'
 
 version = '1.0.0'
 sourceCompatibility = 1.8
@@ -27,24 +28,14 @@ repositories {
 	mavenCentral()
 	maven { url "http://maven.vaadin.com/vaadin-addons" }
 	maven { url "https://mvnrepository.com/"}
-	maven { url 'http://nebula.lpb.lv/nexus/content/groups/public/' }
-//	maven { url "https://plugins.gradle.org/m2/"}
 }
 def libs = [
 		login: fileTree(dir: 'lib', include: '*.jar'),
-		gwt: fileTree(dir: 'lib/gwt', include: '*.jar'),
-		json: fileTree(dir: 'lib/json', include: '*.jar'),
-		vaadinClient: fileTree(dir: 'lib/client', include: '*.jar')
+		json: fileTree(dir: 'lib/json', include: '*.jar')
 ]
 
-//def vaadinVersion = '8.0.0'
-
 dependencies {
-//	compile('org.projectlombok:lombok:1.16.10')
-	compile libs.login
-//	compile libs.gwt
-	compile libs.json
-//	compile libs.vaadinClient
+	compile('org.projectlombok:lombok:1.16.10')
 	compile('ma.glasnost.orika:orika-core:1.4.3')
 	compile('com.google.guava:guava:18.0')
 	compile ('org.apache.commons:commons-lang3:3.5')
@@ -55,7 +46,9 @@ dependencies {
 	compile ('com.vaadin:vaadin-compatibility-shared:8.0.0')
 	compile ('com.vaadin:vaadin-compatibility-themes:8.0.0')
 	compile ('com.vaadin:vaadin-themes:8.0.0')
-/*	compile ('com.vaadin:vaadin-client-compiler:8.0.0')*/
+
+	compile libs.login
+	compile libs.json
 
 	compile group: 'com.paypal.sdk', name: 'paypal-core', version: '1.7.2'
 	compile 'com.paypal.sdk:rest-api-sdk:1.13.1'
@@ -75,17 +68,13 @@ configurations.all {
 	resolutionStrategy {
 		failOnVersionConflict()
 		force 'com.google:guava:18.0',
-				'org.ow2.asm:asm:5.1',
-				'org.ow2.asm:asm-commons:5.1',
-				'org.ow2.asm:asm-tree:5.1',
+				'org.projectlombok:lombok:1.16.10',
 				'com.fasterxml.jackson.core:jackson-databind:2.8.1',
 				'com.fasterxml.jackson.core:jackson-core:2.8.1',
 				'com.fasterxml.jackson.core:jackson-annotations:2.8.1'
 		//  *replace existing forced modules with new ones:
 		forcedModules = ['com.google:guava:18.0',
-						 'org.ow2.asm:asm:5.1',
-						 'org.ow2.asm:asm-commons:5.1',
-						 'org.ow2.asm:asm-tree:5.1',
+						 'org.projectlombok:lombok:1.16.10',
 						 'com.fasterxml.jackson.core:jackson-databind:2.8.1',
 						 'com.fasterxml.jackson.core:jackson-core:2.8.1',
 						 'com.fasterxml.jackson.core:jackson-annotations:2.8.1'
@@ -98,6 +87,7 @@ configurations.all {
 		}
 	}
 }
+
 dependencyManagement {
 	imports {
 		mavenBom "com.vaadin:vaadin-bom:8.0.0"
@@ -116,5 +106,5 @@ springBoot {
 }
 
 task wrapper(type: Wrapper) {
-	gradleVersion = '4.0'
+	gradleVersion = '4.0.1'
 }
