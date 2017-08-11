@@ -8,8 +8,9 @@ import at.downdrown.vaadinaddons.highchartsapi.model.ChartType;
 import at.downdrown.vaadinaddons.highchartsapi.model.Margin;
 import at.downdrown.vaadinaddons.highchartsapi.model.data.HighChartsData;
 import at.downdrown.vaadinaddons.highchartsapi.model.data.base.StringDoubleData;
-import at.downdrown.vaadinaddons.highchartsapi.model.plotoptions.BarChartPlotOptions;
-import at.downdrown.vaadinaddons.highchartsapi.model.series.BarChartSeries;
+import at.downdrown.vaadinaddons.highchartsapi.model.plotoptions.ColumnChartPlotOptions;
+import at.downdrown.vaadinaddons.highchartsapi.model.plotoptions.HighChartsPlotOptionsImpl;
+import at.downdrown.vaadinaddons.highchartsapi.model.series.ColumnChartSeries;
 import com.adonis.data.service.PersonService;
 import com.adonis.data.service.RentaHistoryService;
 import com.adonis.data.service.VehicleService;
@@ -98,25 +99,25 @@ public class RentaCalendarView extends CustomComponent implements View {
         HighChart chart = new HighChart();
         ChartConfiguration rentaConfiguration = new ChartConfiguration();
         rentaConfiguration.setTitle("Calendar available dates for vehicles");
-        rentaConfiguration.setChartType(ChartType.BAR);
+        rentaConfiguration.setChartType(ChartType.COLUMN);
         rentaConfiguration.setBackgroundColor(Colors.WHITE);
 
         List<List<HighChartsData>> lists = new ArrayList<>();
         List<String> numbers = vehicleService.findAllActiveNumbers();
-        List<BarChartSeries> barChartSeriesList = new ArrayList<>();
+        List<ColumnChartSeries> barChartSeriesList = new ArrayList<>();
         List<String> dates = new ArrayList<>();
         List<String> labels = new ArrayList<>();
         for (String number : numbers) {
             Date lastAvailableData = rentaHistoryService.getAvailableDate(number);
             List<HighChartsData> dataVehiclesNumbers = new ArrayList<>();
-            StringDoubleData stringDoubleData = new StringDoubleData(number+ " last date : "+sdf.format(lastAvailableData),
+            StringDoubleData stringDoubleData = new StringDoubleData(number+ " last available date : "+sdf.format(lastAvailableData),
                     rentaHistoryService.getAvailableDate(number).getTime());
             dataVehiclesNumbers.add(stringDoubleData
                     );
 
             labels.add(stringDoubleData.getHighChartValue());
 
-            BarChartSeries numbersBar = new BarChartSeries("Vehicle "+number, dataVehiclesNumbers);
+            ColumnChartSeries numbersBar = new ColumnChartSeries(vehicleService.findByVehicleNumber(number).getModel()+" "+number+" available date :"+sdf.format(lastAvailableData), dataVehiclesNumbers);
             lists.add(dataVehiclesNumbers);
             barChartSeriesList.add(numbersBar);
             dates.add(sdf.format(lastAvailableData));
@@ -147,16 +148,16 @@ public class RentaCalendarView extends CustomComponent implements View {
         rentaConfiguration.setChartMargin(new Margin(150, 50, 100, 120));
         rentaConfiguration.setLegendEnabled(true);
 
-        BarChartPlotOptions barChartPlotOptions = new BarChartPlotOptions();
+        ColumnChartPlotOptions barChartPlotOptions = new ColumnChartPlotOptions();
         barChartPlotOptions.setDataLabelsFontColor(Colors.LIGHTGRAY);
         barChartPlotOptions.setDataLabelsEnabled(true);
         barChartPlotOptions.setAllowPointSelect(true);
         barChartPlotOptions.setShowCheckBox(false);
+        barChartPlotOptions.setSteps(HighChartsPlotOptionsImpl.Steps.CENTER);
 
         rentaConfiguration.setPlotOptions(barChartPlotOptions);
 
         try {
-            rentaConfiguration.getxAxis().getHighChartValue().toCharArray();
         chart = HighChartFactory.renderChart(rentaConfiguration);
         chart.setHeight(90, Unit.PERCENTAGE);
         chart.setWidth(90, Unit.PERCENTAGE);
