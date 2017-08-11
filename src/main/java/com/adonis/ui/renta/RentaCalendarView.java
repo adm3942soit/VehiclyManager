@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static at.downdrown.vaadinaddons.highchartsapi.model.Axis.AxisValueType.DATETIME;
+
 /**
  * Created by oksdud on 12.04.2017.
  */
@@ -102,48 +104,61 @@ public class RentaCalendarView extends CustomComponent implements View {
         List<List<HighChartsData>> lists = new ArrayList<>();
         List<String> numbers = vehicleService.findAllActiveNumbers();
         List<BarChartSeries> barChartSeriesList = new ArrayList<>();
+        List<String> dates = new ArrayList<>();
+        List<String> labels = new ArrayList<>();
         for (String number : numbers) {
             Date lastAvailableData = rentaHistoryService.getAvailableDate(number);
             List<HighChartsData> dataVehiclesNumbers = new ArrayList<>();
-            dataVehiclesNumbers.add(new StringDoubleData(
-                    number+ " last date : "+sdf.format(lastAvailableData), rentaHistoryService.getAvailableDate(number).getTime()));
-            lists.add(dataVehiclesNumbers);
+            StringDoubleData stringDoubleData = new StringDoubleData(number+ " last date : "+sdf.format(lastAvailableData),
+                    rentaHistoryService.getAvailableDate(number).getTime());
+            dataVehiclesNumbers.add(stringDoubleData
+                    );
+
+            labels.add(stringDoubleData.getHighChartValue());
+
             BarChartSeries numbersBar = new BarChartSeries("Vehicle "+number, dataVehiclesNumbers);
+            lists.add(dataVehiclesNumbers);
             barChartSeriesList.add(numbersBar);
-
+            dates.add(sdf.format(lastAvailableData));
         }
 
+        barChartSeriesList.forEach(barChartSeries -> {
+            rentaConfiguration.getSeriesList().add(barChartSeries);}
 
-        List<String> dates = new ArrayList<>();
-        for (String number : numbers) {
-            dates.add(sdf.format(rentaHistoryService.getAvailableDate(number)));
-        }
-        for (BarChartSeries barChartSeries : barChartSeriesList) {
-            rentaConfiguration.getSeriesList().add(barChartSeries);
-        }
+            );
+        rentaConfiguration.setTooltipEnabled(true);
+        rentaConfiguration.setCreditsEnabled(true);
 
+        /*dates*/
+        rentaConfiguration.getxAxis().setCategories(dates);
+        rentaConfiguration.getxAxis().setAxisValueType(DATETIME);
         rentaConfiguration.getxAxis().setLabelsEnabled(true);
-        rentaConfiguration.getyAxis().setLabelsEnabled(true);
-        rentaConfiguration.getyAxis().setCategories(dates);
-        rentaConfiguration.getxAxis().setCategories(numbers);
-        rentaConfiguration.getxAxis().setShowFirstLabel(true);
-        rentaConfiguration.getxAxis().setShowLastLabel(true);
-        rentaConfiguration.getxAxis().setAllowDecimals(false);
+        rentaConfiguration.getxAxis().setShowFirstLabel(false);
+        rentaConfiguration.getxAxis().setShowLastLabel(false);
+
+        rentaConfiguration.getxAxis().setTitle("Available dates");
+        /*numbers*/
+        rentaConfiguration.getyAxis().setCategories(numbers);
+        rentaConfiguration.getyAxis().setLabelsEnabled(false);
+
 
 //        rentaConfiguration.removeBackgroundLines();
         rentaConfiguration.setBackgroundColor(Colors.LIGHTCYAN);
-        rentaConfiguration.setChartMargin(new Margin(100, 50, 100, 120));
+        rentaConfiguration.setChartMargin(new Margin(150, 50, 100, 120));
         rentaConfiguration.setLegendEnabled(true);
 
         BarChartPlotOptions barChartPlotOptions = new BarChartPlotOptions();
         barChartPlotOptions.setDataLabelsFontColor(Colors.LIGHTGRAY);
+        barChartPlotOptions.setDataLabelsEnabled(true);
+        barChartPlotOptions.setAllowPointSelect(true);
         barChartPlotOptions.setShowCheckBox(false);
 
         rentaConfiguration.setPlotOptions(barChartPlotOptions);
 
         try {
+            rentaConfiguration.getxAxis().getHighChartValue().toCharArray();
         chart = HighChartFactory.renderChart(rentaConfiguration);
-        chart.setHeight(60, Unit.PERCENTAGE);
+        chart.setHeight(90, Unit.PERCENTAGE);
         chart.setWidth(90, Unit.PERCENTAGE);
 
         }catch (Exception ex){
