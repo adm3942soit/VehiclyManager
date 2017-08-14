@@ -3,6 +3,7 @@ package com.adonis.ui.renta;
 import at.downdrown.vaadinaddons.highchartsapi.Colors;
 import at.downdrown.vaadinaddons.highchartsapi.HighChart;
 import at.downdrown.vaadinaddons.highchartsapi.HighChartFactory;
+import at.downdrown.vaadinaddons.highchartsapi.model.Axis;
 import at.downdrown.vaadinaddons.highchartsapi.model.ChartConfiguration;
 import at.downdrown.vaadinaddons.highchartsapi.model.ChartType;
 import at.downdrown.vaadinaddons.highchartsapi.model.Margin;
@@ -14,8 +15,10 @@ import com.adonis.data.service.PersonService;
 import com.adonis.data.service.RentaHistoryService;
 import com.adonis.data.service.VehicleService;
 import com.adonis.utils.DateUtils;
+import com.adonis.utils.PaymentsUtils;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.shared.ui.colorpicker.Color;
 import com.vaadin.ui.*;
 
 import java.text.SimpleDateFormat;
@@ -124,21 +127,18 @@ public class RentaAnavailableCalendarView extends CustomComponent implements Vie
         });
         List<String> labels = new ArrayList<>();
         List<Double> doubleDates = new ArrayList<>();
+        Double hour = Double.valueOf((60 * 60 * 1000));
         for (String number : numbers) {
+            List<ColumnRangeChartData> dataVehiclesNumbers = new ArrayList<>();
             Date fromDate = rentaHistoryService.getHistory(number).getFromDate();
             Date toDate = rentaHistoryService.getHistory(number).getToDate();
-            Double middle = Double.valueOf(toDate.getTime()-fromDate.getTime()/2);
 
-            List<ColumnRangeChartData> dataVehiclesNumbers = new ArrayList<>();
+            Date nullDate = DateUtils.convertToDate("01/01/1970");
+            Date now = new Date();
             List<Double> currentDates = new ArrayList<>();
-            currentDates.add(Double.valueOf((fromDate.getTime() - monthAgo.getTime()+ middle)));//1000));
-            currentDates.add(Double.valueOf((fromDate.getTime() - monthAgo.getTime())));
-            currentDates.add(Double.valueOf((toDate.getTime() - monthAgo.getTime())));
-//            Collections.sort(currentDates, new Comparator<Double>() {
-//                public int compare(Double o1, Double o2) {
-//                    return Double.compare(o1, o2);
-//                }
-//            });
+            currentDates.add(PaymentsUtils.round2(Double.valueOf((now.getTime() - nullDate.getTime()) / hour)));//(fromDate.getTime() - nullDate.getTime() + middle)));//1000));
+            currentDates.add(PaymentsUtils.round2(Double.valueOf((fromDate.getTime() - nullDate.getTime())/hour)));
+            currentDates.add(PaymentsUtils.round2(Double.valueOf((toDate.getTime() - nullDate.getTime())/hour)));
             ColumnRangeChartData data = new ColumnRangeChartData(
                     currentDates.get(0),
                     currentDates.get(1),
@@ -149,9 +149,9 @@ public class RentaAnavailableCalendarView extends CustomComponent implements Vie
             ColumnRangeChartSeries numbersBar = new ColumnRangeChartSeries(
                     vehicleService.findByVehicleNumber(number).getModel() + " " + number + " from :" + sdf.format(fromDate) + " to:" + sdf.format(toDate),
                     dataVehiclesNumbers);
+            barChartSeriesList.add(numbersBar);
 
             lists.add(dataVehiclesNumbers);
-            barChartSeriesList.add(numbersBar);
             doubleDates.addAll(currentDates);
         }
 
@@ -165,20 +165,45 @@ public class RentaAnavailableCalendarView extends CustomComponent implements Vie
 
         /*dates*/
         rentaConfiguration.getyAxis().setTitle("Vehicles anavailable dates");
+        rentaConfiguration.getyAxis().setAllowDecimals(false);
+        Collections.sort(doubleDates, new Comparator<Double>() {
+            public int compare(Double o1, Double o2) {
+                return Double.compare(o1, o2);
+            }
+        });
 
         List<String> doubleString = new ArrayList<>();
-        doubleString.add(String.valueOf(0));
-        doubleDates.forEach(aDouble -> {doubleString.add(String.valueOf(aDouble));});
-        doubleString.add(String.valueOf(new Date().getTime()-monthAgo.getTime()));
-        rentaConfiguration.getyAxis().setCategories(datesString);//doubleString);//numbers
+//        doubleString.add(String.valueOf(0));
+        doubleDates.forEach(aDouble -> {
+            doubleString.add(String.valueOf(aDouble));
+        });
+//        doubleString.add(String.valueOf(new Date().getTime() - nullD.getTime()));
+        rentaConfiguration.getyAxis().setCategories(doubleString);//datesString doubleString);//numbers
         rentaConfiguration.getyAxis().setLabelsEnabled(true);
-//        List<String> counters  = new ArrayList<>();
-//        for(int i=1; i<=numbers.size();i++){
-//            counters.add(String.valueOf(i));
-//        }
-//
-//        rentaConfiguration.getxAxis().setCategories(counters);
+        rentaConfiguration.getyAxis().setAxisValueType(Axis.AxisValueType.DATETIME);
+        rentaConfiguration.getyAxis().setLineColor(Color.GREEN);
+        rentaConfiguration.getyAxis().setLineWidth(5);
+
+
+        List<String> counters = new ArrayList<>();
+        counters.add(String.valueOf(0));
+        for (int i = 1; i <= numbers.size()*10; i=i+10) {
+            counters.add(String.valueOf(i));
+        }
+        counters.add(String.valueOf(numbers.size() + 1));
+        Axis axis = new Axis();
+        axis.setAxisType(Axis.AxisType.xAxis);
+        axis.setTickLength(numbers.size() + 1);
+        axis.setAllowDecimals(false);
+        axis.setCategories(counters);
+        axis.setGridLineWidth(1);
+        axis.setAxisValueType(Axis.AxisValueType.DATETIME);
+        rentaConfiguration.setxAxis(axis);
+        rentaConfiguration.getxAxis().setCategories(counters);
         rentaConfiguration.getxAxis().setLabelsEnabled(false);
+        rentaConfiguration.getxAxis().setLineColor(Color.GREEN);
+        rentaConfiguration.getxAxis().setLineWidth(5);
+
 
         rentaConfiguration.setBackgroundColor(Colors.LIGHTCYAN);
         rentaConfiguration.setChartMargin(new Margin(110, 10, 10, 100));
@@ -186,17 +211,19 @@ public class RentaAnavailableCalendarView extends CustomComponent implements Vie
 
         ColumnRangeChartPlotOptions barChartPlotOptions = new ColumnRangeChartPlotOptions();
         barChartPlotOptions.setDataLabelsFontColor(Colors.LIGHTGRAY);
-        barChartPlotOptions.setDataLabelsEnabled(false);
+        barChartPlotOptions.setDataLabelsEnabled(true);
         barChartPlotOptions.setAllowPointSelect(true);
         barChartPlotOptions.setShowCheckBox(false);
-        barChartPlotOptions.setSteps(HighChartsPlotOptionsImpl.Steps.CENTER);
+        barChartPlotOptions.setAnimated(true);
+        barChartPlotOptions.setSteps(HighChartsPlotOptionsImpl.Steps.FALSE);
 
         rentaConfiguration.setPlotOptions(barChartPlotOptions);
+        rentaConfiguration.setLegendEnabled(true);
+        rentaConfiguration.setTooltipEnabled(true);
 
         try {
             chart = HighChartFactory.renderChart(rentaConfiguration);
-            chart.setHeight(100, Unit.PERCENTAGE);
-            chart.setWidth(100, Unit.PERCENTAGE);
+            chart.setSizeFull();
 
         } catch (Exception ex) {
             ex.printStackTrace();

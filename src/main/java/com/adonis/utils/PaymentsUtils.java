@@ -12,6 +12,8 @@ import com.paypal.core.rest.PayPalResource;
 import org.apache.poi.util.IOUtils;
 
 import java.io.InputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -38,6 +40,9 @@ public class PaymentsUtils {
     static String clientSecret;
     private static class ResourceHolder {
         private static final PaymentsUtils paymentsUtils = new PaymentsUtils();
+    }
+   public static Double round2(Double val) {
+        return new BigDecimal(val.toString()).setScale(0, RoundingMode.HALF_UP).doubleValue();
     }
     private static void initPayPal() {
         InputStream is = null;

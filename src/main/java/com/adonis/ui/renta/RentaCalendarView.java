@@ -15,6 +15,7 @@ import com.adonis.data.service.PersonService;
 import com.adonis.data.service.RentaHistoryService;
 import com.adonis.data.service.VehicleService;
 import com.adonis.utils.DateUtils;
+import com.adonis.utils.PaymentsUtils;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.*;
@@ -104,6 +105,8 @@ public class RentaCalendarView extends CustomComponent implements View {
         rentaConfiguration.setChartType(ChartType.COLUMN);
         rentaConfiguration.setBackgroundColor(Colors.WHITE);
 
+        Double hour = Double.valueOf((60 * 60 * 1000));
+
         List<List<HighChartsData>> lists = new ArrayList<>();
         List<String> numbers = vehicleService.findAllActiveNumbers();
         List<ColumnChartSeries> barChartSeriesList = new ArrayList<>();
@@ -111,13 +114,14 @@ public class RentaCalendarView extends CustomComponent implements View {
         List<String> labels = new ArrayList<>();
         Date lastData = rentaHistoryService.getAvailableDate(numbers.get(0));
         Date monthAgo = DateUtils.anyDaysAgo(lastData, 30);
+        Date nullDate = DateUtils.convertToDate("01/01/1970");
         for (String number : numbers) {
             Date lastAvailableData = rentaHistoryService.getAvailableDate(number);
 
             List<HighChartsData> dataVehiclesNumbers = new ArrayList<>();
             StringDoubleData stringDoubleData = new StringDoubleData(
                     number+ " last available date : "+sdf.format(lastAvailableData),
-                    rentaHistoryService.getAvailableDate(number).getTime() - monthAgo.getTime());
+                    PaymentsUtils.round2(Double.valueOf(rentaHistoryService.getAvailableDate(number).getTime() - nullDate.getTime())/hour));
             dataVehiclesNumbers.add(stringDoubleData);
 
             labels.add(stringDoubleData.getHighChartValue());
@@ -158,7 +162,7 @@ public class RentaCalendarView extends CustomComponent implements View {
         barChartPlotOptions.setDataLabelsEnabled(true);
         barChartPlotOptions.setAllowPointSelect(true);
         barChartPlotOptions.setShowCheckBox(false);
-        barChartPlotOptions.setSteps(HighChartsPlotOptionsImpl.Steps.CENTER);
+        barChartPlotOptions.setSteps(HighChartsPlotOptionsImpl.Steps.RIGHT);
 
         rentaConfiguration.setPlotOptions(barChartPlotOptions);
 
