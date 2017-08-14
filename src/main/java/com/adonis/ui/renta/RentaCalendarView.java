@@ -19,6 +19,7 @@ import com.adonis.utils.PaymentsUtils;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.*;
+import org.joda.time.DateTime;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -115,25 +116,28 @@ public class RentaCalendarView extends CustomComponent implements View {
         Date lastData = rentaHistoryService.getAvailableDate(numbers.get(0));
         Date monthAgo = DateUtils.anyDaysAgo(lastData, 30);
         Date nullDate = DateUtils.convertToDate("01/01/1970");
+        org.joda.time.DateTime nullDateTime = new DateTime(nullDate);
         for (String number : numbers) {
-            Date lastAvailableData = rentaHistoryService.getAvailableDate(number);
-
+//            Date lastAvailableData = rentaHistoryService.getAvailableDate(number);
+            DateTime lastAvailableData = new DateTime(rentaHistoryService.getAvailableDate(number));
+            String dateString = lastAvailableData.dayOfMonth().getAsShortText()+" "+ lastAvailableData.monthOfYear().getAsShortText() + " " + lastAvailableData.year().getAsString();
             List<HighChartsData> dataVehiclesNumbers = new ArrayList<>();
             StringDoubleData stringDoubleData = new StringDoubleData(
-                    number + " last available date : " + sdf.format(lastAvailableData),
+                    number + " last available date : " +dateString,//sdf.format(lastAvailableData),
+                    PaymentsUtils.round(Double.valueOf(lastAvailableData.getMillis()-nullDateTime.getMillis())/hour));
 //                    Double.valueOf(rentaHistoryService.getAvailableDate(number).getTime())); //- nullDate.getTime()
-                    PaymentsUtils.round(Double.valueOf(rentaHistoryService.getAvailableDate(number).getTime() - nullDate.getTime()) / hour));
+//                    PaymentsUtils.round(Double.valueOf(rentaHistoryService.getAvailableDate(number).getTime() - nullDate.getTime()) / hour));
             dataVehiclesNumbers.add(stringDoubleData);
 
             labels.add(stringDoubleData.getHighChartValue());
 
             ColumnChartSeries numbersBar = new ColumnChartSeries(
-                    vehicleService.findByVehicleNumber(number).getModel() + " " + number + " available date :" + sdf.format(lastAvailableData),
+                    vehicleService.findByVehicleNumber(number).getModel() + " " + number + " available date :" + dateString,//sdf.format(lastAvailableData),
                     dataVehiclesNumbers);
             lists.add(dataVehiclesNumbers);
             barChartSeriesList.add(numbersBar);
-//            dates.add(sdf.format(lastAvailableData));
-            dates.add(String.valueOf(PaymentsUtils.round(Double.valueOf(rentaHistoryService.getAvailableDate(number).getTime() - nullDate.getTime()) / hour)));//
+//            dates.add(dateString);//sdf.format(lastAvailableData));
+            dates.add(String.valueOf(PaymentsUtils.round(Double.valueOf(lastAvailableData.getMillis() - nullDateTime.getMillis()) / hour)));//
         }
 
         barChartSeriesList.forEach(barChartSeries -> {
@@ -147,7 +151,7 @@ public class RentaCalendarView extends CustomComponent implements View {
 
 
         rentaConfiguration.getxAxis().setLabelsEnabled(false);
-        rentaConfiguration.getxAxis().setCategories(dates);
+//        rentaConfiguration.getxAxis().setCategories(dates);
         rentaConfiguration.getxAxis().setTitle("Available dates");
 
         /*dates*/
