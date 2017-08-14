@@ -41,7 +41,7 @@ public class PaymentsUtils {
     private static class ResourceHolder {
         private static final PaymentsUtils paymentsUtils = new PaymentsUtils();
     }
-   public static Double round2(Double val) {
+   public static Double round(Double val) {
         return new BigDecimal(val.toString()).setScale(0, RoundingMode.HALF_UP).doubleValue();
     }
     private static void initPayPal() {

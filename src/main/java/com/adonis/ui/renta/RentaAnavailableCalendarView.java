@@ -136,9 +136,9 @@ public class RentaAnavailableCalendarView extends CustomComponent implements Vie
             Date nullDate = DateUtils.convertToDate("01/01/1970");
             Date now = new Date();
             List<Double> currentDates = new ArrayList<>();
-            currentDates.add(PaymentsUtils.round2(Double.valueOf((now.getTime() - nullDate.getTime()) / hour)));//(fromDate.getTime() - nullDate.getTime() + middle)));//1000));
-            currentDates.add(PaymentsUtils.round2(Double.valueOf((fromDate.getTime() - nullDate.getTime())/hour)));
-            currentDates.add(PaymentsUtils.round2(Double.valueOf((toDate.getTime() - nullDate.getTime())/hour)));
+            currentDates.add(PaymentsUtils.round(Double.valueOf((now.getTime() - nullDate.getTime()) / hour)));//(fromDate.getTime() - nullDate.getTime() + middle)));//1000));
+            currentDates.add(PaymentsUtils.round(Double.valueOf((fromDate.getTime() - nullDate.getTime())/hour)));
+            currentDates.add(PaymentsUtils.round(Double.valueOf((toDate.getTime() - nullDate.getTime())/hour)));
             ColumnRangeChartData data = new ColumnRangeChartData(
                     currentDates.get(0),
                     currentDates.get(1),

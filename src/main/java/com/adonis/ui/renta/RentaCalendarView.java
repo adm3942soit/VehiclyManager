@@ -120,30 +120,34 @@ public class RentaCalendarView extends CustomComponent implements View {
 
             List<HighChartsData> dataVehiclesNumbers = new ArrayList<>();
             StringDoubleData stringDoubleData = new StringDoubleData(
-                    number+ " last available date : "+sdf.format(lastAvailableData),
-                    PaymentsUtils.round2(Double.valueOf(rentaHistoryService.getAvailableDate(number).getTime() - nullDate.getTime())/hour));
+                    number + " last available date : " + sdf.format(lastAvailableData),
+//                    Double.valueOf(rentaHistoryService.getAvailableDate(number).getTime())); //- nullDate.getTime()
+                    PaymentsUtils.round(Double.valueOf(rentaHistoryService.getAvailableDate(number).getTime() - nullDate.getTime()) / hour));
             dataVehiclesNumbers.add(stringDoubleData);
 
             labels.add(stringDoubleData.getHighChartValue());
 
             ColumnChartSeries numbersBar = new ColumnChartSeries(
-       vehicleService.findByVehicleNumber(number).getModel()+" "+number+" available date :"+sdf.format(lastAvailableData),
+                    vehicleService.findByVehicleNumber(number).getModel() + " " + number + " available date :" + sdf.format(lastAvailableData),
                     dataVehiclesNumbers);
             lists.add(dataVehiclesNumbers);
             barChartSeriesList.add(numbersBar);
-            dates.add(sdf.format(lastAvailableData));
+//            dates.add(sdf.format(lastAvailableData));
+            dates.add(String.valueOf(PaymentsUtils.round(Double.valueOf(rentaHistoryService.getAvailableDate(number).getTime() - nullDate.getTime()) / hour)));//
         }
 
         barChartSeriesList.forEach(barChartSeries -> {
-            rentaConfiguration.getSeriesList().add(barChartSeries);}
+                    rentaConfiguration.getSeriesList().add(barChartSeries);
+                }
 
-            );
+        );
         rentaConfiguration.setTooltipEnabled(true);
         rentaConfiguration.setCreditsEnabled(true);
+        rentaConfiguration.setLegendEnabled(true);
 
 
         rentaConfiguration.getxAxis().setLabelsEnabled(false);
-
+        rentaConfiguration.getxAxis().setCategories(dates);
         rentaConfiguration.getxAxis().setTitle("Available dates");
 
         /*dates*/
@@ -158,20 +162,22 @@ public class RentaCalendarView extends CustomComponent implements View {
         rentaConfiguration.setLegendEnabled(true);
 
         ColumnChartPlotOptions barChartPlotOptions = new ColumnChartPlotOptions();
-        barChartPlotOptions.setDataLabelsFontColor(Colors.LIGHTGRAY);
+        barChartPlotOptions.setDataLabelsFontColor(Colors.BROWN);
         barChartPlotOptions.setDataLabelsEnabled(true);
         barChartPlotOptions.setAllowPointSelect(true);
         barChartPlotOptions.setShowCheckBox(false);
         barChartPlotOptions.setSteps(HighChartsPlotOptionsImpl.Steps.RIGHT);
+        barChartPlotOptions.setAnimated(true);
 
         rentaConfiguration.setPlotOptions(barChartPlotOptions);
 
         try {
-        chart = HighChartFactory.renderChart(rentaConfiguration);
-        chart.setHeight(100, Unit.PERCENTAGE);
-        chart.setWidth(100, Unit.PERCENTAGE);
+            chart = HighChartFactory.renderChart(rentaConfiguration);
+            chart.setSizeFull();
+//            chart.setHeight(100, Unit.PERCENTAGE);
+//            chart.setWidth(100, Unit.PERCENTAGE);
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return chart;
