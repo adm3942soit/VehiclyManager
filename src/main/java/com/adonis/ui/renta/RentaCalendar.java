@@ -65,22 +65,28 @@ public class RentaCalendar extends CustomComponent implements View {
             return new JsHighChartRenta("");
         }
         StringBuffer data = new StringBuffer("");
+        Date now = new Date();
+        Date monthAgo = DateUtils.anyDaysAgo(now, 30);
+
         List<String> numbers = vehicleService.findAllActiveNumbers();
         data.append("Categories,From date,To date\n");
         Double hour = Double.valueOf((60 * 60 * 1000));
-        Date nullDate = DateUtils.convertToDate("01/01/1970");
+//        Date nullDate = DateUtils.convertToDate("01/01/1970");
         int i = 1;
         for (String number : numbers) {
+
             Date fromDate = rentaHistoryService.getHistory(number).getFromDate();
             Date toDate = rentaHistoryService.getHistory(number).getToDate();
-            data.append(vehicleService.findByVehicleNumber(number).getModel() + " " + number + "(" + sdf.format(fromDate) + "-" + sdf.format(toDate) + ",");
-            data.append(
-                    String.valueOf(PaymentsUtils.round(
-                            Double.valueOf((fromDate.getTime() - nullDate.getTime()) / hour))) + ", " +
-                            String.valueOf(PaymentsUtils.round(
-                                    Double.valueOf((toDate.getTime() - nullDate.getTime()) / hour))) +
-                            ((i < numbers.size()) ? "\n" : "")
-            );
+            if(fromDate.getTime()>= monthAgo.getTime()) {//for the last month
+                data.append(vehicleService.findByVehicleNumber(number).getModel() + " " + number + "(" + sdf.format(fromDate) + "-" + sdf.format(toDate) + ",");
+                data.append(
+                        String.valueOf(PaymentsUtils.round(
+                                Double.valueOf((fromDate.getTime() - monthAgo.getTime()) / hour))) + ", " +
+                                String.valueOf(PaymentsUtils.round(
+                                        Double.valueOf((toDate.getTime() - monthAgo.getTime()) / hour))) +
+                                ((i < numbers.size()) ? "\n" : "")
+                );
+            }
             i++;
         }
         JsHighChartRenta chart = new JsHighChartRenta(data.toString());
