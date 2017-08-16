@@ -20,18 +20,16 @@ import java.util.List;
  * Created by oksdud on 12.04.2017.
  */
 
-public class RentaCalendar extends CustomComponent implements View {
-    public static final String NAME = "RENTA CALENDAR";
+public class RentaCalendarForLastMonth extends CustomComponent implements View {
+    public static final String NAME = "RENTA CALENDAR FOR LAST MONTH";
     private PersonService service;
     private RentaHistoryService rentaHistoryService;
     private VehicleService vehicleService;
-    // The view root layout
-    HorizontalLayout viewLayout = new HorizontalLayout();
-
 
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
-    public RentaCalendar(PersonService personService, RentaHistoryService rentaHistoryService, VehicleService vehicleService) {
+    public RentaCalendarForLastMonth(PersonService personService, RentaHistoryService rentaHistoryService, VehicleService vehicleService) {
+        HorizontalLayout viewLayout = new HorizontalLayout();
         this.service = personService;
         this.rentaHistoryService = rentaHistoryService;
         this.vehicleService = vehicleService;

@@ -1,6 +1,9 @@
 package com.adonis.ui.main;
 
 
+import com.adonis.data.service.PersonService;
+import com.adonis.data.service.RentaHistoryService;
+import com.adonis.data.service.VehicleService;
 import com.adonis.ui.MainUI;
 import com.adonis.ui.login.LoginView;
 import com.adonis.ui.menu.Menu;
@@ -36,7 +39,14 @@ public class MainScreen extends HorizontalLayout implements View {
     private Menu menu;
     private MainUI mainUI;
     public static final String NAME = "MainScreen";
-    LoginView loginView;
+    PersonService personService;
+    VehicleService vehicleService;
+    RentaHistoryService rentaHistoryService;
+    View renta1;
+    View renta2;
+    View renta3;
+    View renta4;
+    Navigator navigator;
 
     public MainScreen(MainUI ui) {
         mainUI = ui;
@@ -46,19 +56,26 @@ public class MainScreen extends HorizontalLayout implements View {
         viewContainer.addStyleName("valo-content");
         viewContainer.setSizeFull();
 
-        final Navigator navigator = new Navigator(ui, viewContainer);
+        navigator = new Navigator(ui, viewContainer);
         navigator.setErrorView(ErrorView.class);
         menu = new Menu(ui.service, ui.vehicleService, navigator);
         menu.setStyleName(ValoTheme.MENU_ROOT);
+        personService = ui.service;
+        vehicleService = ui.vehicleService;
+        rentaHistoryService = ui.rentaHistoryService;
         menu.addView(new VehicleModelsCrudView(ui.vehicleService), VehicleModelsCrudView.NAME, VehicleModelsCrudView.NAME, new ThemeResource("img/vehicle-model.jpg"));
         menu.addView(new VehicleTypesCrudView(ui.vehicleService), VehicleTypesCrudView.NAME, VehicleTypesCrudView.NAME, new ThemeResource("img/vehicle-type.jpg"));
         menu.addView(new VehiclesCrudView(ui.vehicleService), VehiclesCrudView.NAME, VehiclesCrudView.NAME, new ThemeResource("img/car.jpg"));//vehicles1
         menu.addView(ui.getPersonsCrudView(), PersonsCrudView.NAME, PersonsCrudView.NAME, new ThemeResource("img/customers.jpg"));
         menu.addView(new RentaHistoryCrudView(ui.rentaHistoryService, ui.service, ui.vehicleService), RentaHistoryCrudView.NAME, RentaHistoryCrudView.NAME, new ThemeResource("img/for-rent.jpg"));
-        menu.addView(new RentaPieChartView(ui.service, ui.rentaHistoryService, ui.vehicleService), RentaPieChartView.NAME, RentaPieChartView.NAME, new ThemeResource("img/chartPNG.png"));
-        menu.addView(new RentaCalendarView(ui.service, ui.rentaHistoryService, ui.vehicleService), RentaCalendarView.NAME, RentaCalendarView.NAME, new ThemeResource("img/barChartPNG.png"));
-        menu.addView(new RentaAnavailableCalendarView(ui.service, ui.rentaHistoryService, ui.vehicleService), RentaAnavailableCalendarView.NAME, RentaAnavailableCalendarView.NAME, new ThemeResource("img/FusionChart.png"));
-        menu.addView(new RentaCalendar(ui.service, ui.rentaHistoryService, ui.vehicleService), RentaCalendar.NAME, RentaCalendar.NAME, new ThemeResource("img/rangechart.jpg"));
+        renta1 = init1(ui.service, ui.rentaHistoryService, ui.vehicleService);
+        menu.addView(renta1, RentaPieChartView.NAME, RentaPieChartView.NAME, new ThemeResource("img/chartPNG.png"));
+        renta2 = init2(ui.service, ui.rentaHistoryService, ui.vehicleService);
+        menu.addView(renta2, RentaCalendarView.NAME, RentaCalendarView.NAME, new ThemeResource("img/barChartPNG.png"));
+        renta3 = init3(ui.service, ui.rentaHistoryService, ui.vehicleService);
+        menu.addView(renta3, RentaAnavailableCalendarView.NAME, RentaAnavailableCalendarView.NAME, new ThemeResource("img/FusionChart.png"));
+        renta4 = init4(ui.service, ui.rentaHistoryService, ui.vehicleService);
+        menu.addView(renta4, RentaCalendarForLastMonth.NAME, RentaCalendarForLastMonth.NAME, new ThemeResource("img/rangechart.jpg"));
         menu.addView(new RegistrationUI(ui.service), "CUSTOMER REGISTRATION", "CUSTOMER REGISTRATION", new ThemeResource("img/Register-Today.jpg"));
         menu.addView(new PersonUI(ui.service, true, MainUI.loginPerson), "PROFILE", "PROFILE", new ThemeResource("img/user-icon.jpg"));
         menu.addView(new PrintView(ui.service, ui.rentaHistoryService), "PRINT", "PRINT", new ThemeResource("img/print-icon.jpg"));
@@ -79,6 +96,7 @@ public class MainScreen extends HorizontalLayout implements View {
 
         @Override
         public boolean beforeViewChange(ViewChangeEvent event) {
+
             boolean isLoggedIn = MainUI.loginPerson != null;
             boolean isProfileView = event.getNewView() instanceof PersonUI;
             if (isLoggedIn && isProfileView) {
@@ -102,9 +120,24 @@ public class MainScreen extends HorizontalLayout implements View {
 
     };
 
+    private View init1(PersonService personService, RentaHistoryService rentaHistoryService, VehicleService vehicleService) {
+        return new RentaPieChartView(personService, rentaHistoryService, vehicleService);
+    }
+
+    private View init2(PersonService personService, RentaHistoryService rentaHistoryService, VehicleService vehicleService) {
+        return new RentaCalendarView(personService, rentaHistoryService, vehicleService);
+    }
+
+    private View init3(PersonService personService, RentaHistoryService rentaHistoryService, VehicleService vehicleService) {
+        return new RentaAnavailableCalendarView(personService, rentaHistoryService, vehicleService);
+    }
+
+    private View init4(PersonService personService, RentaHistoryService rentaHistoryService, VehicleService vehicleService) {
+        return new RentaCalendarForLastMonth(personService, rentaHistoryService, vehicleService);
+    }
+
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-
     }
 
     @Override

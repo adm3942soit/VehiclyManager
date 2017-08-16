@@ -23,55 +23,50 @@ public class RentaPieChartView extends CustomComponent implements View {
     PersonService service;
     RentaHistoryService rentaHistoryService;
     VehicleService vehicleService;
-    // The view root layout
-    HorizontalLayout viewLayout = new HorizontalLayout();
-    ChartConfiguration rentaConfiguration = new ChartConfiguration();
-    static PieChartSeries pieVehicles = new PieChartSeries("Vehicles");
-    static HighChart pieChart;
+
 
     public RentaPieChartView(PersonService personService, RentaHistoryService rentaHistoryService, VehicleService vehicleService) {
+        // The view root layout
+        HorizontalLayout viewLayout = new HorizontalLayout();
+
         this.service = personService;
         this.rentaHistoryService = rentaHistoryService;
         this.vehicleService = vehicleService;
 
         setSizeFull();
 
-        rentaConfiguration.setTitle("TestRenta");
-        rentaConfiguration.setChartType(ChartType.PIE);
-        rentaConfiguration.setBackgroundColor(Colors.LIGHTCYAN);
-
         VerticalLayout verticalLayout = new VerticalLayout();
 
-        pieChart = initChart();
+        HighChart pieChart = initChart();
 
         if (pieChart != null) {
             verticalLayout.addComponent(pieChart);
             verticalLayout.setComponentAlignment(pieChart, Alignment.MIDDLE_CENTER);
         }
 
-        Button refresh = new Button("Refresh data");
-        refresh.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                verticalLayout.removeComponent(pieChart);
-                viewLayout.removeComponent(verticalLayout);
-                pieChart = initChart();
-
-                if (pieChart != null) {
-                    verticalLayout.addComponent(pieChart);
-                    verticalLayout.setComponentAlignment(pieChart, Alignment.MIDDLE_CENTER);
-                    viewLayout.addComponent(verticalLayout);
-                    viewLayout.setComponentAlignment(verticalLayout, Alignment.MIDDLE_CENTER);
-                    viewLayout.setSizeFull();
-                    setCompositionRoot(viewLayout);
-
-                }
-
-            }
-        });
-
-        verticalLayout.addComponent(refresh);
-        verticalLayout.setComponentAlignment(refresh, Alignment.BOTTOM_CENTER);
+//        Button refresh = new Button("Refresh data");
+//        refresh.addClickListener(new Button.ClickListener() {
+//            @Override
+//            public void buttonClick(Button.ClickEvent event) {
+//                verticalLayout.removeComponent(pieChart);
+//                viewLayout.removeComponent(verticalLayout);
+//                pieChart = initChart();
+//
+//                if (pieChart != null) {
+//                    verticalLayout.addComponent(pieChart);
+//                    verticalLayout.setComponentAlignment(pieChart, Alignment.MIDDLE_CENTER);
+//                    viewLayout.addComponent(verticalLayout);
+//                    viewLayout.setComponentAlignment(verticalLayout, Alignment.MIDDLE_CENTER);
+//                    viewLayout.setSizeFull();
+//                    setCompositionRoot(viewLayout);
+//
+//                }
+//
+//            }
+//        });
+//
+//        verticalLayout.addComponent(refresh);
+//        verticalLayout.setComponentAlignment(refresh, Alignment.BOTTOM_CENTER);
 
         viewLayout.addComponent(verticalLayout);
         viewLayout.setComponentAlignment(verticalLayout, Alignment.MIDDLE_CENTER);
@@ -81,9 +76,9 @@ public class RentaPieChartView extends CustomComponent implements View {
     }
 
     private HighChart initChart() {
+        PieChartSeries pieVehicles = new PieChartSeries("Vehicles");
         pieVehicles.getData().clear();
-
-
+        HighChart pieChart = new HighChart();
         Double working = Double.valueOf(rentaHistoryService.findAllWorking().size());
         Double active = Double.valueOf(vehicleService.findAllActive().size());
         Double all = Double.valueOf(vehicleService.findAll().size());
@@ -97,13 +92,19 @@ public class RentaPieChartView extends CustomComponent implements View {
             pieVehicles.getData().add(workingVehicles);
             pieVehicles.getData().add(notActiveVehicles);
             pieVehicles.getData().add(notWorkingVehicles);
+            ChartConfiguration rentaConfiguration = new ChartConfiguration();
+
+
+            rentaConfiguration.setTitle("TestRenta");
+            rentaConfiguration.setChartType(ChartType.PIE);
+            rentaConfiguration.setBackgroundColor(Colors.LIGHTCYAN);
+
 
             rentaConfiguration.getSeriesList().add(pieVehicles);
 
             try {
                 pieChart = HighChartFactory.renderChart(rentaConfiguration);
-                pieChart.setHeight(80, UNITS_PERCENTAGE);
-                pieChart.setWidth(80, UNITS_PERCENTAGE);
+                pieChart.setSizeFull();
                 System.out.println("PieChart Script : " + rentaConfiguration.getHighChartValue());
                 return pieChart;
             } catch (Exception e) {
@@ -115,6 +116,5 @@ public class RentaPieChartView extends CustomComponent implements View {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-
     }
 }

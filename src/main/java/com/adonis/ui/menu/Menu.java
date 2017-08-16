@@ -34,8 +34,6 @@ public class Menu extends CssLayout {
 
     private CssLayout menuItemsLayout;
     private CssLayout menuPart;
-    public final VerticalLayout personsArea = new VerticalLayout();
-    public final VerticalLayout vehiclesArea = new VerticalLayout();
     public final GridBasedCrudComponent<Vehicle> vehiclesCrud = new GridBasedCrudComponent<>(Vehicle.class, new HorizontalSplitCrudLayout());
     public final GridBasedCrudComponent<Person> personsCrud = new GridBasedCrudComponent<>(Person.class, new HorizontalSplitCrudLayout());
 

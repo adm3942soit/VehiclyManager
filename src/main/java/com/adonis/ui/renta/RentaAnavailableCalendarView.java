@@ -34,20 +34,20 @@ public class RentaAnavailableCalendarView extends CustomComponent implements Vie
     private PersonService service;
     private RentaHistoryService rentaHistoryService;
     private VehicleService vehicleService;
-    // The view root layout
-    HorizontalLayout viewLayout = new HorizontalLayout();
 
-    private HighChart chart;
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
     public RentaAnavailableCalendarView(PersonService personService, RentaHistoryService rentaHistoryService, VehicleService vehicleService) {
+        // The view root layout
+        HorizontalLayout viewLayout = new HorizontalLayout();
+
         this.service = personService;
         this.rentaHistoryService = rentaHistoryService;
         this.vehicleService = vehicleService;
 
         setSizeFull();
 
-        chart = initChart();
+        HighChart chart = initChart();
 
         VerticalLayout verticalLayout = new VerticalLayout();
         verticalLayout.setSizeFull();
@@ -58,27 +58,27 @@ public class RentaAnavailableCalendarView extends CustomComponent implements Vie
             verticalLayout.setExpandRatio(chart, 1.0f);
         }
 
-        Button refresh = new Button("Refresh data");
-        refresh.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                if (chart != null) verticalLayout.removeComponent(chart);
-                viewLayout.removeComponent(verticalLayout);
-                chart = initChart();
-
-                if (chart != null) {
-                    verticalLayout.addComponent(chart);
-                    verticalLayout.setComponentAlignment(chart, Alignment.MIDDLE_CENTER);
-                    verticalLayout.setExpandRatio(chart, 1.0f);
-                    viewLayout.addComponent(verticalLayout);
-                    viewLayout.setComponentAlignment(verticalLayout, Alignment.MIDDLE_CENTER);
-                    viewLayout.setSizeFull();
-                    setCompositionRoot(viewLayout);
-
-                }
-
-            }
-        });
+//        Button refresh = new Button("Refresh data");
+//        refresh.addClickListener(new Button.ClickListener() {
+//            @Override
+//            public void buttonClick(Button.ClickEvent event) {
+//                if (chart != null) verticalLayout.removeComponent(chart);
+//                viewLayout.removeComponent(verticalLayout);
+//                chart = initChart();
+//
+//                if (chart != null) {
+//                    verticalLayout.addComponent(chart);
+//                    verticalLayout.setComponentAlignment(chart, Alignment.MIDDLE_CENTER);
+//                    verticalLayout.setExpandRatio(chart, 1.0f);
+//                    viewLayout.addComponent(verticalLayout);
+//                    viewLayout.setComponentAlignment(verticalLayout, Alignment.MIDDLE_CENTER);
+//                    viewLayout.setSizeFull();
+//                    setCompositionRoot(viewLayout);
+//
+//                }
+//
+//            }
+//        });
 
 //        verticalLayout.addComponent(refresh);
 //        verticalLayout.setComponentAlignment(refresh, Alignment.BOTTOM_CENTER);
@@ -94,7 +94,7 @@ public class RentaAnavailableCalendarView extends CustomComponent implements Vie
 
         Double all = Double.valueOf(vehicleService.findAll().size());
         if (all.equals(0.0)) {
-            return chart;
+            return new HighChart();
         }
         HighChart chart = new HighChart();
         ChartConfiguration rentaConfiguration = new ChartConfiguration();
