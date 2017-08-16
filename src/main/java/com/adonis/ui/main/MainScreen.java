@@ -8,10 +8,7 @@ import com.adonis.ui.persons.PersonUI;
 import com.adonis.ui.persons.PersonsCrudView;
 import com.adonis.ui.persons.RegistrationUI;
 import com.adonis.ui.print.PrintView;
-import com.adonis.ui.renta.RentaCalendarView;
-import com.adonis.ui.renta.RentaAnavailableCalendarView;
-import com.adonis.ui.renta.RentaHistoryCrudView;
-import com.adonis.ui.renta.RentaPieChartView;
+import com.adonis.ui.renta.*;
 import com.adonis.ui.vehicles.VehicleModelsCrudView;
 import com.adonis.ui.vehicles.VehicleTypesCrudView;
 import com.adonis.ui.vehicles.VehiclesCrudView;
@@ -57,12 +54,13 @@ public class MainScreen extends HorizontalLayout implements View {
         menu.addView(new VehicleTypesCrudView(ui.vehicleService), VehicleTypesCrudView.NAME, VehicleTypesCrudView.NAME, new ThemeResource("img/vehicle-type.jpg"));
         menu.addView(new VehiclesCrudView(ui.vehicleService), VehiclesCrudView.NAME, VehiclesCrudView.NAME, new ThemeResource("img/car.jpg"));//vehicles1
         menu.addView(ui.getPersonsCrudView(), PersonsCrudView.NAME, PersonsCrudView.NAME, new ThemeResource("img/customers.jpg"));
-        menu.addView(new RentaHistoryCrudView(ui.rentaHistoryService,ui.service, ui.vehicleService), RentaHistoryCrudView.NAME, RentaHistoryCrudView.NAME, new ThemeResource("img/for-rent.jpg"));
+        menu.addView(new RentaHistoryCrudView(ui.rentaHistoryService, ui.service, ui.vehicleService), RentaHistoryCrudView.NAME, RentaHistoryCrudView.NAME, new ThemeResource("img/for-rent.jpg"));
         menu.addView(new RentaPieChartView(ui.service, ui.rentaHistoryService, ui.vehicleService), RentaPieChartView.NAME, RentaPieChartView.NAME, new ThemeResource("img/chartPNG.png"));
         menu.addView(new RentaCalendarView(ui.service, ui.rentaHistoryService, ui.vehicleService), RentaCalendarView.NAME, RentaCalendarView.NAME, new ThemeResource("img/barChartPNG.png"));
         menu.addView(new RentaAnavailableCalendarView(ui.service, ui.rentaHistoryService, ui.vehicleService), RentaAnavailableCalendarView.NAME, RentaAnavailableCalendarView.NAME, new ThemeResource("img/FusionChart.png"));
-        menu.addView(new RegistrationUI(ui.service), "CUSTOMER REGISTRATION" , "CUSTOMER REGISTRATION", new ThemeResource("img/Register-Today.jpg"));
-        menu.addView(new PersonUI(ui.service, true, MainUI.loginPerson), "PROFILE" , "PROFILE", new ThemeResource("img/user-icon.jpg"));
+        menu.addView(new RentaCalendar(ui.service, ui.rentaHistoryService, ui.vehicleService), RentaCalendar.NAME, RentaCalendar.NAME, new ThemeResource("img/rangechart.jpg"));
+        menu.addView(new RegistrationUI(ui.service), "CUSTOMER REGISTRATION", "CUSTOMER REGISTRATION", new ThemeResource("img/Register-Today.jpg"));
+        menu.addView(new PersonUI(ui.service, true, MainUI.loginPerson), "PROFILE", "PROFILE", new ThemeResource("img/user-icon.jpg"));
         menu.addView(new PrintView(ui.service, ui.rentaHistoryService), "PRINT", "PRINT", new ThemeResource("img/print-icon.jpg"));
         menu.addView(new XlsView(ui.service, ui.rentaHistoryService, ui.vehicleService), "LOAD", "LOAD", new ThemeResource("img/xls1.jpg"));
         menu.addView(new AboutView(), AboutView.VIEW_NAME, AboutView.VIEW_NAME, new ThemeResource("img/info.jpg"));
@@ -81,17 +79,17 @@ public class MainScreen extends HorizontalLayout implements View {
 
         @Override
         public boolean beforeViewChange(ViewChangeEvent event) {
-                boolean isLoggedIn = MainUI.loginPerson!=null;
-                boolean isProfileView = event.getNewView() instanceof PersonUI;
-                if(isLoggedIn && isProfileView ) {
-                    PersonUI.grid.getSelectionModel().select(MainUI.loginPerson);
-                    return true;
-                }
-                boolean exitNeeded = event.getNewView() instanceof LoginView;
-                if(isLoggedIn && exitNeeded){
-                    VaadinUtils.getSession().invalidate();
-                    VaadinUtils.getPage().reload();
-                }
+            boolean isLoggedIn = MainUI.loginPerson != null;
+            boolean isProfileView = event.getNewView() instanceof PersonUI;
+            if (isLoggedIn && isProfileView) {
+                PersonUI.grid.getSelectionModel().select(MainUI.loginPerson);
+                return true;
+            }
+            boolean exitNeeded = event.getNewView() instanceof LoginView;
+            if (isLoggedIn && exitNeeded) {
+                VaadinUtils.getSession().invalidate();
+                VaadinUtils.getPage().reload();
+            }
             return true;
 
         }

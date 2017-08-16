@@ -19,7 +19,7 @@ import com.vaadin.ui.*;
  */
 public class RentaPieChartView extends CustomComponent implements View {
 
-    public static final String NAME =  "RENTA CHART VIEW";
+    public static final String NAME = "RENTA CHART VIEW";
     PersonService service;
     RentaHistoryService rentaHistoryService;
     VehicleService vehicleService;
@@ -28,7 +28,8 @@ public class RentaPieChartView extends CustomComponent implements View {
     ChartConfiguration rentaConfiguration = new ChartConfiguration();
     static PieChartSeries pieVehicles = new PieChartSeries("Vehicles");
     static HighChart pieChart;
-    public RentaPieChartView(PersonService personService, RentaHistoryService rentaHistoryService, VehicleService vehicleService){
+
+    public RentaPieChartView(PersonService personService, RentaHistoryService rentaHistoryService, VehicleService vehicleService) {
         this.service = personService;
         this.rentaHistoryService = rentaHistoryService;
         this.vehicleService = vehicleService;
@@ -43,7 +44,7 @@ public class RentaPieChartView extends CustomComponent implements View {
 
         pieChart = initChart();
 
-        if(pieChart!=null){
+        if (pieChart != null) {
             verticalLayout.addComponent(pieChart);
             verticalLayout.setComponentAlignment(pieChart, Alignment.MIDDLE_CENTER);
         }
@@ -56,7 +57,7 @@ public class RentaPieChartView extends CustomComponent implements View {
                 viewLayout.removeComponent(verticalLayout);
                 pieChart = initChart();
 
-                if(pieChart!=null){
+                if (pieChart != null) {
                     verticalLayout.addComponent(pieChart);
                     verticalLayout.setComponentAlignment(pieChart, Alignment.MIDDLE_CENTER);
                     viewLayout.addComponent(verticalLayout);
@@ -79,7 +80,7 @@ public class RentaPieChartView extends CustomComponent implements View {
 
     }
 
-    private HighChart initChart(){
+    private HighChart initChart() {
         pieVehicles.getData().clear();
 
 
@@ -87,7 +88,7 @@ public class RentaPieChartView extends CustomComponent implements View {
         Double active = Double.valueOf(vehicleService.findAllActive().size());
         Double all = Double.valueOf(vehicleService.findAll().size());
         Double notActive = all - active;
-        if(!all.equals(0.0)) {
+        if (!all.equals(0.0)) {
 
             PieChartData workingVehicles = new PieChartData("Working", Double.valueOf((working / all) * 100));
             PieChartData notWorkingVehicles = new PieChartData("Not working", Double.valueOf(((active - working) / all) * 100));
@@ -109,7 +110,7 @@ public class RentaPieChartView extends CustomComponent implements View {
                 e.printStackTrace();
             }
         }
-       return null;
+        return null;
     }
 
     @Override

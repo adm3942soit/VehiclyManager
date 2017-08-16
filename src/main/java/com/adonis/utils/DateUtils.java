@@ -341,12 +341,13 @@ public class DateUtils {
         Calendar calendarCurrent = GregorianCalendar.getInstance();
         calendarCurrent.setTime(currentDate);
 
-        if ((calendarCurrent.getTime().compareTo(calendarNew.getTime())>=0)
+        if ((calendarCurrent.getTime().compareTo(calendarNew.getTime()) >= 0)
                 &&
-           (calendarCurrent.getTime().compareTo(calendarOld.getTime())<=0))
+                (calendarCurrent.getTime().compareTo(calendarOld.getTime()) <= 0))
             return true;
         return false;
     }
+
     public static Date anyDaysAgo(Date date, int countDaysAgo) {
         return sub(date, countDaysAgo, DAY);
     }

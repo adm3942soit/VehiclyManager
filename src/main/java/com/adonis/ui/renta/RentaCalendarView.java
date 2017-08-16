@@ -120,11 +120,11 @@ public class RentaCalendarView extends CustomComponent implements View {
         for (String number : numbers) {
 //            Date lastAvailableData = rentaHistoryService.getAvailableDate(number);
             DateTime lastAvailableData = new DateTime(rentaHistoryService.getAvailableDate(number));
-            String dateString = lastAvailableData.dayOfMonth().getAsShortText()+" "+ lastAvailableData.monthOfYear().getAsShortText() + " " + lastAvailableData.year().getAsString();
+            String dateString = lastAvailableData.dayOfMonth().getAsShortText() + " " + lastAvailableData.monthOfYear().getAsShortText() + " " + lastAvailableData.year().getAsString();
             List<HighChartsData> dataVehiclesNumbers = new ArrayList<>();
             StringDoubleData stringDoubleData = new StringDoubleData(
-                    number + " last available date : " +dateString,//sdf.format(lastAvailableData),
-                    PaymentsUtils.round(Double.valueOf(lastAvailableData.getMillis()-nullDateTime.getMillis())/hour));
+                    number + " last available date : " + dateString,//sdf.format(lastAvailableData),
+                    PaymentsUtils.round(Double.valueOf(lastAvailableData.getMillis() - nullDateTime.getMillis()) / hour));
 //                    Double.valueOf(rentaHistoryService.getAvailableDate(number).getTime())); //- nullDate.getTime()
 //                    PaymentsUtils.round(Double.valueOf(rentaHistoryService.getAvailableDate(number).getTime() - nullDate.getTime()) / hour));
             dataVehiclesNumbers.add(stringDoubleData);

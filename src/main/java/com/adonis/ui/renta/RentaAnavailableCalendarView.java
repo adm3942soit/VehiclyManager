@@ -137,8 +137,8 @@ public class RentaAnavailableCalendarView extends CustomComponent implements Vie
             Date now = new Date();
             List<Double> currentDates = new ArrayList<>();
             currentDates.add(PaymentsUtils.round(Double.valueOf((now.getTime() - nullDate.getTime()) / hour)));//(fromDate.getTime() - nullDate.getTime() + middle)));//1000));
-            currentDates.add(PaymentsUtils.round(Double.valueOf((fromDate.getTime() - nullDate.getTime())/hour)));
-            currentDates.add(PaymentsUtils.round(Double.valueOf((toDate.getTime() - nullDate.getTime())/hour)));
+            currentDates.add(PaymentsUtils.round(Double.valueOf((fromDate.getTime() - nullDate.getTime()) / hour)));
+            currentDates.add(PaymentsUtils.round(Double.valueOf((toDate.getTime() - nullDate.getTime()) / hour)));
             ColumnRangeChartData data = new ColumnRangeChartData(
                     currentDates.get(0),
                     currentDates.get(1),
@@ -187,7 +187,7 @@ public class RentaAnavailableCalendarView extends CustomComponent implements Vie
 
         List<String> counters = new ArrayList<>();
         counters.add(String.valueOf(0));
-        for (int i = 1; i <= numbers.size()*10; i=i+10) {
+        for (int i = 1; i <= numbers.size() * 10; i = i + 10) {
             counters.add(String.valueOf(i));
         }
         counters.add(String.valueOf(numbers.size() + 1));
