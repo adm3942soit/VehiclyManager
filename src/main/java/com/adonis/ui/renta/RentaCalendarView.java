@@ -60,31 +60,6 @@ public class RentaCalendarView extends CustomComponent implements View {
             verticalLayout.setExpandRatio(chart, 1.0f);
         }
 
-//        Button refresh = new Button("Refresh data");
-//        refresh.addClickListener(new Button.ClickListener() {
-//            @Override
-//            public void buttonClick(Button.ClickEvent event) {
-//                if (chart != null) verticalLayout.removeComponent(chart);
-//                viewLayout.removeComponent(verticalLayout);
-//                chart = initChart();
-//
-//                if (chart != null) {
-//                    verticalLayout.addComponent(chart);
-//                    verticalLayout.setComponentAlignment(chart, Alignment.MIDDLE_CENTER);
-//                    verticalLayout.setExpandRatio(chart, 1.0f);
-//                    viewLayout.addComponent(verticalLayout);
-//                    viewLayout.setComponentAlignment(verticalLayout, Alignment.MIDDLE_CENTER);
-//                    viewLayout.setSizeFull();
-//                    setCompositionRoot(viewLayout);
-//
-//                }
-//
-//            }
-//        });
-
-//        verticalLayout.addComponent(refresh);
-//        verticalLayout.setComponentAlignment(refresh, Alignment.BOTTOM_CENTER);
-
         viewLayout.addComponent(verticalLayout);
         viewLayout.setComponentAlignment(verticalLayout, Alignment.MIDDLE_CENTER);
         viewLayout.setSizeFull();
@@ -115,16 +90,14 @@ public class RentaCalendarView extends CustomComponent implements View {
         Date monthAgo = DateUtils.anyDaysAgo(lastData, 30);
         Date nullDate = DateUtils.convertToDate("01/01/1970");
         org.joda.time.DateTime nullDateTime = new DateTime(nullDate);
+        org.joda.time.DateTime monthAgoDateTime = new DateTime(monthAgo);
         for (String number : numbers) {
-//            Date lastAvailableData = rentaHistoryService.getAvailableDate(number);
             DateTime lastAvailableData = new DateTime(rentaHistoryService.getAvailableDate(number));
             String dateString = lastAvailableData.dayOfMonth().getAsShortText() + " " + lastAvailableData.monthOfYear().getAsShortText() + " " + lastAvailableData.year().getAsString();
             List<HighChartsData> dataVehiclesNumbers = new ArrayList<>();
             StringDoubleData stringDoubleData = new StringDoubleData(
                     number + " last available date : " + dateString,//sdf.format(lastAvailableData),
-                    PaymentsUtils.round(Double.valueOf(lastAvailableData.getMillis() - nullDateTime.getMillis()) / hour));
-//                    Double.valueOf(rentaHistoryService.getAvailableDate(number).getTime())); //- nullDate.getTime()
-//                    PaymentsUtils.round(Double.valueOf(rentaHistoryService.getAvailableDate(number).getTime() - nullDate.getTime()) / hour));
+                    PaymentsUtils.round(Double.valueOf(lastAvailableData.getMillis() - monthAgoDateTime.getMillis()) / hour));
             dataVehiclesNumbers.add(stringDoubleData);
 
             labels.add(stringDoubleData.getHighChartValue());
@@ -134,7 +107,6 @@ public class RentaCalendarView extends CustomComponent implements View {
                     dataVehiclesNumbers);
             lists.add(dataVehiclesNumbers);
             barChartSeriesList.add(numbersBar);
-//            dates.add(dateString);//sdf.format(lastAvailableData));
             dates.add(String.valueOf(PaymentsUtils.round(Double.valueOf(lastAvailableData.getMillis() - nullDateTime.getMillis()) / hour)));//
         }
 
@@ -149,7 +121,7 @@ public class RentaCalendarView extends CustomComponent implements View {
 
 
         rentaConfiguration.getxAxis().setLabelsEnabled(false);
-//        rentaConfiguration.getxAxis().setCategories(dates);
+        rentaConfiguration.getxAxis().setCategories(dates);
         rentaConfiguration.getxAxis().setTitle("Available dates");
 
         /*dates*/
@@ -158,7 +130,6 @@ public class RentaCalendarView extends CustomComponent implements View {
         rentaConfiguration.getyAxis().setLabelsEnabled(false);
 
 
-//        rentaConfiguration.removeBackgroundLines();
         rentaConfiguration.setBackgroundColor(Colors.LIGHTCYAN);
         rentaConfiguration.setChartMargin(new Margin(50, 20, 10, 120));
         rentaConfiguration.setLegendEnabled(true);
@@ -176,9 +147,6 @@ public class RentaCalendarView extends CustomComponent implements View {
         try {
             chart = HighChartFactory.renderChart(rentaConfiguration);
             chart.setSizeFull();
-//            chart.setHeight(100, Unit.PERCENTAGE);
-//            chart.setWidth(100, Unit.PERCENTAGE);
-
         } catch (Exception ex) {
             ex.printStackTrace();
         }
