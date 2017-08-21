@@ -6,4 +6,6 @@ package com.adonis.install;
 public class InstallConstants {
 
     public static Boolean INSTALL = false;
+    public static final String DEFAULT_TIMEZONE = "Europe/Riga";//TimeZone.getDefault().getDisplayName();
+
 }

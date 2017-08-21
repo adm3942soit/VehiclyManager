@@ -7,6 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.TimeZone;
+
+import static com.adonis.install.InstallConstants.DEFAULT_TIMEZONE;
 import static com.adonis.install.InstallConstants.INSTALL;
 import static com.adonis.install.VehicleManagerInstaller.createShortcat;
 
@@ -17,6 +20,9 @@ import static com.adonis.install.VehicleManagerInstaller.createShortcat;
 public class VehiclyManagerApplication {
 
 	public static void main(String[] args) {
+
+		TimeZone.setDefault(TimeZone.getTimeZone(DEFAULT_TIMEZONE));
+
 		if(args!=null && args.length>0 && args[0].equals("install") ){
 			INSTALL = true;
 		}else{

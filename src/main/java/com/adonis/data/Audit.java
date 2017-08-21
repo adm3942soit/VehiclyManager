@@ -1,5 +1,6 @@
 package com.adonis.data;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,6 +8,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
+
+import static com.adonis.install.InstallConstants.DEFAULT_TIMEZONE;
+
 
 @SuppressWarnings("serial")
 @MappedSuperclass
@@ -20,9 +24,13 @@ public class Audit implements Serializable, Cloneable {
 	@Column(name = "ID")
 	private Long id;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss",
+			locale = JsonFormat.DEFAULT_LOCALE, timezone = DEFAULT_TIMEZONE)
 	@Column(name = "CREATED")
 	private Date created;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss",
+			locale = JsonFormat.DEFAULT_LOCALE, timezone = DEFAULT_TIMEZONE)
 	@Column(name = "UPDATED")
 	private Date updated;
 
