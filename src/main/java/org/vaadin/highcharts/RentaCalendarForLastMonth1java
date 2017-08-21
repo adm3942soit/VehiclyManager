@@ -1,0 +1,138 @@
+package org.vaadin.highcharts;
+
+import com.adonis.data.service.PersonService;
+import com.adonis.data.service.RentaHistoryService;
+import com.adonis.data.service.VehicleService;
+import com.adonis.utils.DateUtils;
+import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.VerticalLayout;
+import org.vaadin.highcharts.JsHighChartVehiclesRenta;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+/**
+ * Created by oksdud on 12.04.2017.
+ */
+
+public class RentaCalendarForLastMonth1 extends CustomComponent implements View {
+    public static final String NAME = "CALENDAR FOR LAST MONTH";
+    private PersonService service;
+    private RentaHistoryService rentaHistoryService;
+    private VehicleService vehicleService;
+
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+    JsHighChartVehiclesRenta chart;
+
+    public RentaCalendarForLastMonth1(PersonService personService, RentaHistoryService rentaHistoryService, VehicleService vehicleService) {
+        HorizontalLayout viewLayout = new HorizontalLayout();
+        this.service = personService;
+        this.rentaHistoryService = rentaHistoryService;
+        this.vehicleService = vehicleService;
+
+        setSizeFull();
+
+        chart = initChart();
+        chart.setId("myJSRentaComponent");
+
+        VerticalLayout verticalLayout = new VerticalLayout();
+        verticalLayout.setSizeFull();
+
+        if (chart != null) {
+            verticalLayout.addComponent(chart);
+            verticalLayout.setComponentAlignment(chart, Alignment.MIDDLE_CENTER);
+            verticalLayout.setExpandRatio(chart, 1.0f);
+        }
+
+
+        viewLayout.addComponent(verticalLayout);
+        viewLayout.setComponentAlignment(verticalLayout, Alignment.MIDDLE_CENTER);
+        viewLayout.setSizeFull();
+        setCompositionRoot(viewLayout);
+
+    }
+
+    private JsHighChartVehiclesRenta initChart() {
+
+        Double all = Double.valueOf(vehicleService.findAll().size());
+        if (all.equals(0.0)) {
+            return new JsHighChartVehiclesRenta("", "", "");
+        }
+        StringBuffer data = new StringBuffer("");
+        StringBuffer labels = new StringBuffer("");
+        StringBuffer categories = new StringBuffer("");
+        Date now = new Date();
+        Date monthAgo = DateUtils.anyDaysAgo(now, 30);
+
+        List<String> numbers = vehicleService.findAllActiveNumbers();
+        categories.append("Categories");//,From date,To date
+
+        List<Date> dates = new ArrayList<>();
+        List<String> datesString = new ArrayList<>();
+        dates.add(monthAgo);
+        numbers.forEach(number -> {
+            Date fromDate = rentaHistoryService.getHistory(number).getFromDate();
+            if(fromDate.getTime()>= monthAgo.getTime()) {//for the last month
+                dates.add(rentaHistoryService.getHistory(number).getFromDate());
+                dates.add(rentaHistoryService.getHistory(number).getToDate());
+            }
+        });
+        dates.add(new Date());
+        Collections.sort(dates, new Comparator<Date>() {
+            public int compare(Date o1, Date o2) {
+                return Long.compare(o1.getTime(), o2.getTime());
+            }
+        });
+        dates.forEach(date -> {
+            datesString.add(sdf.format(date));
+        });
+
+        datesString.forEach(dateString->{
+            categories.append(", " + dateString);
+        });
+        categories.append("\n");
+
+        Double hour = Double.valueOf((60 * 60 * 1000));
+        List<Double> counters = new ArrayList<>();
+        numbers.forEach(number->{
+            Date fromDate = rentaHistoryService.getHistory(number).getFromDate();
+            if(fromDate.getTime()>= monthAgo.getTime()) {//for the last month
+                counters.add(Double.valueOf(rentaHistoryService.getHistory(number).getId()));
+            }
+        });
+
+        int i = 1;
+        for (String number : numbers) {
+            Date fromDate = rentaHistoryService.getHistory(number).getFromDate();
+            Date toDate = rentaHistoryService.getHistory(number).getToDate();
+            if(fromDate.getTime()>= monthAgo.getTime()) {//for the last month
+//                X
+                categories.append(", " + vehicleService.findByVehicleNumber(number).getModel() + " " + number);
+                if (i == numbers.size()) {
+                    categories.append("\n");
+                }
+
+                data.append(vehicleService.findByVehicleNumber(number).getModel() + " " + number + "(" + sdf.format(fromDate) + "-" + sdf.format(toDate) + ",");
+                data.append( number + ",");
+                data.append( Double.valueOf(rentaHistoryService.getHistory(number).getId())+((i < numbers.size()) ? "\n" : ""));
+                labels.append( number+"\n");
+            }
+            i++;
+        }
+        chart = new JsHighChartVehiclesRenta(data.toString(), labels.toString(), categories.toString());
+        chart.setSizeFull();
+        return chart;
+    }
+
+
+    @Override
+    public void enter(ViewChangeListener.ViewChangeEvent event) {
+      chart = initChart();
+      this.getCompositionRoot().getUI().getPage().reload();
+    }
+
+}

@@ -1,4 +1,4 @@
-window.org_vaadin_highcharts_AbstractHighChart = function () {
+org_vaadin_highcharts_AbstractHighChart = function () {
 
     this.onStateChange = function () {
         // read state
@@ -7,7 +7,7 @@ window.org_vaadin_highcharts_AbstractHighChart = function () {
 
         var connector = this;
 
-        // evaluate highcharts JS which needs to define var "options"
+        // evaluate org.vaadin.highcharts JS which needs to define var "options"
         eval(hcjs);
 
         // set chart context

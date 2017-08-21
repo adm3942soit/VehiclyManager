@@ -10,7 +10,7 @@ import java.util.Locale;
 import static java.util.Calendar.LONG_FORMAT;
 import static java.util.Calendar.MONTH;
 
-@com.vaadin.annotations.JavaScript({"jquery-2.1.3.min.js", "highchartsLocal.js", "js_highChartRenta.js", "highcharts-connectorLocal.js"})
+@com.vaadin.annotations.JavaScript({"jquery-3.2.1.min.js", "highchartsLocal.js", "js_highChartRenta.js", "highcharts-connectorLocal.js"})
 public class JsHighChartRenta extends AbstractJavaScriptComponent {
 
     private static final long serialVersionUID = 1913474773889181118L;

@@ -1,8 +1,5 @@
-package com.adonis.ui.renta;
+package at.downdrown.vaadinaddons.highchartsapi;
 
-import at.downdrown.vaadinaddons.highchartsapi.Colors;
-import at.downdrown.vaadinaddons.highchartsapi.HighChart;
-import at.downdrown.vaadinaddons.highchartsapi.HighChartFactory;
 import at.downdrown.vaadinaddons.highchartsapi.model.Axis;
 import at.downdrown.vaadinaddons.highchartsapi.model.ChartConfiguration;
 import at.downdrown.vaadinaddons.highchartsapi.model.ChartType;
@@ -19,7 +16,11 @@ import com.adonis.utils.PaymentsUtils;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.shared.ui.colorpicker.Color;
-import com.vaadin.ui.*;
+import com.vaadin.spring.annotation.SpringView;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.VerticalLayout;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -27,7 +28,7 @@ import java.util.*;
 /**
  * Created by oksdud on 12.04.2017.
  */
-
+@SpringView
 public class RentaAnavailableCalendarView extends CustomComponent implements View {
     /*https://github.com/downdrown/VaadinHighChartsAPI-Demo/blob/master/src/main/java/at/downdrown/vaadinaddons/demoui/views/BarChartExamples.java*/
     public static final String NAME = "VEHICLES USAGE CALENDAR";

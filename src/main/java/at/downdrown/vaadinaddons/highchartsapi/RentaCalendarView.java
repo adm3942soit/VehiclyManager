@@ -1,8 +1,5 @@
-package com.adonis.ui.renta;
+package at.downdrown.vaadinaddons.highchartsapi;
 
-import at.downdrown.vaadinaddons.highchartsapi.Colors;
-import at.downdrown.vaadinaddons.highchartsapi.HighChart;
-import at.downdrown.vaadinaddons.highchartsapi.HighChartFactory;
 import at.downdrown.vaadinaddons.highchartsapi.model.ChartConfiguration;
 import at.downdrown.vaadinaddons.highchartsapi.model.ChartType;
 import at.downdrown.vaadinaddons.highchartsapi.model.Margin;
@@ -18,7 +15,10 @@ import com.adonis.utils.DateUtils;
 import com.adonis.utils.PaymentsUtils;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.VerticalLayout;
 import org.joda.time.DateTime;
 
 import java.text.SimpleDateFormat;
