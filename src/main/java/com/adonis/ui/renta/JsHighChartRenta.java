@@ -16,7 +16,6 @@ public class JsHighChartRenta extends AbstractJavaScriptComponent {
 
 
     public JsHighChartRenta(String data, String id) {
-//        super();
         this.setId(id);
         getState().data = data;
         getState().title = "!Renta calendar for the last month";

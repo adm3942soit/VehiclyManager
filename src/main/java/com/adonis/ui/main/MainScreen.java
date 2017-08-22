@@ -15,7 +15,6 @@ import com.adonis.ui.persons.PersonsCrudView;
 import com.adonis.ui.persons.RegistrationUI;
 import com.adonis.ui.print.PrintView;
 import com.adonis.ui.renta.RentaCalendarForLastMonth;
-import com.adonis.ui.renta.RentaCalendarForLastMonthRevert;
 import com.adonis.ui.renta.RentaHistoryCrudView;
 import com.adonis.ui.vehicles.VehicleModelsCrudView;
 import com.adonis.ui.vehicles.VehicleTypesCrudView;
@@ -77,7 +76,7 @@ public class MainScreen extends HorizontalLayout implements View {
         menu.addView(new RentaCalendarView(personService, rentaHistoryService, vehicleService), RentaCalendarView.NAME, RentaCalendarView.NAME, new ThemeResource("img/barChartPNG.png"));
         menu.addView(new RentaAnavailableCalendarView(personService, rentaHistoryService, vehicleService), RentaAnavailableCalendarView.NAME, RentaAnavailableCalendarView.NAME, new ThemeResource("img/FusionChart.png"));
         menu.addView(new RentaCalendarForLastMonth(ui.service, ui.rentaHistoryService, ui.vehicleService), RentaCalendarForLastMonth.NAME, RentaCalendarForLastMonth.NAME, new ThemeResource("img/rangechart.jpg"));
-        menu.addView(new RentaCalendarForLastMonthRevert(ui.service, ui.rentaHistoryService, ui.vehicleService), RentaCalendarForLastMonthRevert.NAME, RentaCalendarForLastMonthRevert.NAME, new ThemeResource("img/barChartPNG.png"));
+//        menu.addView(new RentaCalendarForLastMonthRevert(ui.service, ui.rentaHistoryService, ui.vehicleService), RentaCalendarForLastMonthRevert.NAME, RentaCalendarForLastMonthRevert.NAME, new ThemeResource("img/barChartPNG.png"));
         menu.addView(new RegistrationUI(ui.service), "CUSTOMER REGISTRATION", "CUSTOMER REGISTRATION", new ThemeResource("img/Register-Today.jpg"));
         menu.addView(new PersonUI(ui.service, true, MainUI.loginPerson), "PROFILE", "PROFILE", new ThemeResource("img/user-icon.jpg"));
         menu.addView(new PrintView(ui.service, ui.rentaHistoryService), "PRINT", "PRINT", new ThemeResource("img/print-icon.jpg"));
