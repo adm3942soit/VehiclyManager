@@ -22,7 +22,7 @@ import java.util.List;
 
 public class RentaCalendarForLastMonth extends CustomComponent implements View {
     public static final String NAME = "RENTA CALENDAR FOR LAST MONTH";
-    private PersonService service;
+    private PersonService personService;
     private RentaHistoryService rentaHistoryService;
     private VehicleService vehicleService;
 
@@ -30,7 +30,7 @@ public class RentaCalendarForLastMonth extends CustomComponent implements View {
 
     public RentaCalendarForLastMonth(PersonService personService, RentaHistoryService rentaHistoryService, VehicleService vehicleService) {
         HorizontalLayout viewLayout = new HorizontalLayout();
-        this.service = personService;
+        this.personService = personService;
         this.rentaHistoryService = rentaHistoryService;
         this.vehicleService = vehicleService;
 
@@ -69,7 +69,6 @@ public class RentaCalendarForLastMonth extends CustomComponent implements View {
         List<String> numbers = vehicleService.findAllActiveNumbers();
         data.append("Categories,From date,To date\n");
         Double hour = Double.valueOf((60 * 60 * 1000));
-//        Date nullDate = DateUtils.convertToDate("01/01/1970");
         int i = 1;
         for (String number : numbers) {
 
@@ -89,6 +88,7 @@ public class RentaCalendarForLastMonth extends CustomComponent implements View {
         }
         JsHighChartRenta chart = new JsHighChartRenta(data.toString());
         chart.setSizeFull();
+        chart.setId("myJSComponent");
         return chart;
     }
 
