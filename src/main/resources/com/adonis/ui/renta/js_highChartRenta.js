@@ -5,6 +5,7 @@ com_adonis_ui_renta_JsHighChartRenta = function()
     var title = this.getState().title;
     var data = this.getState().data;
     var units = this.getState().units;
+    var idComponent = this.getState().idComponent;
 
     $(document).ready(readDataAndDraw())
 
@@ -15,14 +16,14 @@ com_adonis_ui_renta_JsHighChartRenta = function()
 
     function readDataAndDraw()
     {
-        var id = document.getElementById("myJSComponent");
+        var id = document.getElementById(idComponent);
         // double check if we really found the right div
         if (id == null) return;
-        if(id.id != "myJSComponent") return;
+        if(id.id != idComponent) return;
 
         var options = {
             chart: {
-                renderTo: 'myJSComponent',
+                renderTo: idComponent,
                 defaultSeriesType: 'line',
                 marginRight: 130,
                 marginBottom: 25

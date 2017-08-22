@@ -25,7 +25,7 @@ public class RentaCalendarForLastMonth extends CustomComponent implements View {
     private PersonService personService;
     private RentaHistoryService rentaHistoryService;
     private VehicleService vehicleService;
-
+    public static  JsHighChartRenta chart;
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
     public RentaCalendarForLastMonth(PersonService personService, RentaHistoryService rentaHistoryService, VehicleService vehicleService) {
@@ -35,8 +35,7 @@ public class RentaCalendarForLastMonth extends CustomComponent implements View {
         this.vehicleService = vehicleService;
 
         setSizeFull();
-
-        JsHighChartRenta chart = initChart();
+        chart = initChart();
         chart.setId("myJSComponent");
 
         VerticalLayout verticalLayout = new VerticalLayout();
@@ -60,7 +59,7 @@ public class RentaCalendarForLastMonth extends CustomComponent implements View {
 
         Double all = Double.valueOf(vehicleService.findAll().size());
         if (all.equals(0.0)) {
-            return new JsHighChartRenta("");
+            return new JsHighChartRenta("", "myJSComponent");
         }
         StringBuffer data = new StringBuffer("");
         Date now = new Date();
@@ -86,7 +85,7 @@ public class RentaCalendarForLastMonth extends CustomComponent implements View {
             }
             i++;
         }
-        JsHighChartRenta chart = new JsHighChartRenta(data.toString());
+        JsHighChartRenta chart = new JsHighChartRenta(data.toString(), "myJSComponent");
         chart.setSizeFull();
         chart.setId("myJSComponent");
         return chart;

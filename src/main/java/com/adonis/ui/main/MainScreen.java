@@ -15,6 +15,7 @@ import com.adonis.ui.persons.PersonsCrudView;
 import com.adonis.ui.persons.RegistrationUI;
 import com.adonis.ui.print.PrintView;
 import com.adonis.ui.renta.RentaCalendarForLastMonth;
+import com.adonis.ui.renta.RentaCalendarForLastMonthRevert;
 import com.adonis.ui.renta.RentaHistoryCrudView;
 import com.adonis.ui.vehicles.VehicleModelsCrudView;
 import com.adonis.ui.vehicles.VehicleTypesCrudView;
@@ -72,15 +73,11 @@ public class MainScreen extends HorizontalLayout implements View {
         menu.addView(new VehiclesCrudView(ui.vehicleService), VehiclesCrudView.NAME, VehiclesCrudView.NAME, new ThemeResource("img/car.jpg"));//vehicles1
         menu.addView(ui.getPersonsCrudView(), PersonsCrudView.NAME, PersonsCrudView.NAME, new ThemeResource("img/customers.jpg"));
         menu.addView(new RentaHistoryCrudView(ui.rentaHistoryService, ui.service, ui.vehicleService), RentaHistoryCrudView.NAME, RentaHistoryCrudView.NAME, new ThemeResource("img/for-rent.jpg"));
-        renta1 = init1(ui.service, ui.rentaHistoryService, ui.vehicleService);
-        menu.addView(renta1, RentaPieChartView.NAME, RentaPieChartView.NAME, new ThemeResource("img/chartPNG.png"));
-        renta2 = init2(ui.service, ui.rentaHistoryService, ui.vehicleService);
-        menu.addView(renta2, RentaCalendarView.NAME, RentaCalendarView.NAME, new ThemeResource("img/barChartPNG.png"));
-        renta3 = init3(ui.service, ui.rentaHistoryService, ui.vehicleService);
-        menu.addView(renta3, RentaAnavailableCalendarView.NAME, RentaAnavailableCalendarView.NAME, new ThemeResource("img/FusionChart.png"));
-        renta4 = init4(ui.service, ui.rentaHistoryService, ui.vehicleService);
-        menu.addView(renta4, RentaCalendarForLastMonth.NAME, RentaCalendarForLastMonth.NAME, new ThemeResource("img/rangechart.jpg"));
-//        menu.addView(new RentaCalendarForLastMonth1(personService, rentaHistoryService, vehicleService), RentaCalendarForLastMonth1.NAME, RentaCalendarForLastMonth1.NAME, new ThemeResource("img/barChartPNG.png"));
+        menu.addView(new RentaPieChartView(personService, rentaHistoryService, vehicleService), RentaPieChartView.NAME, RentaPieChartView.NAME, new ThemeResource("img/chartPNG.png"));
+        menu.addView(new RentaCalendarView(personService, rentaHistoryService, vehicleService), RentaCalendarView.NAME, RentaCalendarView.NAME, new ThemeResource("img/barChartPNG.png"));
+        menu.addView(new RentaAnavailableCalendarView(personService, rentaHistoryService, vehicleService), RentaAnavailableCalendarView.NAME, RentaAnavailableCalendarView.NAME, new ThemeResource("img/FusionChart.png"));
+        menu.addView(new RentaCalendarForLastMonth(ui.service, ui.rentaHistoryService, ui.vehicleService), RentaCalendarForLastMonth.NAME, RentaCalendarForLastMonth.NAME, new ThemeResource("img/rangechart.jpg"));
+        menu.addView(new RentaCalendarForLastMonthRevert(ui.service, ui.rentaHistoryService, ui.vehicleService), RentaCalendarForLastMonthRevert.NAME, RentaCalendarForLastMonthRevert.NAME, new ThemeResource("img/barChartPNG.png"));
         menu.addView(new RegistrationUI(ui.service), "CUSTOMER REGISTRATION", "CUSTOMER REGISTRATION", new ThemeResource("img/Register-Today.jpg"));
         menu.addView(new PersonUI(ui.service, true, MainUI.loginPerson), "PROFILE", "PROFILE", new ThemeResource("img/user-icon.jpg"));
         menu.addView(new PrintView(ui.service, ui.rentaHistoryService), "PRINT", "PRINT", new ThemeResource("img/print-icon.jpg"));
@@ -124,22 +121,6 @@ public class MainScreen extends HorizontalLayout implements View {
         }
 
     };
-
-    private View init1(PersonService personService, RentaHistoryService rentaHistoryService, VehicleService vehicleService) {
-        return new RentaPieChartView(personService, rentaHistoryService, vehicleService);
-    }
-
-    private View init2(PersonService personService, RentaHistoryService rentaHistoryService, VehicleService vehicleService) {
-        return new RentaCalendarView(personService, rentaHistoryService, vehicleService);
-    }
-
-    private View init3(PersonService personService, RentaHistoryService rentaHistoryService, VehicleService vehicleService) {
-        return new RentaAnavailableCalendarView(personService, rentaHistoryService, vehicleService);
-    }
-
-    private View init4(PersonService personService, RentaHistoryService rentaHistoryService, VehicleService vehicleService) {
-        return new RentaCalendarForLastMonth(personService, rentaHistoryService, vehicleService);
-    }
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
