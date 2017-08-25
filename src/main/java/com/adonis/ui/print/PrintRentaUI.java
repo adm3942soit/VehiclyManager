@@ -2,7 +2,7 @@ package com.adonis.ui.print;
 
 import com.adonis.data.renta.RentaHistory;
 import com.adonis.ui.MainUI;
-import com.adonis.ui.converters.DateUtils;
+import com.adonis.ui.converters.DatesConverter;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.JavaScript;
@@ -57,8 +57,8 @@ public class PrintRentaUI extends UI {
                         HSSFRow row = sheet.createRow((short) index);
                         row.createCell((short) 0).setCellValue(rentaHistory.getPerson());
                         row.createCell((short) 1).setCellValue(rentaHistory.getVehicle());
-                        row.createCell((short) 2).setCellValue(DateUtils.timestampToString(rentaHistory.getFromDate()));
-                        row.createCell((short) 3).setCellValue(DateUtils.timestampToString(rentaHistory.getToDate()));
+                        row.createCell((short) 2).setCellValue(DatesConverter.timestampToString(rentaHistory.getFromDate()));
+                        row.createCell((short) 3).setCellValue(DatesConverter.timestampToString(rentaHistory.getToDate()));
                         row.createCell((short) 4).setCellValue(rentaHistory.getPrice());
                         row.createCell((short) 5).setCellValue(rentaHistory.getSumma());
 //                        row.createCell((short) 6).setCellValue(rentaHistory.getPaid());

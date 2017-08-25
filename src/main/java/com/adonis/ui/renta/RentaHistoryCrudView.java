@@ -6,7 +6,7 @@ import com.adonis.data.service.PersonService;
 import com.adonis.data.service.RentaHistoryService;
 import com.adonis.data.service.VehicleService;
 import com.adonis.ui.addFields.RentaPaymentField;
-import com.adonis.ui.converters.DateUtils;
+import com.adonis.ui.converters.DatesConverter;
 import com.adonis.ui.converters.StringOfInstantToSqlTimestampConverter;
 import com.vaadin.data.converter.StringToDoubleConverter;
 import com.vaadin.navigator.View;
@@ -72,7 +72,7 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
         protected Timestamp handleUnparsableDateString(
                 String dateString) {
             try {
-                parsedValueFrom = DateUtils.convertValue(dateString);
+                parsedValueFrom = DatesConverter.convertValue(dateString);
                 return parsedValueFrom;
             } catch (DateTimeParseException e) {
                 return null;
@@ -92,7 +92,7 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
 
             try {
                 // try to parse with alternative format
-                parsedValueTo = DateUtils.convertValue(dateString);
+                parsedValueTo = DatesConverter.convertValue(dateString);
                 return parsedValueTo;
             } catch (DateTimeParseException e) {
                 return null;
@@ -266,8 +266,8 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
                     public void componentEvent(Event event) {
                         Date dateFrom = fromDateDateField.getValue();
                         Date dateTo = toDateDateField.getValue();
-                        parsedValueFrom = DateUtils.getTimeStamp(dateFrom);
-                        parsedValueTo = DateUtils.getTimeStamp(dateTo);
+                        parsedValueFrom = DatesConverter.getTimeStamp(dateFrom);
+                        parsedValueTo = DatesConverter.getTimeStamp(dateTo);
                         if (dateFrom != null && dateTo != null && priceTextField != null && priceTextField.getValue() != null) {
                             long countMinutes = (dateTo.getTime() - dateFrom.getTime()) / 1000 / 60 / 60;
                             if (summaTextField != null && price != null) {

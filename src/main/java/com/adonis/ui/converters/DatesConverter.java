@@ -1,5 +1,6 @@
 package com.adonis.ui.converters;
 
+import com.adonis.utils.DateUtils;
 import com.google.common.base.Strings;
 
 import java.sql.Timestamp;
@@ -11,7 +12,7 @@ import java.util.TimeZone;
 /**
  * Created by oksdud on 04.04.2017.
  */
-public class DateUtils {
+public class DatesConverter {
     public LocalDate getLocalDate(Date date) {
         return date == null ? null : Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
     }
@@ -77,6 +78,12 @@ public class DateUtils {
                 .atOffset( ZoneOffset.UTC )  // Transform `Instant` to `OffsetDateTime`.
                 .format( DateTimeFormatter.ISO_LOCAL_DATE_TIME )  // Generate a String.
                 .replace( "T" , " " );  // Put a SPACE in the middle.
+    }
+    /*Timestamp->unix time*/
+    public static Integer getUnixTime(Timestamp timestamp) {
+        int now = Long.valueOf(getSqlTime(getUtilDate(timestamp)).getTime() / 1000).intValue();
+        int midnight = Long.valueOf(getSqlTime(DateUtils.beginningOfTheDay(getUtilDate(timestamp))).getTime() / 1000).intValue();
+        return now - midnight;
     }
 
 }
