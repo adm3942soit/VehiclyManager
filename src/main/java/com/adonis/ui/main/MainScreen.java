@@ -41,19 +41,13 @@ import java.util.function.Consumer;
 @NoArgsConstructor
 public class MainScreen extends HorizontalLayout implements View {
     private Menu menu;
-    private MainUI mainUI;
     public static final String NAME = "MainScreen";
     PersonService personService;
     VehicleService vehicleService;
     RentaHistoryService rentaHistoryService;
-    View renta1;
-    View renta2;
-    View renta3;
-    View renta4;
     Navigator navigator;
 
     public MainScreen(MainUI ui) {
-        mainUI = ui;
         setStyleName("main-screen");
 
         CssLayout viewContainer = new CssLayout();
@@ -83,12 +77,14 @@ public class MainScreen extends HorizontalLayout implements View {
         menu.addView(new XlsView(ui.service, ui.rentaHistoryService, ui.vehicleService), "LOAD", "LOAD", new ThemeResource("img/xls1.jpg"));
         menu.addView(new AboutView(), AboutView.VIEW_NAME, AboutView.VIEW_NAME, new ThemeResource("img/info.jpg"));
         menu.addView(ui.getLoginView(), "LOGOUT", "LOGOUT", new ThemeResource("img/logout.jpg"));
+
         navigator.addViewChangeListener(viewChangeListener);
 
         addComponent(menu);
         addComponent(viewContainer);
         setExpandRatio(viewContainer, 1);
         setSizeFull();
+        menu.getShowMenu().click();
     }
 
     // notify the view menu about view changes so that it can display which view

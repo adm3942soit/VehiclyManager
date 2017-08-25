@@ -31,7 +31,7 @@ public class Menu extends CssLayout {
     private static final String VALO_MENU_VISIBLE = "valo-menu-visible";
     private Navigator navigator;
     private Map<String, Button> viewButtons = new HashMap<String, Button>();
-
+    public Button showMenu;
     private CssLayout menuItemsLayout;
     private CssLayout menuPart;
     public final GridBasedCrudComponent<Vehicle> vehiclesCrud = new GridBasedCrudComponent<>(Vehicle.class, new HorizontalSplitCrudLayout());
@@ -86,7 +86,7 @@ public class Menu extends CssLayout {
 //        menuPart.addComponent(logoutLayout);
 
         // button for toggling the visibility of the menu when on a small screen
-        final Button showMenu = new Button("Menu", new ClickListener() {
+        showMenu = new Button("Menu", new ClickListener() {
             @Override
             public void buttonClick(final ClickEvent event) {
                 if (menuPart.getStyleName().contains(VALO_MENU_VISIBLE)) {
@@ -211,5 +211,9 @@ public class Menu extends CssLayout {
             selected.addStyleName("selected");
         }
         menuPart.removeStyleName(VALO_MENU_VISIBLE);
+    }
+
+    public Button getShowMenu() {
+        return showMenu;
     }
 }
