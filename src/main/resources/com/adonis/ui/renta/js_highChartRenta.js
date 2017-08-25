@@ -1,5 +1,4 @@
-com_adonis_ui_renta_JsHighChartRenta = function()
-{
+com_adonis_ui_renta_JsHighChartRenta = function () {
     var element = $(this.getElement());
     // getData
     var title = this.getState().title;
@@ -9,17 +8,15 @@ com_adonis_ui_renta_JsHighChartRenta = function()
 
     $(document).ready(readDataAndDraw())
 
-    this.onStateChange = function()
-    {
+    this.onStateChange = function () {
         $(document).ready(readDataAndDraw())
     }
 
-    function readDataAndDraw()
-    {
+    function readDataAndDraw() {
         var id = document.getElementById(idComponent);
         // double check if we really found the right div
         if (id == null) return;
-        if(id.id != idComponent) return;
+        if (id.id != idComponent) return;
 
         var options = {
             chart: {
@@ -45,20 +42,40 @@ com_adonis_ui_renta_JsHighChartRenta = function()
             yAxis: {
                 title: {
                     text: units
-                }
+                },
+                labels: {
+                    // rotation: -45,
+                    style: {
+                        fontSize: '13px',
+                        fontFamily: 'Verdana, sans-serif'
+                    },
+                    // y: 10,
+                    // marginBottom: 250//,
+                    formatter: function () {
+                        return Date.parse(this.value / 1000);//this.value / 1000;"Month day, year");//
+                    }
+                }//,
+                // tickInterval: 24*60*60*1000
+
             },
+            tooltip:
+                {
+                    headerFormat: '<b>{point.x}</b><br/>',
+                    pointFormat:
+                        '{point.x}-> {Date.parse(point.y/1000)}<br/>'
+                },
             series: []
         };
 
         // Split the lines
         var lines = data.split('\n');
         // Iterate over the lines and add categories or series
-        $.each(lines, function(lineNo, line) {
+        $.each(lines, function (lineNo, line) {
             var items = line.split(',');
 
             // header line containes categories
             if (lineNo == 0) {
-                $.each(items, function(itemNo, item) {
+                $.each(items, function (itemNo, item) {
                     if (itemNo > 0) options.xAxis.categories.push(item);
                 });
             }
@@ -68,7 +85,7 @@ com_adonis_ui_renta_JsHighChartRenta = function()
                 var series = {
                     data: []
                 };
-                $.each(items, function(itemNo, item) {
+                $.each(items, function (itemNo, item) {
                     if (itemNo == 0) {
                         series.name = item;
                     } else {
