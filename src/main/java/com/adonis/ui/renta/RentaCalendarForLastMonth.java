@@ -4,7 +4,6 @@ import com.adonis.data.service.PersonService;
 import com.adonis.data.service.RentaHistoryService;
 import com.adonis.data.service.VehicleService;
 import com.adonis.utils.DateUtils;
-import com.adonis.utils.PaymentsUtils;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Alignment;
@@ -21,11 +20,11 @@ import java.util.List;
  */
 
 public class RentaCalendarForLastMonth extends CustomComponent implements View {
-    public static final String NAME = "RENTA CALENDAR FOR LAST MONTH";
+    public static final String NAME = "CALENDAR OF CARS EMPLOYMENT FOR LAST MONTH";
     private PersonService personService;
     private RentaHistoryService rentaHistoryService;
     private VehicleService vehicleService;
-    public static  JsHighChartRenta chart;
+    public static JsHighChartRenta chart;
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
     public RentaCalendarForLastMonth(PersonService personService, RentaHistoryService rentaHistoryService, VehicleService vehicleService) {
@@ -66,6 +65,7 @@ public class RentaCalendarForLastMonth extends CustomComponent implements View {
         Date monthAgo = DateUtils.anyDaysAgo(now, 30);
 
         List<String> numbers = vehicleService.findAllActiveNumbers();
+        //OX
         data.append("Categories,From date,To date\n");
         Double hour = Double.valueOf((60 * 60 * 1000));
         int i = 1;
@@ -73,14 +73,18 @@ public class RentaCalendarForLastMonth extends CustomComponent implements View {
 
             Date fromDate = rentaHistoryService.getHistory(number).getFromDate();
             Date toDate = rentaHistoryService.getHistory(number).getToDate();
-            if(fromDate.getTime()>= monthAgo.getTime()) {//for the last month
-                data.append(vehicleService.findByVehicleNumber(number).getModel() + " " + number + "(" + sdf.format(fromDate) + "-" + sdf.format(toDate) + ",");
+            if (fromDate.getTime() >= monthAgo.getTime()) {//for the last month
+
                 data.append(
-                        String.valueOf(PaymentsUtils.round(
-                                Double.valueOf((fromDate.getTime() - monthAgo.getTime()) / hour))) + ", " +
-                                String.valueOf(PaymentsUtils.round(
-                                        Double.valueOf((toDate.getTime() - monthAgo.getTime()) / hour))) +
-                                ((i < numbers.size()) ? "\n" : "")
+                        //tooltip
+                        vehicleService.findByVehicleNumber(number).getModel() + " " + number + "(" + sdf.format(fromDate) + "-" + sdf.format(toDate) + "," +
+                                //OY
+                                //from date
+//                                String.valueOf(PaymentsUtils.round(Double.valueOf((fromDate.getTime() - monthAgo.getTime()) / hour))) + ", " +
+                                String.valueOf(Double.valueOf(fromDate.getTime())) + ", " +
+                                //to date
+//                                String.valueOf(PaymentsUtils.round(Double.valueOf((toDate.getTime() - monthAgo.getTime()) / hour))) + ((i < numbers.size()) ? "\n" : "")
+                                String.valueOf(Double.valueOf(toDate.getTime())) + ((i < numbers.size()) ? "\n" : "")
                 );
             }
             i++;

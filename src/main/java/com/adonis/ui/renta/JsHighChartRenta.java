@@ -18,11 +18,11 @@ public class JsHighChartRenta extends AbstractJavaScriptComponent {
     public JsHighChartRenta(String data, String id) {
         this.setId(id);
         getState().data = data;
-        getState().title = "!Renta calendar for the last month";
+        getState().title = "Calendar of cars employment for the last month";
         Date now = new Date();
         GregorianCalendar gregorianCalendar = new GregorianCalendar();
         gregorianCalendar.setTime(now);
-        getState().units = "!Dates for "+
+        getState().units = "Dates for "+
                 gregorianCalendar.getDisplayName(MONTH,LONG_FORMAT, Locale.getDefault() )+" "+
                 gregorianCalendar.get(Calendar.YEAR);
         getState().idComponent = id;
