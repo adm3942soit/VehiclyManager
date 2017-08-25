@@ -1,9 +1,9 @@
 package com.adonis.ui.main;
 
 
-import at.downdrown.vaadinaddons.highchartsapi.RentaAnavailableCalendarView;
-import at.downdrown.vaadinaddons.highchartsapi.RentaCalendarView;
-import at.downdrown.vaadinaddons.highchartsapi.RentaPieChartView;
+import com.adonis.ui.renta.highchartsapi.RentaAnavailableCalendarView;
+import com.adonis.ui.renta.highchartsapi.RentaCalendarView;
+import com.adonis.ui.renta.highchartsapi.RentaPieChartView;
 import com.adonis.data.service.PersonService;
 import com.adonis.data.service.RentaHistoryService;
 import com.adonis.data.service.VehicleService;
@@ -14,7 +14,7 @@ import com.adonis.ui.persons.PersonUI;
 import com.adonis.ui.persons.PersonsCrudView;
 import com.adonis.ui.persons.RegistrationUI;
 import com.adonis.ui.print.PrintView;
-import com.adonis.ui.renta.RentaCalendarForLastMonth;
+import com.adonis.ui.renta.highchart.RentaCalendarForLastMonth;
 import com.adonis.ui.renta.RentaHistoryCrudView;
 import com.adonis.ui.vehicles.VehicleModelsCrudView;
 import com.adonis.ui.vehicles.VehicleTypesCrudView;

@@ -1,5 +1,8 @@
-package at.downdrown.vaadinaddons.highchartsapi;
+package com.adonis.ui.renta.highchartsapi;
 
+import at.downdrown.vaadinaddons.highchartsapi.Colors;
+import at.downdrown.vaadinaddons.highchartsapi.HighChart;
+import at.downdrown.vaadinaddons.highchartsapi.HighChartFactory;
 import at.downdrown.vaadinaddons.highchartsapi.model.ChartConfiguration;
 import at.downdrown.vaadinaddons.highchartsapi.model.ChartType;
 import at.downdrown.vaadinaddons.highchartsapi.model.data.PieChartData;
