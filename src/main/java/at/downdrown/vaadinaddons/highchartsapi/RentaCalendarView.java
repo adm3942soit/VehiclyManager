@@ -27,6 +27,7 @@ import java.util.Date;
 import java.util.List;
 
 import static at.downdrown.vaadinaddons.highchartsapi.model.Axis.AxisValueType.DATETIME;
+import static com.adonis.utils.NumberUtils.round;
 
 /**
  * Created by oksdud on 12.04.2017.
@@ -97,7 +98,7 @@ public class RentaCalendarView extends CustomComponent implements View {
             List<HighChartsData> dataVehiclesNumbers = new ArrayList<>();
             StringDoubleData stringDoubleData = new StringDoubleData(
                     number + " last available date : " + dateString,//sdf.format(lastAvailableData),
-                    PaymentsUtils.round(Double.valueOf(lastAvailableData.getMillis() - monthAgoDateTime.getMillis()) / hour));
+                    round(Double.valueOf(lastAvailableData.getMillis() - monthAgoDateTime.getMillis()) / hour));
             dataVehiclesNumbers.add(stringDoubleData);
 
             labels.add(stringDoubleData.getHighChartValue());
@@ -107,7 +108,7 @@ public class RentaCalendarView extends CustomComponent implements View {
                     dataVehiclesNumbers);
             lists.add(dataVehiclesNumbers);
             barChartSeriesList.add(numbersBar);
-            dates.add(String.valueOf(PaymentsUtils.round(Double.valueOf(lastAvailableData.getMillis() - nullDateTime.getMillis()) / hour)));//
+            dates.add(String.valueOf(round(Double.valueOf(lastAvailableData.getMillis() - nullDateTime.getMillis()) / hour)));//
         }
 
         barChartSeriesList.forEach(barChartSeries -> {
