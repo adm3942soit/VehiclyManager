@@ -27,6 +27,7 @@ public class RentaCalendarForLastMonth extends CustomComponent implements View {
     private PersonService personService;
     private RentaHistoryService rentaHistoryService;
     private VehicleService vehicleService;
+    private static final String chartId = "myJSComponent";
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
     public RentaCalendarForLastMonth(PersonService personService, RentaHistoryService rentaHistoryService, VehicleService vehicleService) {
@@ -37,7 +38,7 @@ public class RentaCalendarForLastMonth extends CustomComponent implements View {
 
         setSizeFull();
         JsHighChartRenta chart = initChart();
-        chart.setId("myJSComponent");
+        chart.setId(chartId);
 
         VerticalLayout verticalLayout = new VerticalLayout();
         verticalLayout.setSizeFull();
@@ -60,7 +61,7 @@ public class RentaCalendarForLastMonth extends CustomComponent implements View {
 
         Double all = Double.valueOf(vehicleService.findAll().size());
         if (all.equals(0.0)) {
-            return new JsHighChartRenta("", "myJSComponent");
+            return new JsHighChartRenta("", chartId);
         }
         StringBuffer data = new StringBuffer("");
         Date now = new Date();
@@ -84,17 +85,17 @@ public class RentaCalendarForLastMonth extends CustomComponent implements View {
                                 //from date
 //                                String.valueOf(PaymentsUtils.round(Double.valueOf((fromDate.getTime() - monthAgo.getTime()) / hour))) + ", " +
 //                                String.valueOf(Double.valueOf(fromDate.getTime())) + ", " +
-                                String.valueOf(Double.valueOf(getUnixTime(getTimeStamp(fromDate))-getUnixTime(getTimeStamp(monthAgo)))) + ", " +
+                                String.valueOf(Double.valueOf(getUnixTime(getTimeStamp(fromDate)) - getUnixTime(getTimeStamp(monthAgo)))) + ", " +
 //
                                 //to date
 //                                String.valueOf(PaymentsUtils.round(Double.valueOf((toDate.getTime() - monthAgo.getTime()) / hour))) + ((i < numbers.size()) ? "\n" : "")
 //                                String.valueOf(Double.valueOf(toDate.getTime())) + ((i < numbers.size()) ? "\n" : "")
-                                String.valueOf(Double.valueOf(getUnixTime(getTimeStamp(toDate))-getUnixTime(getTimeStamp(monthAgo)))) + ((i < numbers.size()) ? "\n" : "")
+                                String.valueOf(Double.valueOf(getUnixTime(getTimeStamp(toDate)) - getUnixTime(getTimeStamp(monthAgo)))) + ((i < numbers.size()) ? "\n" : "")
                 );
             }
             i++;
         }
-        JsHighChartRenta chart = new JsHighChartRenta(data.toString(), "myJSComponent");
+        JsHighChartRenta chart = new JsHighChartRenta(data.toString(), chartId);
         chart.setSizeFull();
         chart.setId("myJSComponent");
         return chart;
