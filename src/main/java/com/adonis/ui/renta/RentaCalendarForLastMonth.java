@@ -15,6 +15,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import static com.adonis.ui.converters.DatesConverter.getTimeStamp;
+import static com.adonis.ui.converters.DatesConverter.getUnixTime;
+
 /**
  * Created by oksdud on 12.04.2017.
  */
@@ -81,10 +84,12 @@ public class RentaCalendarForLastMonth extends CustomComponent implements View {
                                 //OY
                                 //from date
 //                                String.valueOf(PaymentsUtils.round(Double.valueOf((fromDate.getTime() - monthAgo.getTime()) / hour))) + ", " +
-                                String.valueOf(Double.valueOf(fromDate.getTime())) + ", " +
+//                                String.valueOf(Double.valueOf(fromDate.getTime())) + ", " +
+                                String.valueOf(Double.valueOf(getUnixTime(getTimeStamp(fromDate))-getUnixTime(getTimeStamp(monthAgo)))) + ", " +
                                 //to date
 //                                String.valueOf(PaymentsUtils.round(Double.valueOf((toDate.getTime() - monthAgo.getTime()) / hour))) + ((i < numbers.size()) ? "\n" : "")
-                                String.valueOf(Double.valueOf(toDate.getTime())) + ((i < numbers.size()) ? "\n" : "")
+//                                String.valueOf(Double.valueOf(toDate.getTime())) + ((i < numbers.size()) ? "\n" : "")
+                                String.valueOf(Double.valueOf(getUnixTime(getTimeStamp(toDate))-getUnixTime(getTimeStamp(monthAgo)))) + ((i < numbers.size()) ? "\n" : "")
                 );
             }
             i++;

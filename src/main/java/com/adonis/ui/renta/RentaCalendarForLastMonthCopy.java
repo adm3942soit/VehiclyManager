@@ -4,7 +4,6 @@ import com.adonis.data.service.PersonService;
 import com.adonis.data.service.RentaHistoryService;
 import com.adonis.data.service.VehicleService;
 import com.adonis.utils.DateUtils;
-import com.adonis.utils.PaymentsUtils;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Alignment;
@@ -15,6 +14,8 @@ import com.vaadin.ui.VerticalLayout;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
+import static com.adonis.utils.NumberUtils.round;
 
 /**
  * Created by oksdud on 12.04.2017.
@@ -81,11 +82,11 @@ public class RentaCalendarForLastMonthCopy extends CustomComponent implements Vi
                         vehicleService.findByVehicleNumber(number).getModel() + " " + number + "(" + sdf.format(fromDate) + "-" + sdf.format(toDate) + "," +
                                 //OY
                                 //from date
-                                String.valueOf(PaymentsUtils.round(Double.valueOf((fromDate.getTime() - monthAgo.getTime()) / hour))) + ", " +
+                                String.valueOf(round(Double.valueOf((fromDate.getTime() - monthAgo.getTime()) / hour))) + ", " +
 //                                String.valueOf(Double.valueOf(fromDate.getTime())) + ", " +
 //                                String.valueOf(Double.valueOf(DatesConverter.getUnixTime(DatesConverter.getTimeStamp(fromDate))) - DatesConverter.getUnixTime(DatesConverter.getTimeStamp(monthAgo)))
                                 //to date
-                                String.valueOf(PaymentsUtils.round(Double.valueOf((toDate.getTime() - monthAgo.getTime()) / hour))) + ((i < numbers.size()) ? "\n" : "")
+                                String.valueOf(round(Double.valueOf((toDate.getTime() - monthAgo.getTime()) / hour))) + ((i < numbers.size()) ? "\n" : "")
 //                                String.valueOf(Double.valueOf(toDate.getTime())) + ((i < numbers.size()) ? "\n" : "")
                 );
             }

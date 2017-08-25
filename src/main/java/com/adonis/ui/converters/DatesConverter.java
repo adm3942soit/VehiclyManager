@@ -1,6 +1,5 @@
 package com.adonis.ui.converters;
 
-import com.adonis.utils.DateUtils;
 import com.google.common.base.Strings;
 
 import java.sql.Timestamp;
@@ -82,8 +81,8 @@ public class DatesConverter {
     /*Timestamp->unix time*/
     public static Integer getUnixTime(Timestamp timestamp) {
         int now = Long.valueOf(getSqlTime(getUtilDate(timestamp)).getTime() / 1000).intValue();
-        int midnight = Long.valueOf(getSqlTime(DateUtils.beginningOfTheDay(getUtilDate(timestamp))).getTime() / 1000).intValue();
-        return now - midnight;
+//        int midnight = Long.valueOf(getSqlTime(DateUtils.beginningOfTheDay(getUtilDate(timestamp))).getTime() / 1000).intValue();
+        return now;
     }
 
 }
