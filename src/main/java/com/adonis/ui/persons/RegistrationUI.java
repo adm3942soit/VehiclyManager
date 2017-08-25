@@ -6,6 +6,7 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.Spliterator;
 import java.util.function.Consumer;
@@ -23,6 +24,7 @@ public class RegistrationUI extends CustomComponent implements com.vaadin.naviga
     PersonView editor = new PersonView(this::savePerson, null, this::addPerson, false);//this::deletePerson, this::addPerson, false);
 
     public RegistrationUI (PersonService personService){
+        setPrimaryStyleName(ValoTheme.FORMLAYOUT_LIGHT);
         this.service = personService;
         VerticalLayout viewLayout = new VerticalLayout();
         viewLayout.setSizeFull();

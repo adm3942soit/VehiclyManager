@@ -26,7 +26,7 @@ import java.util.Map;
 @NoArgsConstructor
 public class Menu extends CssLayout {
 
-    private static final String VALO_MENUITEMS = "valo-menuitems";
+    public static final String VALO_MENUITEMS = "valo-menuitems";
     private static final String VALO_MENU_TOGGLE = "valo-menu-toggle";
     private static final String VALO_MENU_VISIBLE = "valo-menu-visible";
     private Navigator navigator;
