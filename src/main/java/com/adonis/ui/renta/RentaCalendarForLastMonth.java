@@ -27,7 +27,6 @@ public class RentaCalendarForLastMonth extends CustomComponent implements View {
     private PersonService personService;
     private RentaHistoryService rentaHistoryService;
     private VehicleService vehicleService;
-    public static JsHighChartRenta chart;
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
     public RentaCalendarForLastMonth(PersonService personService, RentaHistoryService rentaHistoryService, VehicleService vehicleService) {
@@ -37,7 +36,7 @@ public class RentaCalendarForLastMonth extends CustomComponent implements View {
         this.vehicleService = vehicleService;
 
         setSizeFull();
-        chart = initChart();
+        JsHighChartRenta chart = initChart();
         chart.setId("myJSComponent");
 
         VerticalLayout verticalLayout = new VerticalLayout();
@@ -85,12 +84,12 @@ public class RentaCalendarForLastMonth extends CustomComponent implements View {
                                 //from date
 //                                String.valueOf(PaymentsUtils.round(Double.valueOf((fromDate.getTime() - monthAgo.getTime()) / hour))) + ", " +
 //                                String.valueOf(Double.valueOf(fromDate.getTime())) + ", " +
-                                String.valueOf(Double.valueOf(getUnixTime(getTimeStamp(fromDate)))) + ", " +
-//                                -getUnixTime(getTimeStamp(monthAgo))
+                                String.valueOf(Double.valueOf(getUnixTime(getTimeStamp(fromDate))-getUnixTime(getTimeStamp(monthAgo)))) + ", " +
+//
                                 //to date
 //                                String.valueOf(PaymentsUtils.round(Double.valueOf((toDate.getTime() - monthAgo.getTime()) / hour))) + ((i < numbers.size()) ? "\n" : "")
 //                                String.valueOf(Double.valueOf(toDate.getTime())) + ((i < numbers.size()) ? "\n" : "")
-                                String.valueOf(Double.valueOf(getUnixTime(getTimeStamp(toDate)))) + ((i < numbers.size()) ? "\n" : "")
+                                String.valueOf(Double.valueOf(getUnixTime(getTimeStamp(toDate))-getUnixTime(getTimeStamp(monthAgo)))) + ((i < numbers.size()) ? "\n" : "")
                 );
             }
             i++;

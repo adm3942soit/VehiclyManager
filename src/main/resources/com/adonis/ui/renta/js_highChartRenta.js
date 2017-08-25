@@ -42,28 +42,8 @@ com_adonis_ui_renta_JsHighChartRenta = function () {
             yAxis: {
                 title: {
                     text: units
-                },
-                labels: {
-                    // rotation: -45,
-                    style: {
-                        fontSize: '13px',
-                        fontFamily: 'Verdana, sans-serif'
-                    },
-                    // y: 10,
-                    // marginBottom: 250//,
-                    formatter: function () {
-                        return Date.parse(this.value / 1000);//this.value / 1000;"Month day, year");//
-                    }
-                }//,
-                // tickInterval: 24*60*60*1000
-
+                }
             },
-            tooltip:
-                {
-                    headerFormat: '<b>{point.x}</b><br/>',
-                    pointFormat:
-                        '{point.x}-> {Date.parse(point.y/1000)}<br/>'
-                },
             series: []
         };
 

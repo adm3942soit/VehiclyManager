@@ -1,6 +1,6 @@
 package com.adonis.ui.renta;
 
-import com.vaadin.ui.AbstractJavaScriptComponent;
+import org.vaadin.highcharts.AbstractHighChart;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -12,7 +12,7 @@ import static java.util.Calendar.MONTH;
 
 @com.vaadin.annotations.JavaScript({"jquery-2.1.3.min.js",
         "highchartsLocal.js", "js_highChartRenta.js", "org/vaadin/highcharts/highcharts-connector.js"})
-public class JsHighChartRenta extends AbstractJavaScriptComponent {
+public class JsHighChartRenta extends AbstractHighChart {
 
 
     public JsHighChartRenta(String data, String id) {

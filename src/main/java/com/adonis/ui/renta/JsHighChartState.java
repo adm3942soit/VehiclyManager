@@ -1,8 +1,8 @@
 package com.adonis.ui.renta;
 
-import com.vaadin.shared.ui.JavaScriptComponentState;
+import org.vaadin.highcharts.HighChartState;
 
-public class JsHighChartState extends JavaScriptComponentState {
+public class JsHighChartState extends HighChartState {
     private static final long serialVersionUID = -1016346299843904188L;
 
     public String data;
