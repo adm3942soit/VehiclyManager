@@ -83,13 +83,9 @@ public class RentaCalendarForLastMonth extends CustomComponent implements View {
                         vehicleService.findByVehicleNumber(number).getModel() + " " + number + "(" + sdf.format(fromDate) + "-" + sdf.format(toDate) + "," +
                                 //OY
                                 //from date
-//                                String.valueOf(PaymentsUtils.round(Double.valueOf((fromDate.getTime() - monthAgo.getTime()) / hour))) + ", " +
-//                                String.valueOf(Double.valueOf(fromDate.getTime())) + ", " +
                                 String.valueOf(Double.valueOf(getUnixTime(getTimeStamp(fromDate)) - getUnixTime(getTimeStamp(monthAgo)))) + ", " +
 //
                                 //to date
-//                                String.valueOf(PaymentsUtils.round(Double.valueOf((toDate.getTime() - monthAgo.getTime()) / hour))) + ((i < numbers.size()) ? "\n" : "")
-//                                String.valueOf(Double.valueOf(toDate.getTime())) + ((i < numbers.size()) ? "\n" : "")
                                 String.valueOf(Double.valueOf(getUnixTime(getTimeStamp(toDate)) - getUnixTime(getTimeStamp(monthAgo)))) + ((i < numbers.size()) ? "\n" : "")
                 );
             }

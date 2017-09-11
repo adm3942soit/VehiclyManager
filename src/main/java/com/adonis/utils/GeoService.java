@@ -234,7 +234,7 @@ public class GeoService {
         return countryResponse;
     }
 
-    private class CountryCodes {
+    public class CountryCodes {
         final Map<String, String> map = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
 
         public CountryCodes() {
@@ -497,6 +497,9 @@ public class GeoService {
             }
             return countryFound;
         }
+        public Locale getLocaleByCountryName(String countryName){
+            return new Locale("en", getCode(countryName));
+        }
     }
 
     public CountryCodes getCountryCodes() {
@@ -506,7 +509,15 @@ public class GeoService {
     public List<String> getCountries() {
         return countryCodes.getCountries().stream().collect(Collectors.toList());
     }
-
+    public List<Locale> getLocales() {
+        List<Locale> locales = new ArrayList<>();
+        countryCodes.getCountries().stream().collect(Collectors.toList()).forEach(
+                country->{
+                    locales.add(new Locale("en", countryCodes.getCode(country)));
+                }
+        );
+        return locales;
+    }
     public String getCountryISOCode(String nameCountry) {
         return countryCodes.getCode(nameCountry);
     }

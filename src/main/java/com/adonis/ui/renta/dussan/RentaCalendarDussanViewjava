@@ -1,0 +1,141 @@
+package com.adonis.ui.renta.dussan;
+
+import com.adonis.data.service.PersonService;
+import com.adonis.data.service.RentaHistoryService;
+import com.adonis.data.service.VehicleService;
+import com.adonis.utils.DateUtils;
+import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.VerticalLayout;
+import org.dussan.vaadin.dcharts.DCharts;
+import org.dussan.vaadin.dcharts.base.elements.XYaxis;
+import org.dussan.vaadin.dcharts.data.DataSeries;
+import org.dussan.vaadin.dcharts.data.Ticks;
+import org.dussan.vaadin.dcharts.metadata.renderers.AxisRenderers;
+import org.dussan.vaadin.dcharts.metadata.renderers.SeriesRenderers;
+import org.dussan.vaadin.dcharts.options.Axes;
+import org.dussan.vaadin.dcharts.options.Highlighter;
+import org.dussan.vaadin.dcharts.options.Options;
+import org.dussan.vaadin.dcharts.options.SeriesDefaults;
+import org.joda.time.DateTime;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import static com.adonis.utils.NumberUtils.round;
+
+/**
+ * Created by oksdud on 12.04.2017.
+ */
+//@Widgetset( "org.dussan.vaadin.dtabs.demo.WidgetSet" )
+public class RentaCalendarDussanView extends CustomComponent implements View {//
+    /*http://vaadin.dussan.org/dchartsdemo/#additionalOptions/saveChartImage*/
+    public static final String NAME = "RENTA CALENDAR WITH BAR";
+    private PersonService service;
+    private RentaHistoryService rentaHistoryService;
+    private VehicleService vehicleService;
+
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+    HorizontalLayout viewLayout = new HorizontalLayout();
+    public RentaCalendarDussanView(PersonService personService, RentaHistoryService rentaHistoryService, VehicleService vehicleService) {
+
+        this.service = personService;
+        this.rentaHistoryService = rentaHistoryService;
+        this.vehicleService = vehicleService;
+
+        setSizeFull();
+
+        DCharts chart = initChart();
+
+        VerticalLayout verticalLayout = new VerticalLayout();
+        verticalLayout.setSizeFull();
+
+        if (chart != null) {
+            verticalLayout.addComponent(chart);
+            verticalLayout.setComponentAlignment(chart, Alignment.MIDDLE_CENTER);
+            verticalLayout.setExpandRatio(chart, 1.0f);
+            chart.show();
+        }
+
+        viewLayout.addComponent(verticalLayout);
+        viewLayout.setComponentAlignment(verticalLayout, Alignment.MIDDLE_CENTER);
+        viewLayout.setSizeFull();
+
+
+    }
+
+    private DCharts initChart() {
+
+        Double all = Double.valueOf(vehicleService.findAll().size());
+        if (all.equals(0.0)) {
+            return new DCharts();
+        }
+
+        SeriesDefaults seriesDefaults = new SeriesDefaults().setRenderer(SeriesRenderers.BAR);
+
+        Double hour = Double.valueOf((60 * 60 * 1000));
+
+        List<String> numbers = vehicleService.findAllActiveNumbers();
+        List<String> dates = new ArrayList<>();
+        List<String> labels = new ArrayList<>();
+        Date lastData = rentaHistoryService.getAvailableDate(numbers.get(0));
+        Date monthAgo = DateUtils.anyDaysAgo(lastData, 30);
+        Date nullDate = DateUtils.convertToDate("01/01/1970");
+        DateTime nullDateTime = new DateTime(nullDate);
+        DateTime monthAgoDateTime = new DateTime(monthAgo);
+        DataSeries dataVehiclesNumbers = new DataSeries();
+        StringBuffer categories= new StringBuffer("");
+        for (String number : numbers) {
+            DateTime lastAvailableData = new DateTime(rentaHistoryService.getAvailableDate(number));
+            String dateString = lastAvailableData.dayOfMonth().getAsShortText() + " " + lastAvailableData.monthOfYear().getAsShortText() + " " + lastAvailableData.year().getAsString();
+            categories.append( number + " last available date : " + dateString+",");
+            dataVehiclesNumbers
+                    .add(round(Double.valueOf(lastAvailableData.getMillis() - monthAgoDateTime.getMillis()) / hour));
+
+           dates.add(String.valueOf(round(Double.valueOf(lastAvailableData.getMillis() - nullDateTime.getMillis()) / hour)));//
+        }
+
+
+        /*dates*/
+        Axes axes = new Axes().addAxis(new XYaxis()
+                .setRenderer(AxisRenderers.CATEGORY)
+                .setTicks(new Ticks().add(categories.toString()))
+        );
+        Highlighter highlighter = new Highlighter().setShow(false);
+        Options options = new Options()
+                .setSeriesDefaults(seriesDefaults)
+                .setAxes(axes)
+                .setHighlighter(highlighter);
+
+        DCharts chart = new DCharts()
+                .setDataSeries(dataVehiclesNumbers)
+                .setOptions(options);
+
+        return chart;
+    }
+
+
+    @Override
+    public void enter(ViewChangeListener.ViewChangeEvent event) {
+
+    }
+
+//    @Override
+//    protected void init(VaadinRequest request) {
+//        setContent(viewLayout);
+//    }
+
+    public HorizontalLayout getViewLayout() {
+        return viewLayout;
+    }
+
+//    public View getCurrentPage() {
+//        View view = this.getCurrent().getNavigator().getCurrentView();
+//        return view;
+//    }
+}
