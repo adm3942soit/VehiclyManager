@@ -37,7 +37,7 @@ import static com.adonis.utils.NumberUtils.round;
 
 public class RentaCalendarView extends CustomComponent implements View {
     /*https://github.com/downdrown/VaadinHighChartsAPI-Demo/blob/master/src/main/java/at/downdrown/vaadinaddons/demoui/views/BarChartExamples.java*/
-    public static final String NAME = "RENTA CALENDAR";
+    public static final String NAME = "CALENDAR AVAILABLE DATES FOR VIHICLES";
     private PersonService service;
     private RentaHistoryService rentaHistoryService;
     private VehicleService vehicleService;
