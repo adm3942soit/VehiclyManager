@@ -182,12 +182,12 @@ public class RentaCalendarView extends GridLayout implements View {
 
         Date start = resolveFirstDateOfWeek(today, calendar);
         Date end = resolveLastDateOfWeek(today, calendar);
-        CalendarTestEvent event = getNewEvent("Whole week", start, end);
-        event.setAllDay(true);
-        event.setStyleName("color4");
-        event.setDescription("Description for the whole week event.");
-        dataSource.addEvent(event);
-
+//        CalendarTestEvent event = getNewEvent("Whole week", start, end);
+//        event.setAllDay(true);
+//        event.setStyleName("color4");
+//        event.setDescription("Description for the whole week event.");
+//        dataSource.addEvent(event);
+        CalendarTestEvent event;
         int i=1;
         List<String> numbers = vehicleService.findAllActiveNumbers();
         for (String number : numbers) {
@@ -267,6 +267,8 @@ public class RentaCalendarView extends GridLayout implements View {
         addComponent(hl);
         addComponent(calendarComponent);
         setRowExpandRatio(getRows() - 1, 1.0f);
+        setSizeFull();
+        setPrimaryStyleName(ValoTheme.FORMLAYOUT_LIGHT);
     }
     private void initNavigationButtons() {
         monthButton = new Button("Month", new Button.ClickListener() {
@@ -537,7 +539,7 @@ public class RentaCalendarView extends GridLayout implements View {
         }
 
         Date today = getToday();
-        calendar = new GregorianCalendar(getLocale());
+        calendar = new GregorianCalendar(new Locale("lv","LV"));
         calendar.setTime(today);
         calendarComponent.getInternalCalendar().setTime(today);
 
@@ -703,8 +705,7 @@ public class RentaCalendarView extends GridLayout implements View {
             }
         }
 
-        s.select(geoService.getCountryCodes().getCode("Latvia"));//Locale.getDefault());
-        s.setValue(geoService.getCountryCodes().getCode("Latvia"));//?????
+        s.select(geoService.getCountryCodes().getLocaleByCountryName("Latvia"));//Locale.getDefault());
         s.setImmediate(true);
         s.addValueChangeListener(new Property.ValueChangeListener() {
 
