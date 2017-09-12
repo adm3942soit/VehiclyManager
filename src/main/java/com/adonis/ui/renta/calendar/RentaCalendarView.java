@@ -6,6 +6,7 @@ import com.adonis.data.service.VehicleService;
 import com.adonis.utils.GeoService;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
@@ -295,7 +296,6 @@ public class RentaCalendarView extends GridLayout implements View {
                         .get(GregorianCalendar.YEAR)));
             }
         });
-
         dayButton = new Button("Day", new Button.ClickListener() {
 
             private static final long serialVersionUID = 1L;
@@ -309,8 +309,7 @@ public class RentaCalendarView extends GridLayout implements View {
                         calendar.getTime()));
             }
         });
-
-        nextButton = new Button("Next", new Button.ClickListener() {
+        nextButton = new Button("", new Button.ClickListener() {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -318,8 +317,9 @@ public class RentaCalendarView extends GridLayout implements View {
                 handleNextButtonClick();
             }
         });
-
-        prevButton = new Button("Prev", new Button.ClickListener() {
+        nextButton.setPrimaryStyleName(ValoTheme.BUTTON_ICON_ONLY);
+        nextButton.setIcon(new ThemeResource("img/prev.jpg"));
+        prevButton = new Button("", new Button.ClickListener() {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -327,6 +327,9 @@ public class RentaCalendarView extends GridLayout implements View {
                 handlePreviousButtonClick();
             }
         });
+        prevButton.setPrimaryStyleName(ValoTheme.BUTTON_ICON_ONLY);
+        prevButton.setIcon(new ThemeResource("img/next.jpg"));
+
     }
 
     private void initHideWeekEndButton() {
