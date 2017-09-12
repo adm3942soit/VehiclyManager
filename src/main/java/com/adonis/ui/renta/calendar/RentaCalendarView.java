@@ -28,7 +28,7 @@ import java.text.DateFormatSymbols;
 import java.util.*;
 
 public class RentaCalendarView extends GridLayout implements View {
-    /*https://vaadin.com/directory#!addon/vaadin-calendar*/
+    /*https://github.com/vaadin/valo-demo/blob/master/src/main/java/com/vaadin/tests/themes/valo/CalendarTest.java*/
     public static final String NAME = "RENTA CALENDAR VIEW";
     private enum Mode {
         MONTH, WEEK, DAY;
