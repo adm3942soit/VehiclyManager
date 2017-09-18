@@ -318,7 +318,7 @@ public class RentaCalendarView extends GridLayout implements View {
             }
         });
         nextButton.setPrimaryStyleName(ValoTheme.BUTTON_ICON_ONLY);
-        nextButton.setIcon(new ThemeResource("img/prev.jpg"));
+        nextButton.setIcon(new ThemeResource("img/next.jpg"));
         prevButton = new Button("", new Button.ClickListener() {
             private static final long serialVersionUID = 1L;
 
@@ -328,7 +328,7 @@ public class RentaCalendarView extends GridLayout implements View {
             }
         });
         prevButton.setPrimaryStyleName(ValoTheme.BUTTON_ICON_ONLY);
-        prevButton.setIcon(new ThemeResource("img/next.jpg"));
+        prevButton.setIcon(new ThemeResource("img/prev.jpg"));
 
     }
 

@@ -2,9 +2,8 @@ package com.adonis.ui.addFields;
 
 import com.adonis.data.persons.Person;
 import com.adonis.data.renta.RentaHistory;
-import com.adonis.ui.MainUI;
 import com.adonis.ui.print.PrintReginaUI;
-import com.adonis.utils.PaymentsUtils;
+import com.adonis.utils.payPal.PaymentsPayPalUtils;
 import com.vaadin.server.BrowserWindowOpener;
 import com.vaadin.server.ExternalResource;
 import com.vaadin.server.ThemeResource;
@@ -22,7 +21,7 @@ public class RentaPaymentField extends com.vaadin.v7.ui.CustomField<Boolean> {
     private RentaHistory rentaHistory;
     private FormLayout layout = new FormLayout();
     private com.vaadin.v7.ui.CheckBox field = new com.vaadin.v7.ui.CheckBox("");
-    private PaymentsUtils paymentsUtils = null;// = PaymentsUtils.getInstance();
+    private PaymentsPayPalUtils paymentsUtils = null;// = PaymentsUtils.getInstance();
     com.vaadin.v7.ui.TextArea fieldResult = new com.vaadin.v7.ui.TextArea("");
 
     private Double summa;
@@ -64,7 +63,9 @@ public class RentaPaymentField extends com.vaadin.v7.ui.CustomField<Boolean> {
     }
 
     private void initPayPalButton() {
-        if( paymentsUtils == null )paymentsUtils = PaymentsUtils.getInstance();
+        if( paymentsUtils == null ) {
+            paymentsUtils = PaymentsPayPalUtils.getInstance();
+        }
         paypal = new Button(null, new ExternalResource("https://www.paypal.com/en_US/i/btn/btn_dg_pay_w_paypal.gif"));//new ExternalResource(value));
         paypal.setPrimaryStyleName(ValoTheme.BUTTON_ICON_ONLY);
         paypal.addClickListener(new Button.ClickListener() {
@@ -72,12 +73,19 @@ public class RentaPaymentField extends com.vaadin.v7.ui.CustomField<Boolean> {
             public void buttonClick(Button.ClickEvent event) {
                 try {
 
-                    value = paymentsUtils.payWithPaypalAcc(
-                            rentaHistory!=null? MainUI.getRentaHistoryCrudView().getPersonService().findByName(rentaHistory.getPerson()):
-                            person!=null?person:null, summa.longValue());//, "access_token$sandbox$dkfqgn25cxb7z4t5$29193a5f4e04ed44168c1ccdf45ad5ff");
-                    Notification.show("Successfully!");
-                    fieldResult.setValue("Successfully!");
-                    fieldResult.setVisible(true);
+//                    value = paymentsUtils.payWithPaypalAcc(
+//                            rentaHistory!=null? MainUI.getRentaHistoryCrudView().getPersonService().findByName(rentaHistory.getPerson()):
+//                            person!=null?person:null, summa.longValue());//, "access_token$sandbox$dkfqgn25cxb7z4t5$29193a5f4e04ed44168c1ccdf45ad5ff");
+                    value = paymentsUtils.payment("asyadudnik@hotmail.com", "adm3942soit@gmail.com");
+                    if(value) {
+                        Notification.show("Successfully!");
+                        fieldResult.setValue("Successfully!");
+                        fieldResult.setVisible(true);
+                    }else {
+                        Notification.show("Errors!");
+                        fieldResult.setValue("Errors!");
+                        fieldResult.setVisible(true);
+                    }
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -88,7 +96,7 @@ public class RentaPaymentField extends com.vaadin.v7.ui.CustomField<Boolean> {
                 field.setValue(value);
             }
         });
-        paypal.setEnabled(false);//!!!!
+        paypal.setEnabled(true);//!!!!
     }
     private void initPrintButton() {
         print = new Button(null, new ExternalResource("https://www.paypal.com/en_US/i/btn/btn_dg_pay_w_paypal.gif"));//new ExternalResource(value));
