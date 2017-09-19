@@ -12,6 +12,7 @@ import com.paypal.core.rest.PayPalRESTException;
 import com.paypal.core.rest.PayPalResource;
 import com.paypal.exception.*;
 import com.paypal.sdk.exceptions.OAuthException;
+import com.paypal.svcs.services.AdaptivePaymentsService;
 import com.paypal.svcs.types.ap.PayRequest;
 import com.paypal.svcs.types.ap.PayResponse;
 import com.paypal.svcs.types.ap.Receiver;
@@ -73,8 +74,10 @@ public class PaymentsPayPalUtils {
     private void initProperties(){
         Map<String, String> customConfigurationMap = new HashMap<String, String>();
         customConfigurationMap.put("mode", "sandbox");
-        customConfigurationMap.put("acct1.UserName", "adm3942soit@gmail.com");
-        customConfigurationMap.put("acct1.Password", "libra280963");
+        customConfigurationMap.putAll(ConfigManager.getInstance().getConfigurationMap());
+        adaptivePaymentsService = new AdaptivePaymentsService(customConfigurationMap);
+//        customConfigurationMap.put("acct1.UserName", "adm3942soit@gmail.com");
+//        customConfigurationMap.put("acct1.Password", "libra280963");
 
     }
     private PaymentsPayPalUtils() {
@@ -85,6 +88,7 @@ public class PaymentsPayPalUtils {
         systemConfig.put("paypal_accessTokenLiveTime", "28800");
         systemConfig.put("ip", geoService.getIpAdress());
         initPayPal();
+        initProperties();
 
 //        try {
 //            updateAccessToken();

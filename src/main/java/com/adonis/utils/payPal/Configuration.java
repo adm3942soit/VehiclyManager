@@ -13,10 +13,10 @@ public class Configuration {
         configMap.putAll(getConfig());
 
         // Account Credential
-        configMap.put("acct1.UserName", "jb-us-seller_api1.paypal.com");
-        configMap.put("acct1.Password", "WX4WTU3S8MY44S7F");
-        configMap.put("acct1.Signature", "AFcWxV21C7fd0v3bYYYRCpSSRl31A7yDhhsPUU2XhtMoZXsWHFxu-RWy");
-        configMap.put("acct1.AppId", "APP-80W284485P519543T");
+//        configMap.put("acct1.UserName", "jb-us-seller_api1.paypal.com");
+//        configMap.put("acct1.Password", "WX4WTU3S8MY44S7F");
+//        configMap.put("acct1.Signature", "AFcWxV21C7fd0v3bYYYRCpSSRl31A7yDhhsPUU2XhtMoZXsWHFxu-RWy");
+//        configMap.put("acct1.AppId", "APP-80W284485P519543T");
         adaptivePaymentsService = new AdaptivePaymentsService(configMap);
         // Sample Certificate credential
         // configMap.put("acct2.UserName", "certuser_biz_api1.paypal.com");
