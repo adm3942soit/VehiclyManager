@@ -239,12 +239,19 @@ public class RentaCalendarView extends GridLayout implements View {
         controlPanel.setSpacing(true);
         controlPanel.setWidth("100%");
         controlPanel.setMargin(new MarginInfo(false, false, true, false));
+        Label viewCaption = new Label("Calendar");
+        viewCaption.addStyleName(ValoTheme.LABEL_H4);
+//        viewCaption.addStyleName(ValoTheme.LABEL_NO_MARGIN);
+//        viewCaption.setPrimaryStyleName(ValoTheme.BUTTON_ICON_ONLY);
+        viewCaption.setIcon(new ThemeResource("img/calendar.png"));
+        controlPanel.addComponent(viewCaption);
+
         controlPanel.addComponent(localeSelect);
         controlPanel.addComponent(timeZoneSelect);
         controlPanel.addComponent(formatSelect);
         controlPanel.addComponent(hideWeekendsButton);
-        controlPanel.addComponent(readOnlyButton);
-        controlPanel.addComponent(disabledButton);
+//        controlPanel.addComponent(readOnlyButton);
+//        controlPanel.addComponent(disabledButton);
 //        controlPanel.addComponent(addNewEvent);
 //        controlPanel.setExpandRatio(addNewEvent, 1.0f);
 
@@ -254,16 +261,12 @@ public class RentaCalendarView extends GridLayout implements View {
         controlPanel.setComponentAlignment(localeSelect, Alignment.MIDDLE_LEFT);
         controlPanel.setComponentAlignment(hideWeekendsButton,
                 Alignment.BOTTOM_LEFT);
-        controlPanel.setComponentAlignment(readOnlyButton,
-                Alignment.BOTTOM_LEFT);
-        controlPanel.setComponentAlignment(disabledButton,
-                Alignment.BOTTOM_LEFT);
+//        controlPanel.setComponentAlignment(readOnlyButton,
+//                Alignment.BOTTOM_LEFT);
+//        controlPanel.setComponentAlignment(disabledButton,
+//                Alignment.BOTTOM_LEFT);
 //        controlPanel.setComponentAlignment(addNewEvent, Alignment.BOTTOM_RIGHT);
-
-        Label viewCaption = new Label("Calendar");
-        viewCaption.addStyleName(ValoTheme.LABEL_H1);
-        viewCaption.addStyleName(ValoTheme.LABEL_NO_MARGIN);
-        addComponent(viewCaption);
+//        addComponent(horizontalLayout);
         addComponent(controlPanel);
         addComponent(hl);
         addComponent(calendarComponent);
@@ -272,7 +275,7 @@ public class RentaCalendarView extends GridLayout implements View {
         setPrimaryStyleName(ValoTheme.FORMLAYOUT_LIGHT);
     }
     private void initNavigationButtons() {
-        monthButton = new Button("Month", new Button.ClickListener() {
+        monthButton = new Button("", new Button.ClickListener() {
 
             private static final long serialVersionUID = 1L;
 
@@ -281,8 +284,11 @@ public class RentaCalendarView extends GridLayout implements View {
                 switchToMonthView();
             }
         });
+        monthButton.setPrimaryStyleName(ValoTheme.BUTTON_ICON_ONLY);
+        monthButton.setIcon(new ThemeResource("img/month.jpg"));
+        monthButton.setEnabled(true);
 
-        weekButton = new Button("Week", new Button.ClickListener() {
+        weekButton = new Button("", new Button.ClickListener() {
 
             private static final long serialVersionUID = 1L;
 
@@ -296,7 +302,10 @@ public class RentaCalendarView extends GridLayout implements View {
                         .get(GregorianCalendar.YEAR)));
             }
         });
-        dayButton = new Button("Day", new Button.ClickListener() {
+        weekButton.setPrimaryStyleName(ValoTheme.BUTTON_ICON_ONLY);
+        weekButton.setIcon(new ThemeResource("img/week.jpg"));
+
+        dayButton = new Button("", new Button.ClickListener() {
 
             private static final long serialVersionUID = 1L;
 
@@ -309,6 +318,9 @@ public class RentaCalendarView extends GridLayout implements View {
                         calendar.getTime()));
             }
         });
+        dayButton.setPrimaryStyleName(ValoTheme.BUTTON_ICON_ONLY);
+        dayButton.setIcon(new ThemeResource("img/Day.jpg"));
+
         nextButton = new Button("", new Button.ClickListener() {
             private static final long serialVersionUID = 1L;
 
