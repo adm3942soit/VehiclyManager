@@ -121,7 +121,6 @@ public class RentaCalendarView extends GridLayout implements View {
     private com.vaadin.v7.ui.DateField endDateField;
 
     public RentaCalendarView(PersonService personService, RentaHistoryService rentaHistoryService, VehicleService vehicleService) {
-        HorizontalLayout viewLayout = new HorizontalLayout();
 
         this.personService = personService;
         this.rentaHistoryService = rentaHistoryService;
@@ -131,6 +130,8 @@ public class RentaCalendarView extends GridLayout implements View {
         setSpacing(true);
 
         setSizeFull();
+        setPrimaryStyleName(ValoTheme.PANEL_WELL);
+        addStyleName("backImage");
         setLocale(Locale.getDefault());
 
         localeSelect = createLocaleSelect();
@@ -140,14 +141,6 @@ public class RentaCalendarView extends GridLayout implements View {
         initCalendar();
         initLayoutContent();
         addInitialEvents();
-//
-//        VerticalLayout verticalLayout = new VerticalLayout();
-//        verticalLayout.setSizeFull();
-//
-//
-//        viewLayout.addComponent(verticalLayout);
-//        viewLayout.setComponentAlignment(verticalLayout, Alignment.MIDDLE_CENTER);
-//        viewLayout.setSizeFull();
     }
 
     private Date resolveFirstDateOfWeek(Date today,
@@ -236,6 +229,7 @@ public class RentaCalendarView extends GridLayout implements View {
         // weekButton.setVisible(viewMode == Mode.DAY);
 
         HorizontalLayout controlPanel = new HorizontalLayout();
+        controlPanel.setPrimaryStyleName(ValoTheme.PANEL_WELL);
         controlPanel.setSpacing(true);
         controlPanel.setWidth("100%");
         controlPanel.setMargin(new MarginInfo(false, false, true, false));
