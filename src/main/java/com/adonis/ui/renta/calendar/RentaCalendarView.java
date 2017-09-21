@@ -239,13 +239,16 @@ public class RentaCalendarView extends GridLayout implements View {
         controlPanel.setSpacing(true);
         controlPanel.setWidth("100%");
         controlPanel.setMargin(new MarginInfo(false, false, true, false));
-        Label viewCaption = new Label("Calendar");
+        Label viewCaption = new Label("");//Calendar
         viewCaption.addStyleName(ValoTheme.LABEL_H4);
 //        viewCaption.addStyleName(ValoTheme.LABEL_NO_MARGIN);
 //        viewCaption.setPrimaryStyleName(ValoTheme.BUTTON_ICON_ONLY);
-        viewCaption.setIcon(new ThemeResource("img/calendar.png"));
+        viewCaption.setIcon(new ThemeResource("img/calendar.jpg"));
         controlPanel.addComponent(viewCaption);
-
+//        localeSelect.setPrimaryStyleName(ValoTheme.COMBOBOX_LARGE);
+//        timeZoneSelect.setPrimaryStyleName(ValoTheme.COMBOBOX_LARGE);
+//        formatSelect.setPrimaryStyleName(ValoTheme.COMBOBOX_LARGE);
+        hideWeekendsButton.setPrimaryStyleName(ValoTheme.CHECKBOX_LARGE);
         controlPanel.addComponent(localeSelect);
         controlPanel.addComponent(timeZoneSelect);
         controlPanel.addComponent(formatSelect);
@@ -285,7 +288,7 @@ public class RentaCalendarView extends GridLayout implements View {
             }
         });
         monthButton.setPrimaryStyleName(ValoTheme.BUTTON_ICON_ONLY);
-        monthButton.setIcon(new ThemeResource("img/month.jpg"));
+        monthButton.setIcon(new ThemeResource("img/month.png"));
         monthButton.setEnabled(true);
 
         weekButton = new Button("", new Button.ClickListener() {
@@ -303,7 +306,7 @@ public class RentaCalendarView extends GridLayout implements View {
             }
         });
         weekButton.setPrimaryStyleName(ValoTheme.BUTTON_ICON_ONLY);
-        weekButton.setIcon(new ThemeResource("img/week.jpg"));
+        weekButton.setIcon(new ThemeResource("img/week.png"));
 
         dayButton = new Button("", new Button.ClickListener() {
 

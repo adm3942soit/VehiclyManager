@@ -49,7 +49,7 @@ public class MainScreen extends HorizontalLayout implements View {
 
     public MainScreen(MainUI ui) {
         setStyleName("main-screen");
-
+        setPrimaryStyleName(ValoTheme.PANEL_WELL);
         CssLayout viewContainer = new CssLayout();
         viewContainer.addStyleName("valo-content");
         viewContainer.setSizeFull();
@@ -73,7 +73,7 @@ public class MainScreen extends HorizontalLayout implements View {
 //        RentaCalendarDussanView rentaCalendarDussanView = new RentaCalendarDussanView(ui.service, ui.rentaHistoryService, ui.vehicleService);
 //        rentaCalendarDussanView.scrollIntoView(rentaCalendarDussanView.getViewLayout());
 //        menu.addView(rentaCalendarDussanView, RentaCalendarDussanView.NAME, RentaCalendarDussanView.NAME, new ThemeResource("img/barChartPNG.png"));
-        menu.addView(new com.adonis.ui.renta.calendar.RentaCalendarView(personService, rentaHistoryService, vehicleService), com.adonis.ui.renta.calendar.RentaCalendarView.NAME, com.adonis.ui.renta.calendar.RentaCalendarView.NAME, new ThemeResource("img/barChartPNG.png"));
+        menu.addView(new com.adonis.ui.renta.calendar.RentaCalendarView(personService, rentaHistoryService, vehicleService), com.adonis.ui.renta.calendar.RentaCalendarView.NAME, com.adonis.ui.renta.calendar.RentaCalendarView.NAME, new ThemeResource("img/chart2.jpg"));
         menu.addView(new RegistrationUI(ui.service), "CUSTOMER REGISTRATION", "CUSTOMER REGISTRATION", new ThemeResource("img/Register-Today.jpg"));
         menu.addView(new PersonUI(ui.service, true, MainUI.loginPerson), "PROFILE", "PROFILE", new ThemeResource("img/user-icon.jpg"));
         menu.addView(new PrintView(ui.service, ui.rentaHistoryService), "PRINT", "PRINT", new ThemeResource("img/print-icon.jpg"));
