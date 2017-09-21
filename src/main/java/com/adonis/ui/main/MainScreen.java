@@ -52,6 +52,7 @@ public class MainScreen extends HorizontalLayout implements View {
         setPrimaryStyleName(ValoTheme.PANEL_WELL);
         CssLayout viewContainer = new CssLayout();
         viewContainer.addStyleName("valo-content");
+        addStyleName("backImage");
         viewContainer.setSizeFull();
 
         navigator = new Navigator(ui, viewContainer);

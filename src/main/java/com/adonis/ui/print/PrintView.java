@@ -40,7 +40,7 @@ public class PrintView extends CustomComponent implements View {
         this.rentaHistoryService = rentaHistoryService;
         setSizeFull();
         addStyleName(ValoTheme.LAYOUT_WELL);
-
+        addStyleName("backImage");
         com.vaadin.v7.ui.TextArea fieldResult = new com.vaadin.v7.ui.TextArea("Result");
         fieldResult.setPrimaryStyleName(ValoTheme.TEXTAREA_SMALL);
         fieldResult.setEnabled(false);

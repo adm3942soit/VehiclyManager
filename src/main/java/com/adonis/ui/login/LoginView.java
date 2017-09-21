@@ -29,17 +29,21 @@ public class LoginView extends CssLayout implements View {
     public LoginView(PersonService personService, LoginListener loginListener){
         setSizeFull();
         this.service = personService;
-        addStyleName("login-screen");
+        addStyleName("loginImage");
         loginFormLayout = new HorizontalLayout();
-        loginFormLayout.setSizeFull();
-        VerticalLayout centeringLayout = new VerticalLayout();
-        centeringLayout.setStyleName("centering-layout");
-        centeringLayout.setSizeFull();
-        centeringLayout.addStyleName(ValoTheme.PANEL_WELL);
+        loginFormLayout.setWidth(100f, Unit.PERCENTAGE);
+        loginFormLayout.setHeight(100.00f, Unit.PERCENTAGE);
 
+        loginFormLayout.addStyleName("backImage");
+
+        VerticalLayout centeringLayout = new VerticalLayout();
+
+        centeringLayout.setWidth(50f, Unit.PERCENTAGE);
+        centeringLayout.setHeight(50.00f, Unit.PERCENTAGE);
+
+        centeringLayout.setPrimaryStyleName("centering-layout");
         loginForm = new LoginForm();
-        loginForm.setStyleName(ValoTheme.FORMLAYOUT_LIGHT);
-        loginForm.setPrimaryStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
+        loginForm.setSizeFull();
 
         updateCaption();
         loginForm.setSizeFull();
@@ -50,12 +54,10 @@ public class LoginView extends CssLayout implements View {
             }
         });
         centeringLayout.addComponent(loginForm);
-        centeringLayout.setComponentAlignment(loginForm,
-                Alignment.MIDDLE_CENTER);
+        centeringLayout.setComponentAlignment(loginForm, Alignment.MIDDLE_CENTER);
         loginFormLayout.addComponent(centeringLayout);
         loginFormLayout.setComponentAlignment(centeringLayout, Alignment.MIDDLE_CENTER);
         addComponent(loginFormLayout);
-
     }
     protected void updateCaption() {
         float width = loginForm.getWidth();

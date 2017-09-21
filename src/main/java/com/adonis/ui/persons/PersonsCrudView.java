@@ -7,7 +7,6 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.ValoTheme;
 import com.vaadin.v7.data.util.BeanItemContainer;
 import com.vaadin.v7.ui.ComboBox;
 import com.vaadin.v7.ui.DateField;
@@ -37,7 +36,8 @@ public class PersonsCrudView extends VerticalLayout implements View {
     public PersonsCrudView(PersonService personService) {
         this.personService = personService;
         setSizeFull();
-        setStyleName(ValoTheme.FORMLAYOUT_LIGHT);
+        addStyleName("backImage");
+//        setStyleName(ValoTheme.FORMLAYOUT_LIGHT);
 
         setPersonsCrudProperties(personService);
         addComponent(personsCrud);

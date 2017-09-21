@@ -30,6 +30,7 @@ public class XlsView extends CustomComponent implements View {
         this.vehicleService = vehicleService;
         setSizeFull();
         addStyleName(ValoTheme.LAYOUT_WELL);
+        addStyleName("backImage");
 
         Form f = new Form();
         f.setPrimaryStyleName(ValoTheme.TABLE_COMPACT);

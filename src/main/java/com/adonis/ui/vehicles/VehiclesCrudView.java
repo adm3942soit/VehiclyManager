@@ -30,7 +30,7 @@ public class VehiclesCrudView extends VerticalLayout implements View {
     public VehiclesCrudView(VehicleService vehicleService) {
         setSizeFull();
         setStyleName(ValoTheme.FORMLAYOUT_LIGHT);
-
+        addStyleName("backImage");
         setVehiclesCrudProperties(vehicleService);
         addComponent(vehiclesCrud);
         objects = vehicleService.findAll();

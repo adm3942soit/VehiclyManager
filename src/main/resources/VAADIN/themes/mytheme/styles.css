@@ -12986,6 +12986,10 @@ div.v-layout.v-horizontal.v-widget {
 	overflow: hidden;
 }
 .mytheme .backImage{
-	background: burlywood;
-    background-image: url(#{$login-background-image})
+	background:lightsalmon;
+    background-image: url(#{$login-background-image});
+}
+.mytheme .loginImage{
+	/*background:lightsalmon;*/
+	background-image: url("img/archetype-login-bg.jpg");
 }

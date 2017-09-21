@@ -31,7 +31,7 @@ public class VehicleModelsCrudView extends VerticalLayout implements View {
     public VehicleModelsCrudView(VehicleService vehicleService) {
         setSizeFull();
         setStyleName(ValoTheme.FORMLAYOUT_LIGHT);
-
+        addStyleName("backImage");
         setVehiclesCrudProperties(vehicleService);
         addComponent(vehiclesCrud);
         setComponentAlignment(vehiclesCrud, Alignment.MIDDLE_CENTER);

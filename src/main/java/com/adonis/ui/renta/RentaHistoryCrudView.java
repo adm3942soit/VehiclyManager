@@ -122,6 +122,7 @@ public class RentaHistoryCrudView extends VerticalLayout implements View {
         this.vehicleService = vehicleService;
         setSizeFull();
         setStyleName(ValoTheme.FORMLAYOUT_LIGHT);
+        addStyleName("backImage");
 
         objects = service.findAll();
 
