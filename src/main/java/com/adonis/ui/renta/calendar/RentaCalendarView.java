@@ -173,13 +173,13 @@ public class RentaCalendarView extends GridLayout implements View {
         Date originalDate = calendar.getTime();
         Date today = getToday();
 
-        // Add a event that last a whole week
+        // Add a event that last a current week
 
         Date start = resolveFirstDateOfWeek(today, calendar);
         Date end = resolveLastDateOfWeek(today, calendar);
-        CalendarTestEvent event = getNewEvent("Whole week", start, end);
+        CalendarTestEvent event = getNewEvent("Current week", start, end);
         event.setAllDay(true);
-        event.setStyleName("color4");
+        event.setStyleName("colorCurrentWeek");
         event.setDescription("Current week");
         dataSource.addEvent(event);
         int i=1;
@@ -193,7 +193,8 @@ public class RentaCalendarView extends GridLayout implements View {
             end = toDate;
             event = getNewEvent("Vehicle "+number+" "+vehicleService.findByVehicleNumber(number).getModel()
                     , start, end);
-            event.setStyleName("color"+i);
+            int j = Integer.valueOf(String.valueOf(i).substring(0,1));
+            event.setStyleName("color"+j);
             dataSource.addEvent(event);
             i++;
         }
@@ -201,14 +202,16 @@ public class RentaCalendarView extends GridLayout implements View {
     }
 
     private void initLayoutContent() {
+
         initNavigationButtons();
         initHideWeekEndButton();
-        initReadOnlyButton();
-        initDisabledButton();
+//        initReadOnlyButton();
+//        initDisabledButton();
 //        initAddNewEventButton();
 
         HorizontalLayout hl = new HorizontalLayout();
         hl.setWidth("100%");
+//        hl.setHeight("15%");
         hl.setSpacing(true);
         hl.addComponent(prevButton);
         hl.addComponent(captionLabel);
@@ -233,6 +236,7 @@ public class RentaCalendarView extends GridLayout implements View {
         controlPanel.setPrimaryStyleName(ValoTheme.PANEL_WELL);
         controlPanel.setSpacing(true);
         controlPanel.setWidth("100%");
+//        controlPanel.setHeight("15%");
         controlPanel.setMargin(new MarginInfo(false, false, true, false));
         Label viewCaption = new Label("");//Calendar
         viewCaption.addStyleName(ValoTheme.LABEL_H4);
@@ -243,7 +247,7 @@ public class RentaCalendarView extends GridLayout implements View {
 //        localeSelect.setPrimaryStyleName(ValoTheme.COMBOBOX_LARGE);
 //        timeZoneSelect.setPrimaryStyleName(ValoTheme.COMBOBOX_LARGE);
 //        formatSelect.setPrimaryStyleName(ValoTheme.COMBOBOX_LARGE);
-        hideWeekendsButton.setPrimaryStyleName(ValoTheme.CHECKBOX_LARGE);
+        hideWeekendsButton.setPrimaryStyleName(ValoTheme.CHECKBOX_SMALL);
         controlPanel.addComponent(localeSelect);
         controlPanel.addComponent(timeZoneSelect);
         controlPanel.addComponent(formatSelect);
@@ -253,12 +257,10 @@ public class RentaCalendarView extends GridLayout implements View {
 //        controlPanel.addComponent(addNewEvent);
 //        controlPanel.setExpandRatio(addNewEvent, 1.0f);
 
-        controlPanel.setComponentAlignment(timeZoneSelect,
-                Alignment.MIDDLE_LEFT);
+        controlPanel.setComponentAlignment(timeZoneSelect,Alignment.MIDDLE_LEFT);
         controlPanel.setComponentAlignment(formatSelect, Alignment.MIDDLE_LEFT);
         controlPanel.setComponentAlignment(localeSelect, Alignment.MIDDLE_LEFT);
-        controlPanel.setComponentAlignment(hideWeekendsButton,
-                Alignment.BOTTOM_LEFT);
+        controlPanel.setComponentAlignment(hideWeekendsButton, Alignment.MIDDLE_LEFT);
 //        controlPanel.setComponentAlignment(readOnlyButton,
 //                Alignment.BOTTOM_LEFT);
 //        controlPanel.setComponentAlignment(disabledButton,
@@ -266,7 +268,9 @@ public class RentaCalendarView extends GridLayout implements View {
 //        controlPanel.setComponentAlignment(addNewEvent, Alignment.BOTTOM_RIGHT);
 //        addComponent(horizontalLayout);
         addComponent(controlPanel);
+        setComponentAlignment(controlPanel, Alignment.TOP_LEFT);
         addComponent(hl);
+        setComponentAlignment(hl, Alignment.MIDDLE_CENTER);
         addComponent(calendarComponent);
         setRowExpandRatio(getRows() - 1, 1.0f);
         setSizeFull();

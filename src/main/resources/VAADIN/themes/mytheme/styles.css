@@ -11358,6 +11358,42 @@ div.v-layout.v-horizontal.v-widget {
 	background-color: #c8eaf4;
 	background-color: rgba(200, 234, 244, 0.8);
 }
+.mytheme .v-calendar-event-month[class*="colorCurrentWeek"]:before {
+	color: black;
+}
+
+.mytheme .v-calendar-event-all-day[class*="colorCurrentWeek"] {
+	background-color: #ce3812;
+	background-color: rgba(241, 211, 203, 0.8);
+	color: black;
+}
+
+.mytheme .v-calendar-week-wrapper .v-calendar-event[class*="colorCurrentWeek"] {
+	color: black;
+}
+
+.mytheme .v-calendar-week-wrapper .v-calendar-event[class*="colorCurrentWeek"] .v-calendar-event-content {
+	background-color: #ce3812;
+	background-color: rgba(241, 211, 203, 0.8);
+}
+.mytheme .v-calendar-event-month[class*="color1"]:before {
+	color: darkcyan;
+}
+
+.mytheme .v-calendar-event-all-day[class*="color1"] {
+	background-color: cyan;
+	background-color: rgba(209, 231, 205, 0.8);
+	color: darkcyan;
+}
+
+.mytheme .v-calendar-week-wrapper .v-calendar-event[class*="color1"] {
+	color: darkcyan;
+}
+
+.mytheme .v-calendar-week-wrapper .v-calendar-event[class*="color1"] .v-calendar-event-content {
+	background-color: cyan;
+	background-color: rgba(209, 231, 205, 0.8);
+}
 
 .mytheme .v-calendar-event-month[class*="color2"]:before {
 	color: #2d9f19;
@@ -11433,6 +11469,88 @@ div.v-layout.v-horizontal.v-widget {
 .mytheme .v-calendar-week-wrapper .v-calendar-event[class*="color5"] .v-calendar-event-content {
 	background-color: #d1d9f1;
 	background-color: rgba(209, 217, 241, 0.8);
+}
+
+.mytheme .v-calendar-event-month[class*="color5"]:before {
+			  color: lightcoral;
+}
+
+.mytheme .v-calendar-event-all-day[class*="color5"] {
+	background-color: lemonchiffon;
+	color: lightcoral;
+}
+
+.mytheme .v-calendar-week-wrapper .v-calendar-event[class*="color5"] {
+	color: lightcoral;
+}
+
+.mytheme .v-calendar-week-wrapper .v-calendar-event[class*="color5"] .v-calendar-event-content {
+	background-color: lemonchiffon;
+}
+.mytheme .v-calendar-event-month[class*="color6"]:before {
+	color: lawngreen;
+}
+
+.mytheme .v-calendar-event-all-day[class*="color6"] {
+	background-color: lavender;
+	color: lawngreen;
+}
+
+.mytheme .v-calendar-week-wrapper .v-calendar-event[class*="color6"] {
+	color: lawngreen;
+}
+
+.mytheme .v-calendar-week-wrapper .v-calendar-event[class*="color6"] .v-calendar-event-content {
+	background-color: lavender;
+}
+
+.mytheme .v-calendar-event-month[class*="color7"]:before {
+	color: red;
+}
+
+.mytheme .v-calendar-event-all-day[class*="color7"] {
+	background-color: lightpink;
+	color: red;
+}
+
+.mytheme .v-calendar-week-wrapper .v-calendar-event[class*="color7"] {
+	color: red;
+}
+
+.mytheme .v-calendar-week-wrapper .v-calendar-event[class*="color7"] .v-calendar-event-content {
+	background-color: lightpink;
+}
+.mytheme .v-calendar-event-month[class*="color8"]:before {
+	color: blue;
+}
+
+.mytheme .v-calendar-event-all-day[class*="color8"] {
+	background-color: beige;
+	color: blue;
+}
+
+.mytheme .v-calendar-week-wrapper .v-calendar-event[class*="color8"] {
+	color: blue;
+}
+
+.mytheme .v-calendar-week-wrapper .v-calendar-event[class*="color8"] .v-calendar-event-content {
+	background-color: beige;
+}
+.mytheme .v-calendar-event-month[class*="color9"]:before {
+	color: seagreen;
+}
+
+.mytheme .v-calendar-event-all-day[class*="color9"] {
+	background-color: mediumspringgreen;
+	color: seagreen;
+}
+
+.mytheme .v-calendar-week-wrapper .v-calendar-event[class*="color9"] {
+	color: seagreen;
+}
+
+.mytheme .v-calendar-week-wrapper .v-calendar-event[class*="color9"] .v-calendar-event-content {
+	background-color: mediumspringgreen;
 }
 
 .mytheme .v-calendar.v-disabled * {
