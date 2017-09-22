@@ -13109,5 +13109,5 @@ div.v-layout.v-horizontal.v-widget {
 }
 .mytheme .loginImage{
 	/*background:lightsalmon;*/
-	background-image: url("img/archetype-login-bg.jpg");
+	background: url("img/archetype-login-bg.jpg") lightsalmon;
 }
