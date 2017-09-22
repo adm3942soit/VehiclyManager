@@ -31,7 +31,14 @@ public class RentaHistory extends Audit{
 //    @Digits(message = "This field must be digit", integer = 6, fraction = 2)
     @Column(name = "PRICE")
     private Double price;
-//    @Digits(message = "This field must be digit", integer = 6, fraction = 2)
+    @Column(name = "PRICE_DAY")
+    private Double priceDay;
+    @Column(name = "PRICE_WEEK")
+    private Double priceWeek;
+    @Column(name = "PRICE_MONTH")
+    private Double priceMonth;
+
+    //    @Digits(message = "This field must be digit", integer = 6, fraction = 2)
     @Column(name = "SUMMA")
     private Double summa;
     @Column(name = "PAID")

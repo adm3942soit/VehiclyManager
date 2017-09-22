@@ -24,7 +24,7 @@ public class PrintVehiclesUI extends UI {
     protected void init(VaadinRequest request) {
         Table table = new Table();
         table.setContainerDataSource(MainUI.getVehiclesCrudView().container);
-        table.setVisibleColumns("vehicleNmbr", "licenseNmbr", "make", "vehicleType", "model", "year", "status", "location","price","active");
+        table.setVisibleColumns("vehicleNmbr", "licenseNmbr", "make", "vehicleType", "model", "year", "active", "location","price", "priceDay", "priceWeek","priceMonth","status");
         // Have some content to print
         setContent(table);
         // Print automatically when the window opens

@@ -98,8 +98,8 @@ public class RentaHistoryService {
         try {
             jdbcTemplate.update(
                     "INSERT INTO renta_history " +
-                            "(PERSON, VEHICLE, FROM_DATE, TO_DATE, PAID, PRICE, SUMMA, UPDATED, CREATED) VALUES " +
-                            "(?,?,?,?,?,?,?,?,?)",
+                            "(PERSON, VEHICLE, FROM_DATE, TO_DATE, PAID, PRICE, PRICE_DAY, PRICE_WEEK, PRICE_MONTH,SUMMA, UPDATED, CREATED) VALUES " +
+                            "(?,?,?,?,?,?,?,?,?,?,?,?)",
                     new Object[]{
                             vehicle.getPerson(),
                             vehicle.getVehicle(),
@@ -107,6 +107,9 @@ public class RentaHistoryService {
                             vehicle.getToDate(),
                             vehicle.getPaid(),
                             vehicle.getPrice(),
+                            vehicle.getPriceDay(),
+                            vehicle.getPriceWeek(),
+                            vehicle.getPriceMonth(),
                             vehicle.getSumma(),
                             new Date(), new Date()
                     });
@@ -126,6 +129,9 @@ public class RentaHistoryService {
                             "PERSON=?, " +
                             "VEHICLE=?, " +
                             "PRICE=?, " +
+                            "PRICE_DAY=?, " +
+                            "PRICE_WEEK=?, " +
+                            "PRICE_MONTH=?, " +
                             "SUMMA=?, " +
                             "FROM_DATE=?, " +
                             "TO_DATE=?, " +
@@ -135,6 +141,9 @@ public class RentaHistoryService {
                     vehicle.getPerson(),
                     vehicle.getVehicle(),
                     vehicle.getPrice(),
+                    vehicle.getPriceDay(),
+                    vehicle.getPriceWeek(),
+                    vehicle.getPriceMonth(),
                     vehicle.getSumma(),
                     vehicle.getFromDate(),
                     vehicle.getToDate(),

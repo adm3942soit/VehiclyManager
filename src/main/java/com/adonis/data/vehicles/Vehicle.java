@@ -41,6 +41,12 @@ public class Vehicle extends Audit {
     private String vinNumber;
     @Column(name = "PRICE")
     private Double price;
+    @Column(name = "PRICE_DAY")
+    private Double priceDay;
+    @Column(name = "PRICE_WEEK")
+    private Double priceWeek;
+    @Column(name = "PRICE_MONTH")
+    private Double priceMonth;
 
 
 }

@@ -236,6 +236,9 @@ public class VehicleService {
                         "LOCATION=?, " +
                         "VIN_NUMBER=?, " +
                         "PRICE=?, " +
+                        "PRICE_DAY=?, " +
+                        "PRICE_WEEK=?, " +
+                        "PRICE_MONTH=?, " +
                         "UPDATED =? " +
                         "WHERE ID=?",
                 vehicle.getVehicleNmbr(),
@@ -249,6 +252,9 @@ public class VehicleService {
                 vehicle.getLocation(),
                 vehicle.getVinNumber(),
                 vehicle.getPrice(),
+                vehicle.getPriceDay(),
+                vehicle.getPriceWeek(),
+                vehicle.getPriceMonth(),
                 new Date(),
                 vehicle.getId());
     }
@@ -259,8 +265,8 @@ public class VehicleService {
             jdbcTemplate.update(
                     "INSERT INTO vehicles " +
                             "(VEHICLE_NMBR, LICENSE_NMBR, MAKE, MODEL, YEAR, STATUS," +
-                            " VEHICLE_TYPE, ACTIVE, LOCATION, VIN_NUMBER, PRICE, UPDATED, CREATED ) VALUES " +
-                            "(?,?,?,?,?,?,?,?,?, ?, ?, ?, ?)",
+                            " VEHICLE_TYPE, ACTIVE, LOCATION, VIN_NUMBER, PRICE, PRICE_DAY,PRICE_WEEK, PRICE_MONTH, UPDATED, CREATED ) VALUES " +
+                            "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                     new Object[]{
                             vehicle.getVehicleNmbr(),
                             vehicle.getLicenseNmbr(),
@@ -273,6 +279,9 @@ public class VehicleService {
                             vehicle.getLocation(),
                             vehicle.getVinNumber(),
                             vehicle.getPrice(),
+                            vehicle.getPriceDay(),
+                            vehicle.getPriceWeek(),
+                            vehicle.getPriceMonth(),
                             new Date(), new Date()
                     });
         } catch (Exception e) {
@@ -342,6 +351,9 @@ public class VehicleService {
                             "LOCATION=?, " +
                             "VIN_NUMBER=?, " +
                             "PRICE=?, " +
+                            "PRICE_DAY=?, " +
+                            "PRICE_WEEK=?, " +
+                            "PRICE_MONTH=?, " +
                             "UPDATED=? " +
                             "WHERE ID=?",
                     vehicle.getVehicleNmbr(),
@@ -355,6 +367,9 @@ public class VehicleService {
                     vehicle.getLocation(),
                     vehicle.getVinNumber(),
                     vehicle.getPrice(),
+                    vehicle.getPriceDay(),
+                    vehicle.getPriceWeek(),
+                    vehicle.getPriceMonth(),
                     new Date(),
                     vehicle.getId());
         } catch (Exception e) {

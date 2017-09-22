@@ -19,7 +19,7 @@ public class PrintReginaUI extends UI {
         table.setContainerDataSource(MainUI.rentaHistoryCrudView.container);
         table.removeAllItems();
         table.addItem(RentaHistoryCrudView.selectedRentaHistoryRecord);
-        table.setVisibleColumns("person", "vehicle", "fromDate", "toDate", "price", "summa");
+        table.setVisibleColumns("person", "vehicle", "fromDate", "toDate", "price", "priceDay", "priceWeek","priceMonth","summa");
 
         setContent(table);
         // Print automatically when the window opens

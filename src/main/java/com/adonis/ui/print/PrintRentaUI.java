@@ -25,7 +25,7 @@ public class PrintRentaUI extends UI {
     protected void init(VaadinRequest request) {
         Table table = new Table();
         table.setContainerDataSource(MainUI.rentaHistoryCrudView.container);
-        table.setVisibleColumns("person", "vehicle", "fromDate", "toDate", "price", "summa", "paid");
+        table.setVisibleColumns("person", "vehicle", "fromDate", "toDate", "price", "priceDay", "priceWeek","priceMonth","summa", "paid");
         // Have some content to print
         setContent(table);
 //        createXLS("renta.xls", MainUI.rentaHistoryCrudView.objects);
