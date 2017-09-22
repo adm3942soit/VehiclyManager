@@ -100,7 +100,7 @@ public class PaymentsPayPalUtils {
         return ResourceHolder.paymentsUtils;
     }
 
-    public static boolean payment(String receiverEmail, String userName){
+    public static List<String> payment(String receiverEmail, String userName){
         RequestEnvelope env = new RequestEnvelope();
         env.setErrorLanguage("en_US");
 
@@ -114,37 +114,41 @@ public class PaymentsPayPalUtils {
         PayRequest payRequest = new PayRequest();
         payRequest.setReceiverList(receiverlst);
         payRequest.setRequestEnvelope(env);
-
+        List<String> errors = new ArrayList<>();
         try {
             PayResponse payResponse = adaptivePaymentsService.pay(payRequest, userName);
-            return (payResponse.getError().size()==0);
+
+            payResponse.getError().forEach(errorData -> {
+                errors.add(errorData.getMessage());
+            });
+            return errors;//(payResponse.getError().size()==0);
         } catch (SSLConfigurationException e) {
-            e.printStackTrace();
-            return false;
+            errors.add(e.getMessage());
+            return errors;
         } catch (InvalidCredentialException e) {
-            e.printStackTrace();
-            return false;
+            errors.add(e.getMessage());
+            return errors;
         } catch (IOException e) {
-            e.printStackTrace();
-            return false;
+            errors.add(e.getMessage());
+            return errors;
         } catch (HttpErrorException e) {
-            e.printStackTrace();
-            return false;
+            errors.add(e.getMessage());
+            return errors;
         } catch (InvalidResponseDataException e) {
-            e.printStackTrace();
-            return false;
+            errors.add(e.getMessage());
+            return errors;
         } catch (ClientActionRequiredException e) {
-            e.printStackTrace();
-            return false;
+            errors.add(e.getMessage());
+            return errors;
         } catch (MissingCredentialException e) {
-            e.printStackTrace();
-            return false;
+            errors.add(e.getMessage());
+            return errors;
         } catch (InterruptedException e) {
-            e.printStackTrace();
-            return false;
+            errors.add(e.getMessage());
+            return errors;
         } catch (OAuthException e) {
-            e.printStackTrace();
-            return false;
+            errors.add(e.getMessage());
+            return errors;
         }
     }
 

@@ -3,12 +3,15 @@ package com.adonis.ui.addFields;
 import com.adonis.data.persons.Person;
 import com.adonis.data.renta.RentaHistory;
 import com.adonis.ui.print.PrintReginaUI;
+import com.adonis.utils.CollectionUtils;
 import com.adonis.utils.payPal.PaymentsPayPalUtils;
 import com.vaadin.server.BrowserWindowOpener;
 import com.vaadin.server.ExternalResource;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+
+import java.util.List;
 
 /**
  * Created by oksdud on 07.04.2017.
@@ -76,14 +79,15 @@ public class RentaPaymentField extends com.vaadin.v7.ui.CustomField<Boolean> {
 //                    value = paymentsUtils.payWithPaypalAcc(
 //                            rentaHistory!=null? MainUI.getRentaHistoryCrudView().getPersonService().findByName(rentaHistory.getPerson()):
 //                            person!=null?person:null, summa.longValue());//, "access_token$sandbox$dkfqgn25cxb7z4t5$29193a5f4e04ed44168c1ccdf45ad5ff");
-                    value = paymentsUtils.payment("asyadudnik@hotmail.com", "adm3942soit@gmail.com");
+                    List<String> errors = paymentsUtils.payment("asyadudnik@hotmail.com", "adm3942soit@gmail.com");
+                    value = errors.isEmpty();
                     if(value) {
                         Notification.show("Successfully!");
                         fieldResult.setValue("Successfully!");
                         fieldResult.setVisible(true);
                     }else {
                         Notification.show("Errors!");
-                        fieldResult.setValue("Errors!");
+                        fieldResult.setValue(CollectionUtils.convertIntoCommaSeparatedString(errors));
                         fieldResult.setVisible(true);
                     }
 

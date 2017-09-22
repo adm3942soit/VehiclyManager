@@ -1,5 +1,6 @@
 package com.adonis.ui.renta.calendar;
 
+import com.adonis.data.renta.RentaHistory;
 import com.adonis.data.service.PersonService;
 import com.adonis.data.service.RentaHistoryService;
 import com.adonis.data.service.VehicleService;
@@ -176,22 +177,22 @@ public class RentaCalendarView extends GridLayout implements View {
 
         Date start = resolveFirstDateOfWeek(today, calendar);
         Date end = resolveLastDateOfWeek(today, calendar);
-//        CalendarTestEvent event = getNewEvent("Whole week", start, end);
-//        event.setAllDay(true);
-//        event.setStyleName("color4");
-//        event.setDescription("Description for the whole week event.");
-//        dataSource.addEvent(event);
-        CalendarTestEvent event;
+        CalendarTestEvent event = getNewEvent("Whole week", start, end);
+        event.setAllDay(true);
+        event.setStyleName("color4");
+        event.setDescription("Current week");
+        dataSource.addEvent(event);
         int i=1;
         List<String> numbers = vehicleService.findAllActiveNumbers();
         for (String number : numbers) {
-
-            Date fromDate = rentaHistoryService.getHistory(number).getFromDate();
-            Date toDate = rentaHistoryService.getHistory(number).getToDate();
+            RentaHistory rentaHistory = rentaHistoryService.getHistory(number);
+            Date fromDate = rentaHistory.getFromDate();
+            Date toDate = rentaHistory.getToDate();
             calendar.set(java.util.Calendar.DATE, fromDate.getDate());
             start = fromDate;
             end = toDate;
-            event = getNewEvent("Vehicle "+number, start, end);
+            event = getNewEvent("Vehicle "+number+" "+vehicleService.findByVehicleNumber(number).getModel()
+                    , start, end);
             event.setStyleName("color"+i);
             dataSource.addEvent(event);
             i++;
