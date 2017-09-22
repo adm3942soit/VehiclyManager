@@ -51,6 +51,7 @@ dependencies {
 
 	compile ('javax.servlet:javax.servlet-api:3.1.0')
 
+	/*vaadin*/
 	compile('com.vaadin:vaadin-compatibility-server:8.0.0')
 	compile ('com.vaadin:vaadin-compatibility-client-compiled:8.0.0')
 	compile ('com.vaadin:vaadin-client-compiler:8.0.0')
@@ -62,17 +63,22 @@ dependencies {
 	compile libs.login
 	compile libs.json
 
+	/*paypal*/
 //	compile group: 'com.paypal.sdk', name: 'paypal-core', version: '1.7.2'
 	compile 'com.paypal.sdk:rest-api-sdk:1.13.1'
 	compile group: 'commons-codec', name: 'commons-codec', version: '1.10'
 	compile libs.payment
 //	compile group: 'com.paypal.sdk', name: 'adaptivepaymentssdk', version: '2.9.117'
 
-
+    /*Spring boot*/
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 	compile('org.springframework.boot:spring-boot-starter-data-rest')
-//	compile('org.springframework.boot:spring-boot-starter-actuator')
 	compile('com.vaadin:vaadin-spring-boot-starter:2.0.1')
+	compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}") {
+		exclude module: "spring-boot-starter-tomcat"
+	}
+	compile 'org.springframework.boot:spring-boot-starter-tomcat:1.1.8.RELEASE'
+
 
 	compile('com.maxmind.geoip2:geoip2:2.8.1')
 
@@ -111,6 +117,13 @@ configurations.all {
 		if (details.requested.group + ":" + details.requested.name == 'com.google:guava') {
 			details.useVersion "18.0"
 			details.useTarget "com.google:guava:18.0"
+		}
+	}
+}
+configurations.all {
+	resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+		if (details.requested.group == 'org.apache.tomcat.embed') {
+			details.useVersion '8.0.3'
 		}
 	}
 }

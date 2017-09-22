@@ -30,4 +30,3 @@ nbdist/
 .nb-gradle/
 gradle.properties'.idea' 
 rest/
-OPENSHIFT_LOG_DIR_IS_UNDEFINED/kp-apps.log
