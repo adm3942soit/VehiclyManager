@@ -15,7 +15,11 @@ create table carmanager.vehicles
 	VIN_NUMBER varchar(50) null,
 	CREATED datetime  null,
 	UPDATED datetime  null,
-	PRICE double null,
+	PRICE        DOUBLE DEFAULT '0'                 NULL,
+	PRICE_WEEK  DOUBLE DEFAULT '0'                      NULL,
+	PRICE_MONTH DOUBLE DEFAULT '0'                      NULL,
+	PRICE_DAY   DOUBLE DEFAULT '0'                      NULL,
+
 	constraint vehicles_ID_uindex
 	unique (ID),
 	constraint vehicles_vehicleNmbr_uindex
