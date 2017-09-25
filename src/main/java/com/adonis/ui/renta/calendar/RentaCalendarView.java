@@ -193,7 +193,8 @@ public class RentaCalendarView extends GridLayout implements View {
             end = toDate;
             event = getNewEvent("Vehicle "+number+" "+vehicleService.findByVehicleNumber(number).getModel()
                     , start, end);
-            int j = Integer.valueOf(String.valueOf(i).substring(0,1));
+            String nmbr = String.valueOf(i);
+            int j = Integer.valueOf(nmbr.length()>1?nmbr.substring(nmbr.length()-2,nmbr.length()-1):nmbr);
             event.setStyleName("color"+j);
             dataSource.addEvent(event);
             i++;
