@@ -13107,6 +13107,11 @@ div.v-layout.v-horizontal.v-widget {
 	background:lightsalmon;
     background-image: url(#{$login-background-image});
 }
+.mytheme .calendarImage{
+	background:orange;
+	background-image: url(#{$login-background-image});
+}
+
 .mytheme .loginImage{
 	/*background:lightsalmon;*/
 	background: url("img/archetype-login-bg.jpg") lightsalmon;

@@ -132,7 +132,7 @@ public class RentaCalendarView extends GridLayout implements View {
 
         setSizeFull();
         setPrimaryStyleName(ValoTheme.PANEL_WELL);
-        addStyleName("backImage");
+        addStyleName("calendarImage");
         setLocale(Locale.getDefault());
 
         localeSelect = createLocaleSelect();
