@@ -3353,8 +3353,8 @@ div.v-layout.v-horizontal.v-widget {
 
 .mytheme .v-filterselect-tiny {
 	height: 28px;
-	
-	font-size: 12px;
+	background:blue;
+	font-size: 14px;
 }
 
 .mytheme .v-filterselect-tiny [class*="input"] {
@@ -3372,7 +3372,7 @@ div.v-layout.v-horizontal.v-widget {
 	user-select: text;
 	margin: 0;
 	font: inherit;
-	
+	background:blue;
 	font-weight: 400;
 	line-height: normal;
 	height: 28px;
@@ -3391,12 +3391,14 @@ div.v-layout.v-horizontal.v-widget {
 
 .v-ie8 .mytheme .v-filterselect-tiny [class*="input"], .v-ie9 .mytheme .v-filterselect-tiny [class*="input"] {
 	line-height: 28px;
+	background:blue;
 	padding-top: 0;
 	padding-bottom: 0;
 }
 
 .mytheme .v-filterselect-tiny .v-icon + [class*="input"] {
 	padding-left: 28px;
+	background:blue;
 }
 
 .mytheme .v-filterselect-tiny img.v-icon {
