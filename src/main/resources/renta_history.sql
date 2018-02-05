@@ -1,5 +1,3 @@
--- auto-generated definition
--- auto-generated definition
 create table carmanager.renta_history
 (
   ID bigint not null auto_increment

@@ -12,9 +12,4 @@ create table carmanager.vehicle_types
   unique (ID),
   constraint vehicle_types_TYPE_uindex
   unique (TYPE)
-)
-;
-
-
-;
-
+);

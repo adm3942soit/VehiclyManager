@@ -1,5 +1,6 @@
 package com.adonis.ui.renta;
 
+import com.adonis.data.renta.RentaHistory;
 import com.adonis.data.service.PersonService;
 import com.adonis.data.service.RentaHistoryService;
 import com.adonis.data.service.VehicleService;
@@ -73,9 +74,13 @@ public class RentaCalendarForLastMonth extends CustomComponent implements View {
         Double hour = Double.valueOf((60 * 60 * 1000));
         int i = 1;
         for (String number : numbers) {
+            RentaHistory rentaHistory = rentaHistoryService.getHistory(number);
+            if(rentaHistory ==null){
+                continue;
+            }
 
-            Date fromDate = rentaHistoryService.getHistory(number).getFromDate();
-            Date toDate = rentaHistoryService.getHistory(number).getToDate();
+            Date fromDate = rentaHistory.getFromDate();
+            Date toDate = rentaHistory.getToDate();
             if (fromDate.getTime() >= monthAgo.getTime()) {//for the last month
 
                 data.append(

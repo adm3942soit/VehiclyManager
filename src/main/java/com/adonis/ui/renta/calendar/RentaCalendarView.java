@@ -186,6 +186,9 @@ public class RentaCalendarView extends GridLayout implements View {
         List<String> numbers = vehicleService.findAllActiveNumbers();
         for (String number : numbers) {
             RentaHistory rentaHistory = rentaHistoryService.getHistory(number);
+            if(rentaHistory ==null){
+                continue;
+            }
             Date fromDate = rentaHistory.getFromDate();
             Date toDate = rentaHistory.getToDate();
             calendar.set(java.util.Calendar.DATE, fromDate.getDate());

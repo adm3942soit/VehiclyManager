@@ -11,6 +11,7 @@ import at.downdrown.vaadinaddons.highchartsapi.model.data.ColumnRangeChartData;
 import at.downdrown.vaadinaddons.highchartsapi.model.plotoptions.ColumnRangeChartPlotOptions;
 import at.downdrown.vaadinaddons.highchartsapi.model.plotoptions.HighChartsPlotOptionsImpl;
 import at.downdrown.vaadinaddons.highchartsapi.model.series.ColumnRangeChartSeries;
+import com.adonis.data.renta.RentaHistory;
 import com.adonis.data.service.PersonService;
 import com.adonis.data.service.RentaHistoryService;
 import com.adonis.data.service.VehicleService;
@@ -118,8 +119,11 @@ public class RentaAnavailableCalendarView extends CustomComponent implements Vie
         List<String> datesString = new ArrayList<>();
         dates.add(monthAgo);
         numbers.forEach(number -> {
-            dates.add(rentaHistoryService.getHistory(number).getFromDate());
-            dates.add(rentaHistoryService.getHistory(number).getToDate());
+            RentaHistory rentaHistory = rentaHistoryService.getHistory(number);
+            if(rentaHistory!=null) {
+                dates.add(rentaHistory.getFromDate());
+                dates.add(rentaHistory.getToDate());
+            }
         });
         dates.add(new Date());
         Collections.sort(dates, new Comparator<Date>() {
@@ -135,8 +139,12 @@ public class RentaAnavailableCalendarView extends CustomComponent implements Vie
         Double hour = Double.valueOf((60 * 60 * 1000));
         for (String number : numbers) {
             List<ColumnRangeChartData> dataVehiclesNumbers = new ArrayList<>();
-            Date fromDate = rentaHistoryService.getHistory(number).getFromDate();
-            Date toDate = rentaHistoryService.getHistory(number).getToDate();
+            RentaHistory rentaHistory = rentaHistoryService.getHistory(number);
+            if(rentaHistory ==null){
+                continue;
+            }
+            Date fromDate = rentaHistory.getFromDate();
+            Date toDate = rentaHistory.getToDate();
 
             Date nullDate = DateUtils.convertToDate("01/01/1970");
             Date now = new Date();

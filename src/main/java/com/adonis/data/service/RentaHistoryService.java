@@ -69,7 +69,7 @@ public class RentaHistoryService {
         return vehicle;
     }
     public Date getAvailableDate(String vehicleNumber){
-      return getHistory(vehicleNumber).getToDate();
+      return getHistory(vehicleNumber)==null?null:getHistory(vehicleNumber).getToDate();
     }
     public RentaHistory getHistory(String vehicleNumber){
         String sql = "SELECT * FROM renta_history where vehicle = "+vehicleNumber+" ORDER BY ID DESC LIMIT 1";
