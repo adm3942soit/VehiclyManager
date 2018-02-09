@@ -55,12 +55,27 @@ public class FileReader {
         }
         return directory.getPath();
     }
+
     public static String createDirectoriesFromCurrent1(String[] dirs) {
-        File directory = new File(getCurrentDirectory());
-        new File(directory.getParent()).setWritable(true);
+        if (dirs == null || dirs.length == 0) {
+            return "";
+
+        }
+        String path = "";
+        boolean start = false;
+        File directory = new File(path);
         for (String dir : dirs) {
-            if(dir.contains(":"))continue;
-            directory = new File(directory.getAbsolutePath() + File.separator + dir);
+            if (dir.contains(":")) {
+                path = dir;
+                start = true;
+                continue;
+            }
+            if (start) {
+                directory = new File(path + File.separator + dir);
+                start = false;
+            } else {
+                directory = new File(directory.getAbsolutePath() + File.separator + dir);
+            }
             directory.setWritable(true);
             if (!directory.exists()) {
                 boolean create = directory.mkdirs();
@@ -75,13 +90,14 @@ public class FileReader {
     }
 
     public static String createDirectoriesFromCurrent(String pathToDir) {
-        String[] dirs = pathToDir.split("\\"+File.separator);
-        if(dirs.length!=0){
+        String[] dirs = pathToDir.split("\\" + File.separator);
+        if (dirs.length != 0) {
             return createDirectoriesFromCurrent1(dirs);
         }
-      return "";
+        return "";
 
     }
+
     public static boolean isEmptyDirectory(String name) {
         File dir = new File(name);
         if (!dir.exists() || !dir.isDirectory()) createRootDirectory(name);

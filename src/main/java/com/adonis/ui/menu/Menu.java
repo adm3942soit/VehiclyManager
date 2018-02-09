@@ -23,6 +23,8 @@ import org.vaadin.crudui.crud.impl.GridBasedCrudComponent;
 import org.vaadin.crudui.form.impl.GridLayoutCrudFormFactory;
 import org.vaadin.crudui.layout.impl.HorizontalSplitCrudLayout;
 import org.vaadin.easyuploads.UploadField;
+import ua.edu.file.MyFiler;
+
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -175,26 +177,15 @@ public class Menu extends CssLayout {
         navigator.addView(name, view);
         createViewButton(name, caption, icon);
     }
-
-    public void addViewWithEditableIcon(View view, final String name, String caption, String nameImage) {
-        navigator.addView(name, view);
-        createViewButtonWithEditableImage(name, caption, nameImage);
-    }
-
-    /**
-     * Register a view in the navigation menu and in the {@link Navigator} based
-     * on a view class.
-     *
-     * @param viewClass class of the views to create
-     * @param name      view name
-     * @param caption   view caption in the menu
-     * @param icon      view icon in the menu
-     * @see Navigator#addView(String, Class)
-     */
     public void addView(Class<? extends View> viewClass, final String name,
                         String caption, com.vaadin.server.Resource icon) {
         navigator.addView(name, viewClass);
         createViewButton(name, caption, icon);
+    }
+
+    public void addViewWithEditableIcon(View view, final String name, String caption, String nameImage) {
+        navigator.addView(name, view);
+        createViewButtonWithEditableImage(name, caption, nameImage);
     }
 
     private void createViewButton(final String name, String caption,
@@ -275,25 +266,25 @@ public class Menu extends CssLayout {
     private void showUploadedImage(UploadField upload, Image image, String fileName, String newNameFile) throws IOException {
         File value = (File) upload.getValue();
         FileReader.copyFile(value.getAbsolutePath().toString(), VaadinUtils.getResourcePath(newNameFile));
-//        FileReader.createDirectoriesFromCurrent(getInitialPath());
-//        FileReader.copyFile(VaadinUtils.getResourcePath(newNameFile), VaadinUtils.getInitialPath() + File.separator + newNameFile);
-//        String path = FileReader.createDirectoriesFromCurrent("BOOT-INF", "classes", "VAADIN", "themes", "mytheme", "img");
-//        FileReader.copyFile(VaadinUtils.getResourcePath(newNameFile), path+File.separator+newNameFile);
-//        String[] command = new String[6];
-//        command[0] = "cmd";
-//        command[1] = "/C";
-//        command[2] = "jar";
-//        command[3] = "uf";
-//        command[4] = VaadinUtils.getPathToJar();
-//        command[5] = "BOOT-INF" + File.separator + "classes" + File.separator + "VAADIN" + File.separator + "themes" + File.separator + "mytheme" + File.separator + "img" + File.separator + newNameFile;
-//        ProcessBuilder pb = new ProcessBuilder(command[0], command[1], command[2], command[3], command[4], command[5]);
-//        pb.directory(new File(MyFiler.getCurrentDirectory()));
-//        try {
-//            Process process = pb.start();
-//            process.waitFor();
-//        } catch (IOException | InterruptedException ex) {
-//            System.err.println(ex.getMessage());
-//        }
+        FileReader.createDirectoriesFromCurrent(getInitialPath());
+        FileReader.copyFile(value.getAbsolutePath().toString(), VaadinUtils.getInitialPath() + File.separator + newNameFile);
+        String path = FileReader.createDirectoriesFromCurrent("BOOT-INF", "classes", "VAADIN", "themes", "mytheme", "img");
+        FileReader.copyFile(VaadinUtils.getResourcePath(newNameFile), path+File.separator+newNameFile);
+        String[] command = new String[6];
+        command[0] = "cmd";
+        command[1] = "/C";
+        command[2] = "jar";
+        command[3] = "uf";
+        command[4] = VaadinUtils.getPathToJar();
+        command[5] = "BOOT-INF" + File.separator + "classes" + File.separator + "VAADIN" + File.separator + "themes" + File.separator + "mytheme" + File.separator + "img" + File.separator + newNameFile;
+        ProcessBuilder pb = new ProcessBuilder(command[0], command[1], command[2], command[3], command[4], command[5]);
+        pb.directory(new File(MyFiler.getCurrentDirectory()));
+        try {
+            Process process = pb.start();
+            process.waitFor();
+        } catch (IOException | InterruptedException ex) {
+            System.err.println(ex.getMessage());
+        }
 
         FileInputStream fileInputStream = new FileInputStream(value);
         long byteLength = value.length(); //bytecount of the file-content
