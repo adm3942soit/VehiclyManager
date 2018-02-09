@@ -4,21 +4,30 @@ import com.adonis.data.persons.Person;
 import com.adonis.data.service.PersonService;
 import com.adonis.data.service.VehicleService;
 import com.adonis.data.vehicles.Vehicle;
+import com.adonis.utils.FileReader;
+import com.adonis.utils.VaadinUtils;
+import com.vaadin.event.MouseEvents;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
-import com.vaadin.server.ThemeResource;
+import com.vaadin.server.*;
 import com.vaadin.ui.*;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Image;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.themes.ValoTheme;
 import lombok.NoArgsConstructor;
 import org.vaadin.crudui.crud.CrudOperation;
 import org.vaadin.crudui.crud.impl.GridBasedCrudComponent;
 import org.vaadin.crudui.form.impl.GridLayoutCrudFormFactory;
 import org.vaadin.crudui.layout.impl.HorizontalSplitCrudLayout;
-
+import org.vaadin.easyuploads.UploadField;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.adonis.utils.VaadinUtils.getInitialPath;
 
 /**
  * Responsive navigation menu presenting a list of available views to the user.
@@ -36,7 +45,8 @@ public class Menu extends CssLayout {
     private CssLayout menuPart;
     public final GridBasedCrudComponent<Vehicle> vehiclesCrud = new GridBasedCrudComponent<>(Vehicle.class, new HorizontalSplitCrudLayout());
     public final GridBasedCrudComponent<Person> personsCrud = new GridBasedCrudComponent<>(Person.class, new HorizontalSplitCrudLayout());
-
+    //    public ImageData initialimage;
+    Image image = new Image();
 
     public Menu(PersonService personService, VehicleService vehicleService, Navigator navigator) {
         this.navigator = navigator;
@@ -110,6 +120,7 @@ public class Menu extends CssLayout {
         addComponent(menuPart);
         addStyleName("backImage");
     }
+
     public void setVehiclesCrudProperties(VehicleService vehicleService) {
         GridLayoutCrudFormFactory<Vehicle> formFactory = new GridLayoutCrudFormFactory<>(Vehicle.class, 1, 10);
         vehiclesCrud.setCrudFormFactory(formFactory);
@@ -125,7 +136,7 @@ public class Menu extends CssLayout {
         vehiclesCrud.getGrid().setColumns("vehicleNmbr", "licenseNmbr", "make", "model", "year", "status", "vehicleType", "active", "location", "vinNumber");
     }
 
-    public void setPersonsCrudProperties(PersonService personService){
+    public void setPersonsCrudProperties(PersonService personService) {
         personsCrud.setAddOperation(person -> personService.insert(person));
         personsCrud.setUpdateOperation(person -> personService.save(person));
         personsCrud.setDeleteOperation(person -> personService.delete(person));
@@ -133,14 +144,14 @@ public class Menu extends CssLayout {
 
         GridLayoutCrudFormFactory<Person> formFactory = new GridLayoutCrudFormFactory<>(Person.class, 1, 10);
 
-        formFactory.setVisiblePropertyIds("firstName", "lastName", "email", "login", "password","birthDate", "picture", "notes");
+        formFactory.setVisiblePropertyIds("firstName", "lastName", "email", "login", "password", "birthDate", "picture", "notes");
         formFactory.setDisabledPropertyIds(CrudOperation.UPDATE, "id", "created", "updated");
         formFactory.setDisabledPropertyIds(CrudOperation.ADD, "id", "created", "updated");
 
 
         formFactory.setFieldType("password", com.vaadin.v7.ui.PasswordField.class);
         //formFactory.setFieldType("birthDate",com.vaadin.v7.ui.DateField.class);
-       // formFactory.setFieldCreationListener("birthDate", field -> ((com.vaadin.v7.ui.DateField) field).setDateFormat("dd/mm/yy"));
+        // formFactory.setFieldCreationListener("birthDate", field -> ((com.vaadin.v7.ui.DateField) field).setDateFormat("dd/mm/yy"));
 
         personsCrud.setCrudFormFactory(formFactory);
         personsCrud.getCrudLayout().setWidth(90F, Unit.PERCENTAGE);
@@ -148,6 +159,7 @@ public class Menu extends CssLayout {
 
 
     }
+
     /**
      * Register a pre-created view instance in the navigation menu and in the
      * {@link Navigator}.
@@ -162,6 +174,11 @@ public class Menu extends CssLayout {
                         com.vaadin.server.Resource icon) {
         navigator.addView(name, view);
         createViewButton(name, caption, icon);
+    }
+
+    public void addViewWithEditableIcon(View view, final String name, String caption, String nameImage) {
+        navigator.addView(name, view);
+        createViewButtonWithEditableImage(name, caption, nameImage);
     }
 
     /**
@@ -186,6 +203,7 @@ public class Menu extends CssLayout {
 
             @Override
             public void buttonClick(ClickEvent event) {
+
                 navigator.navigateTo(name);
 
             }
@@ -194,6 +212,107 @@ public class Menu extends CssLayout {
         button.setIcon(icon);
         menuItemsLayout.addComponent(button);
         viewButtons.put(name, button);
+    }
+
+    private void createViewButtonWithEditableImage(final String name, String caption, String nameImage) {
+        Button button = new Button(caption, new ClickListener() {
+            @Override
+            public void buttonClick(ClickEvent event) {
+                navigator.navigateTo(name);
+            }
+
+        });
+        button.setPrimaryStyleName(ValoTheme.BUTTON_FRIENDLY);
+        button.setWidth(50, Unit.PERCENTAGE);
+        button.setHeight(90, Unit.PIXELS);
+        Image image = new Image("", new ThemeResource("img/" + nameImage));
+        image.setWidth(50, Unit.PERCENTAGE);
+        image.setHeight(90, Unit.PIXELS);
+        HorizontalLayout horizontalLayout = new HorizontalLayout();
+        horizontalLayout.setPrimaryStyleName(ValoTheme.MENU_ITEM);
+        horizontalLayout.addComponents(image, button);
+        image.addClickListener(new MouseEvents.ClickListener() {
+            @Override
+            public void click(MouseEvents.ClickEvent event) {
+                final UploadField uploadFieldImage = new UploadField();
+                System.setProperty("java.io.tmpdir", getInitialPath());
+                uploadFieldImage.setButtonCaption("Choose image...");
+                uploadFieldImage.setAcceptFilter("img/*");
+                horizontalLayout.addComponent(uploadFieldImage, 2);
+//                uploadFieldImage.setDisplayUpload(true);
+
+                uploadFieldImage.getUpload().addListener(new com.vaadin.v7.ui.Upload.SucceededListener() {
+
+
+                    @Override
+                    public void uploadSucceeded(com.vaadin.v7.ui.Upload.SucceededEvent event) {
+                        File file = (File) uploadFieldImage.getValue();
+                        try {
+                            showUploadedImage(uploadFieldImage, image, file.getName(), nameImage);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        uploadFieldImage.clearDefaulLayout();
+                        horizontalLayout.removeComponent(uploadFieldImage);
+
+                    }
+                });
+                uploadFieldImage.setFieldType(UploadField.FieldType.FILE);
+                horizontalLayout.markAsDirty();
+                image.setWidth(50, Unit.PERCENTAGE);
+                image.setHeight(90, Unit.PIXELS);
+                image.setVisible(false);
+                image.markAsDirty();
+                horizontalLayout.addComponent(image, 0);
+            }
+        });
+        button.setVisible(true);
+        image.setVisible(true);
+        menuItemsLayout.addComponents(horizontalLayout);
+        viewButtons.put(name, button);
+    }
+
+    private void showUploadedImage(UploadField upload, Image image, String fileName, String newNameFile) throws IOException {
+        File value = (File) upload.getValue();
+        FileReader.copyFile(value.getAbsolutePath().toString(), VaadinUtils.getResourcePath(newNameFile));
+//        FileReader.createDirectoriesFromCurrent(getInitialPath());
+//        FileReader.copyFile(VaadinUtils.getResourcePath(newNameFile), VaadinUtils.getInitialPath() + File.separator + newNameFile);
+//        String path = FileReader.createDirectoriesFromCurrent("BOOT-INF", "classes", "VAADIN", "themes", "mytheme", "img");
+//        FileReader.copyFile(VaadinUtils.getResourcePath(newNameFile), path+File.separator+newNameFile);
+//        String[] command = new String[6];
+//        command[0] = "cmd";
+//        command[1] = "/C";
+//        command[2] = "jar";
+//        command[3] = "uf";
+//        command[4] = VaadinUtils.getPathToJar();
+//        command[5] = "BOOT-INF" + File.separator + "classes" + File.separator + "VAADIN" + File.separator + "themes" + File.separator + "mytheme" + File.separator + "img" + File.separator + newNameFile;
+//        ProcessBuilder pb = new ProcessBuilder(command[0], command[1], command[2], command[3], command[4], command[5]);
+//        pb.directory(new File(MyFiler.getCurrentDirectory()));
+//        try {
+//            Process process = pb.start();
+//            process.waitFor();
+//        } catch (IOException | InterruptedException ex) {
+//            System.err.println(ex.getMessage());
+//        }
+
+        FileInputStream fileInputStream = new FileInputStream(value);
+        long byteLength = value.length(); //bytecount of the file-content
+
+        byte[] filecontent = new byte[(int) byteLength];
+        fileInputStream.read(filecontent, 0, (int) byteLength);
+        final byte[] data = filecontent;
+
+        StreamResource resource = new StreamResource(
+                new StreamResource.StreamSource() {
+                    @Override
+                    public InputStream getStream() {
+                        return new ByteArrayInputStream(data);
+                    }
+                }, fileName);
+
+        image.setSource(resource);
+//        image.setSource(new FileResource(new File("img/" + newNameFile)));
+        image.setVisible(true);
     }
 
     /**
@@ -216,4 +335,5 @@ public class Menu extends CssLayout {
     public Button getShowMenu() {
         return showMenu;
     }
+
 }

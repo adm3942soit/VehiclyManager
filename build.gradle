@@ -53,6 +53,8 @@ dependencies {
 	compile ('com.vaadin:vaadin-compatibility-themes:8.0.0')
 	compile ('com.vaadin:vaadin-themes:8.0.0')
 
+	compile 'org.vaadin:viritin:2.0.alpha1'
+
 	compile libs.login
 	compile libs.json
 
