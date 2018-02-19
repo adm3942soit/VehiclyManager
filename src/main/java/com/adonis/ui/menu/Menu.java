@@ -216,7 +216,16 @@ public class Menu extends CssLayout {
         button.setPrimaryStyleName(ValoTheme.BUTTON_FRIENDLY);
         button.setWidth(50, Unit.PERCENTAGE);
         button.setHeight(90, Unit.PIXELS);
-        Image image = new Image("", new ThemeResource("img/" + nameImage));
+        FileReader.createDirectoriesFromCurrent(getInitialPath());
+        final Image image = new Image("", new ThemeResource("img/" + nameImage));
+        try {
+            FileReader.copyFile(VaadinUtils.getResourcePath(nameImage), VaadinUtils.getInitialPath() + File.separator + nameImage);
+            image.setSource(new FileResource(new File(VaadinUtils.getInitialPath() + File.separator + nameImage)));
+        } catch (IOException e) {
+            e.printStackTrace();
+            image.setSource(new ThemeResource("img/" + nameImage));
+        }
+
         image.setWidth(50, Unit.PERCENTAGE);
         image.setHeight(90, Unit.PIXELS);
         HorizontalLayout horizontalLayout = new HorizontalLayout();
@@ -226,12 +235,8 @@ public class Menu extends CssLayout {
             @Override
             public void click(MouseEvents.ClickEvent event) {
                 final UploadField uploadFieldImage = new UploadField();
-                System.setProperty("java.io.tmpdir", getInitialPath());
-                uploadFieldImage.setButtonCaption("Choose image...");
                 uploadFieldImage.setAcceptFilter("img/*");
                 horizontalLayout.addComponent(uploadFieldImage, 2);
-//                uploadFieldImage.setDisplayUpload(true);
-
                 uploadFieldImage.getUpload().addListener(new com.vaadin.v7.ui.Upload.SucceededListener() {
 
 
@@ -265,26 +270,28 @@ public class Menu extends CssLayout {
 
     private void showUploadedImage(UploadField upload, Image image, String fileName, String newNameFile) throws IOException {
         File value = (File) upload.getValue();
+        //copy to resources
         FileReader.copyFile(value.getAbsolutePath().toString(), VaadinUtils.getResourcePath(newNameFile));
+        //copy to server directory
         FileReader.createDirectoriesFromCurrent(getInitialPath());
         FileReader.copyFile(value.getAbsolutePath().toString(), VaadinUtils.getInitialPath() + File.separator + newNameFile);
-        String path = FileReader.createDirectoriesFromCurrent("BOOT-INF", "classes", "VAADIN", "themes", "mytheme", "img");
-        FileReader.copyFile(VaadinUtils.getResourcePath(newNameFile), path+File.separator+newNameFile);
-        String[] command = new String[6];
-        command[0] = "cmd";
-        command[1] = "/C";
-        command[2] = "jar";
-        command[3] = "uf";
-        command[4] = VaadinUtils.getPathToJar();
-        command[5] = "BOOT-INF" + File.separator + "classes" + File.separator + "VAADIN" + File.separator + "themes" + File.separator + "mytheme" + File.separator + "img" + File.separator + newNameFile;
-        ProcessBuilder pb = new ProcessBuilder(command[0], command[1], command[2], command[3], command[4], command[5]);
-        pb.directory(new File(MyFiler.getCurrentDirectory()));
-        try {
-            Process process = pb.start();
-            process.waitFor();
-        } catch (IOException | InterruptedException ex) {
-            System.err.println(ex.getMessage());
-        }
+//        String path = FileReader.createDirectoriesFromCurrent("BOOT-INF", "classes", "VAADIN", "themes", "mytheme", "img");
+//        FileReader.copyFile(VaadinUtils.getResourcePath(newNameFile), path+File.separator+newNameFile);
+//        String[] command = new String[6];
+//        command[0] = "cmd";
+//        command[1] = "/C";
+//        command[2] = "jar";
+//        command[3] = "uf";
+//        command[4] = VaadinUtils.getPathToJar();
+//        command[5] = "BOOT-INF" + File.separator + "classes" + File.separator + "VAADIN" + File.separator + "themes" + File.separator + "mytheme" + File.separator + "img" + File.separator + newNameFile;
+//        ProcessBuilder pb = new ProcessBuilder(command[0], command[1], command[2], command[3], command[4], command[5]);
+//        pb.directory(new File(MyFiler.getCurrentDirectory()));
+//        try {
+//            Process process = pb.start();
+//            process.waitFor();
+//        } catch (IOException | InterruptedException ex) {
+//            System.err.println(ex.getMessage());
+//        }
 
         FileInputStream fileInputStream = new FileInputStream(value);
         long byteLength = value.length(); //bytecount of the file-content
@@ -302,7 +309,6 @@ public class Menu extends CssLayout {
                 }, fileName);
 
         image.setSource(resource);
-//        image.setSource(new FileResource(new File("img/" + newNameFile)));
         image.setVisible(true);
     }
 
