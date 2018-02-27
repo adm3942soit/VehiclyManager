@@ -68,22 +68,24 @@ public class MainScreen extends HorizontalLayout implements View {
 //        menu.addView(new VehicleTypesCrudView(ui.vehicleService), VehicleTypesCrudView.NAME, VehicleTypesCrudView.NAME, new ThemeResource("img/vehicle-type.jpg"));
 //        menu.addView(new VehiclesCrudView(ui.vehicleService), VehiclesCrudView.NAME, VehiclesCrudView.NAME, new ThemeResource("img/car.jpg"));//vehicles1
         menu.addViewWithEditableIcon(new VehiclesCrudView(ui.vehicleService), VehiclesCrudView.NAME, VehiclesCrudView.NAME, "car.jpg");//vehicles1
-        menu.addView(ui.getPersonsCrudView(), PersonsCrudView.NAME, PersonsCrudView.NAME, new ThemeResource("img/customers.jpg"));
-        menu.addView(new RentaHistoryCrudView(ui.rentaHistoryService, ui.service, ui.vehicleService), RentaHistoryCrudView.NAME, RentaHistoryCrudView.NAME, new ThemeResource("img/for-rent.jpg"));
-        menu.addView(new RentaPieChartView(personService, rentaHistoryService, vehicleService), RentaPieChartView.NAME, RentaPieChartView.NAME, new ThemeResource("img/chartPNG.png"));
-        menu.addView(new RentaCalendarView(personService, rentaHistoryService, vehicleService), RentaCalendarView.NAME, RentaCalendarView.NAME, new ThemeResource("img/barChartPNG.png"));
-        menu.addView(new RentaAnavailableCalendarView(personService, rentaHistoryService, vehicleService), RentaAnavailableCalendarView.NAME, RentaAnavailableCalendarView.NAME, new ThemeResource("img/FusionChart.png"));
-        menu.addView(new RentaCalendarForLastMonth(ui.service, ui.rentaHistoryService, ui.vehicleService), RentaCalendarForLastMonth.NAME, RentaCalendarForLastMonth.NAME, new ThemeResource("img/rangechart.jpg"));
+//        menu.addView(ui.getPersonsCrudView(), PersonsCrudView.NAME, PersonsCrudView.NAME, new ThemeResource("img/customers.jpg"));
+        menu.addViewWithEditableIcon(ui.getPersonsCrudView(), PersonsCrudView.NAME, PersonsCrudView.NAME, "customers.jpg");
+//        menu.addView(new RentaHistoryCrudView(ui.rentaHistoryService, ui.service, ui.vehicleService), RentaHistoryCrudView.NAME, RentaHistoryCrudView.NAME, new ThemeResource("img/for-rent.jpg"));
+        menu.addViewWithEditableIcon(new RentaHistoryCrudView(ui.rentaHistoryService, ui.service, ui.vehicleService), RentaHistoryCrudView.NAME, RentaHistoryCrudView.NAME, "for-rent.jpg");
+        menu.addViewWithEditableIcon(new RentaPieChartView(personService, rentaHistoryService, vehicleService), RentaPieChartView.NAME, RentaPieChartView.NAME, "chartPNG.png");
+        menu.addViewWithEditableIcon(new RentaCalendarView(personService, rentaHistoryService, vehicleService), RentaCalendarView.NAME, RentaCalendarView.NAME, "barChartPNG.png");
+        menu.addViewWithEditableIcon(new RentaAnavailableCalendarView(personService, rentaHistoryService, vehicleService), RentaAnavailableCalendarView.NAME, RentaAnavailableCalendarView.NAME,"FusionChart.png");
+        menu.addViewWithEditableIcon(new RentaCalendarForLastMonth(ui.service, ui.rentaHistoryService, ui.vehicleService), RentaCalendarForLastMonth.NAME, RentaCalendarForLastMonth.NAME, "rangechart.jpg");
 //        RentaCalendarDussanView rentaCalendarDussanView = new RentaCalendarDussanView(ui.service, ui.rentaHistoryService, ui.vehicleService);
 //        rentaCalendarDussanView.scrollIntoView(rentaCalendarDussanView.getViewLayout());
 //        menu.addView(rentaCalendarDussanView, RentaCalendarDussanView.NAME, RentaCalendarDussanView.NAME, new ThemeResource("img/barChartPNG.png"));
-        menu.addView(new com.adonis.ui.renta.calendar.RentaCalendarView(personService, rentaHistoryService, vehicleService), com.adonis.ui.renta.calendar.RentaCalendarView.NAME, com.adonis.ui.renta.calendar.RentaCalendarView.NAME, new ThemeResource("img/chart2.jpg"));
-        menu.addView(new RegistrationUI(ui.service), "CUSTOMER REGISTRATION", "CUSTOMER REGISTRATION", new ThemeResource("img/Register-Today.jpg"));
-        menu.addView(new PersonUI(ui.service, true, MainUI.loginPerson), "PROFILE", "PROFILE", new ThemeResource("img/user-icon.jpg"));
-        menu.addView(new PrintView(ui.service, ui.rentaHistoryService), "PRINT", "PRINT", new ThemeResource("img/print-icon.jpg"));
-        menu.addView(new XlsView(ui.service, ui.rentaHistoryService, ui.vehicleService), "LOAD", "LOAD", new ThemeResource("img/xls1.jpg"));
-        menu.addView(new AboutView(), AboutView.VIEW_NAME, AboutView.VIEW_NAME, new ThemeResource("img/info.jpg"));
-        menu.addView(ui.getLoginView(), "LOGOUT", "LOGOUT", new ThemeResource("img/logout.jpg"));
+        menu.addViewWithEditableIcon(new com.adonis.ui.renta.calendar.RentaCalendarView(personService, rentaHistoryService, vehicleService), com.adonis.ui.renta.calendar.RentaCalendarView.NAME, com.adonis.ui.renta.calendar.RentaCalendarView.NAME, "chart2.jpg");
+        menu.addViewWithEditableIcon(new RegistrationUI(ui.service), "CUSTOMER REGISTRATION", "CUSTOMER REGISTRATION", "Register-Today.jpg");
+        menu.addViewWithEditableIcon(new PersonUI(ui.service, true, MainUI.loginPerson), "PROFILE", "PROFILE", "user-icon.jpg");
+        menu.addViewWithEditableIcon(new PrintView(ui.service, ui.rentaHistoryService), "PRINT", "PRINT", "print-icon.jpg");
+        menu.addViewWithEditableIcon(new XlsView(ui.service, ui.rentaHistoryService, ui.vehicleService), "LOAD", "LOAD", "xls1.jpg");
+        menu.addViewWithEditableIcon(new AboutView(), AboutView.VIEW_NAME, AboutView.VIEW_NAME, "info.jpg");
+        menu.addViewWithEditableIcon(ui.getLoginView(), "LOGOUT", "LOGOUT", "logout.jpg");
 
         navigator.addViewChangeListener(viewChangeListener);
 
