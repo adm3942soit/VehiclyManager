@@ -128,7 +128,7 @@ public class FileReader {
         System.out.println(sl.resolveTarget());
     }
 
-    public static void copyFile(String sourcePath, String destinationPath) throws IOException {
+    public static void copyFile(String sourcePath, String destinationPath) throws IOException, NoSuchFileException {
         Path FROM = Paths.get(sourcePath);
         Path TO = Paths.get(destinationPath);
         //overwrite existing file, if exists

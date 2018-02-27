@@ -5,6 +5,7 @@ import com.adonis.data.service.PersonService;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -34,13 +35,18 @@ public class RegistrationUI extends CustomComponent implements com.vaadin.naviga
     }
     private void savePerson(Person person) {
         service.update(person);
+        Notification.show("Person saved!");
     }
 
     private void deletePerson(Person person) {
         service.delete(person);
+        Notification.show("Person deleted!");
     }
     private void addPerson(Person person){
-        service.insert(person);
+        Person person1 = service.insert(person);
+        if(person1!=null) {
+            Notification.show("Person inserted!");
+        }
     }
 
     @Override

@@ -37,8 +37,6 @@ public class PersonsCrudView extends VerticalLayout implements View {
         this.personService = personService;
         setSizeFull();
         addStyleName("backImage");
-//        setStyleName(ValoTheme.FORMLAYOUT_LIGHT);
-
         setPersonsCrudProperties(personService);
         addComponent(personsCrud);
 
@@ -69,8 +67,8 @@ public class PersonsCrudView extends VerticalLayout implements View {
             public Field buildField() {
                 PersonImageField imageField =
                         ((Person) personsCrud.getGrid().getSelectedRow()) != null ?
-                                new PersonImageField(((Person) personsCrud.getGrid().getSelectedRow()).getPicture(), ((Person) personsCrud.getGrid().getSelectedRow())) :
-                                new PersonImageField();
+                                new PersonImageField(((Person) personsCrud.getGrid().getSelectedRow()).getPicture(), ((Person) personsCrud.getGrid().getSelectedRow()), personService) :
+                                new PersonImageField(personService);
                 if (((Person) personsCrud.getGrid().getSelectedRow()) != null)
                     imageField.setInternalValue((((Person) personsCrud.getGrid().getSelectedRow()).getPicture()));
                 return imageField;

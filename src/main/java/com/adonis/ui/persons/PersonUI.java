@@ -20,7 +20,7 @@ public class PersonUI extends CustomComponent implements View {
 
     public static final String NAME = "PersonUI";
 
-    Person customer;
+    public Person customer;
     PersonView editor = new PersonView(this::savePerson, this::deletePerson, this::addPerson, true);
     List<Person> customers= Lists.newArrayList();
     public static Grid<Person> grid = new Grid();

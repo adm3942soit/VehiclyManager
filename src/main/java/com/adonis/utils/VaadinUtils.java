@@ -51,6 +51,14 @@ public class VaadinUtils {
         return initialPath;
     }
 
+    public static String getResourcePath() {
+        String initialPath = FileReader.getCurrentDirectory() +
+                File.separator + "src" + File.separator + "main" + File.separator + "resources" +
+                File.separator + "VAADIN" + File.separator + "themes" + File.separator + "mytheme" +
+                File.separator + "img";
+        return initialPath;
+    }
+
     public static String getPathToJar() {
         String initialPath = FileReader.getCurrentDirectory() +
                 File.separator + "build" + File.separator + "libs" + File.separator +

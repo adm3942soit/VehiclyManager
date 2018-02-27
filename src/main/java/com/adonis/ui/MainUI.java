@@ -146,4 +146,8 @@ public class MainUI extends UI {
     public PersonService getService() {
         return service;
     }
+
+    public PersonUI getPersonView() {
+        return personView;
+    }
 }
