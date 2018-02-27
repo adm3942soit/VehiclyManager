@@ -3,11 +3,11 @@ package com.adonis.ui.persons;
 import com.adonis.data.persons.Person;
 import com.adonis.data.service.PersonService;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import de.steinwedel.messagebox.ButtonOption;
+import de.steinwedel.messagebox.MessageBox;
+import de.steinwedel.messagebox.MessageForm;
 
 import java.util.Spliterator;
 import java.util.function.Consumer;
@@ -21,7 +21,6 @@ public class RegistrationUI extends CustomComponent implements com.vaadin.naviga
 
     public static final String NAME = "RegistrationUI";
 
-    private Person customer;
     PersonView editor = new PersonView(this::savePerson, null, this::addPerson, false);//this::deletePerson, this::addPerson, false);
 
     public RegistrationUI (PersonService personService){
@@ -34,18 +33,20 @@ public class RegistrationUI extends CustomComponent implements com.vaadin.naviga
 
     }
     private void savePerson(Person person) {
-        service.update(person);
-        Notification.show("Person saved!");
+        MessageForm.winSave(service, person);
     }
 
     private void deletePerson(Person person) {
         service.delete(person);
-        Notification.show("Person deleted!");
+        MessageForm.winDefault("Person saved successfully!");
+
     }
     private void addPerson(Person person){
         Person person1 = service.insert(person);
         if(person1!=null) {
-            Notification.show("Person inserted!");
+            com.vaadin.ui.Notification.show("Person inserted successfully!");
+            MessageForm.winInsert(service, person);
+
         }
     }
 
