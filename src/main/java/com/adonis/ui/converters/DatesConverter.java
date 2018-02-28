@@ -67,6 +67,9 @@ public class DatesConverter {
        return new java.util.Date(sqlDate.getTime());
    }
    public static String utilDateToString(java.util.Date utilDate){
+        if(utilDate==null){
+            return "";
+        }
        return new java.util.Date(utilDate.getTime()).toInstant()  // Convert `java.util.Date` to `Instant`.
                .atOffset( ZoneOffset.UTC )  // Transform `Instant` to `OffsetDateTime`.
                .format( DateTimeFormatter.ISO_LOCAL_DATE )  // Generate a String.

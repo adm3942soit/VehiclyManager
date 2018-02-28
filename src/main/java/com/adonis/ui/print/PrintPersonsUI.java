@@ -50,12 +50,12 @@ public class PrintPersonsUI extends UI {
 
             people.forEach(person -> {
                         HSSFRow row = sheet.createRow((short) index);
-                        row.createCell((short) 0).setCellValue(person.getFirstName());
-                        row.createCell((short) 1).setCellValue(person.getLastName());
-                        row.createCell((short) 2).setCellValue(person.getEmail());
+                        row.createCell((short) 0).setCellValue(person.getFirstName()!=null?person.getFirstName():"");
+                        row.createCell((short) 1).setCellValue(person.getLastName()!=null?person.getLastName():"");
+                        row.createCell((short) 2).setCellValue(person.getEmail()!=null?person.getEmail():"");
                         row.createCell((short) 3).setCellValue(DatesConverter.utilDateToString(person.getBirthDate()));
-                        row.createCell((short) 4).setCellValue(person.getLogin());
-                        row.createCell((short) 5).setCellValue(person.getPhoneNumber());
+                        row.createCell((short) 4).setCellValue(person.getLogin()!=null?person.getLogin():"");
+                        row.createCell((short) 5).setCellValue(person.getPhoneNumber()!=null?person.getPhoneNumber():null);
                         index++;
                     }
             );
