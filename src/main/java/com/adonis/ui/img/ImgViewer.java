@@ -98,7 +98,7 @@ public class ImgViewer extends CustomComponent implements View {
         mainLayout.setComponentAlignment(ctrls, Alignment.BOTTOM_CENTER);
 
         Label images = new Label(
-                "Sample Photos: Bruno Monginoux / www.Landscape-Photo.net (cc-by-nc-nd)");
+                "Photos: from All albums");
         images.setSizeUndefined();
         images.setStyleName("licence");
         mainLayout.addComponent(images);
