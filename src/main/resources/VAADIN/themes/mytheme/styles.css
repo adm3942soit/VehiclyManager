@@ -12124,7 +12124,7 @@ div.v-layout.v-horizontal.v-widget {
 	vertical-align: top;
 	text-align: left;
 	white-space: normal;
-	background-color: #00ace0;
+	width: 90px;
 }
 
 .mytheme .v-upload-immediate .v-button {

@@ -23,6 +23,7 @@ import javax.validation.constraints.Past;
 @Getter
 @Setter
 @NoArgsConstructor
+@Cacheable(value = false)
 public class Person extends Audit
 {
 

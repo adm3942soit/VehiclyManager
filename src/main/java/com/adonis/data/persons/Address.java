@@ -16,6 +16,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
+@Cacheable(value = false)
 public class Address extends Audit{
         @Column(name = "STREET", nullable = false)
         private String street;

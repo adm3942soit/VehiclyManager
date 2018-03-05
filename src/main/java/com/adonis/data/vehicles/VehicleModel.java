@@ -16,6 +16,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
+@Cacheable(value = false)
 public class VehicleModel extends Audit{
 
     @Column(name = "VEHICLE_TYPE")

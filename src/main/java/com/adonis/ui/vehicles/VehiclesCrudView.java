@@ -1,7 +1,10 @@
 package com.adonis.ui.vehicles;
 
+import com.adonis.data.service.FotoAlbumService;
 import com.adonis.data.service.VehicleService;
 import com.adonis.data.vehicles.Vehicle;
+import com.adonis.ui.addFields.PersonImageField;
+import com.adonis.ui.addFields.VehicleAlbumField;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Alignment;
@@ -9,8 +12,10 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import com.vaadin.v7.data.util.BeanItemContainer;
 import com.vaadin.v7.ui.ComboBox;
+import com.vaadin.v7.ui.Field;
 import org.vaadin.crudui.crud.CrudOperation;
 import org.vaadin.crudui.crud.impl.GridBasedCrudComponent;
+import org.vaadin.crudui.form.FieldProvider;
 import org.vaadin.crudui.form.impl.GridLayoutCrudFormFactory;
 import org.vaadin.crudui.layout.impl.HorizontalSplitCrudLayout;
 
@@ -27,11 +32,11 @@ public class VehiclesCrudView extends VerticalLayout implements View {
     public static final BeanItemContainer<Vehicle> container = new BeanItemContainer<Vehicle>(Vehicle.class);
     public static List<Vehicle> objects;
 
-    public VehiclesCrudView(VehicleService vehicleService) {
+    public VehiclesCrudView(VehicleService vehicleService, FotoAlbumService fotoAlbumService) {
         setSizeFull();
         setStyleName(ValoTheme.FORMLAYOUT_LIGHT);
         addStyleName("backImage");
-        setVehiclesCrudProperties(vehicleService);
+        setVehiclesCrudProperties(vehicleService, fotoAlbumService);
         addComponent(vehiclesCrud);
         objects = vehicleService.findAll();
 
@@ -44,7 +49,7 @@ public class VehiclesCrudView extends VerticalLayout implements View {
 
     }
 
-    public void setVehiclesCrudProperties(VehicleService vehicleService) {
+    public void setVehiclesCrudProperties(VehicleService vehicleService, FotoAlbumService fotoAlbumService) {
         GridLayoutCrudFormFactory<Vehicle> formFactory = new GridLayoutCrudFormFactory<>(Vehicle.class, 1, 10);
         vehiclesCrud.setCrudFormFactory(formFactory);
 
@@ -52,10 +57,22 @@ public class VehiclesCrudView extends VerticalLayout implements View {
         vehiclesCrud.setUpdateOperation(vehicle -> vehicleService.save(vehicle));
         vehiclesCrud.setDeleteOperation(vehicle -> vehicleService.delete(vehicle));
         vehiclesCrud.setFindAllOperation(() -> vehicleService.findAll());
-        vehiclesCrud.getCrudFormFactory().setVisiblePropertyIds("vehicleNmbr", "licenseNmbr", "make", "vehicleType","model", "year", "status",  "active", "location", "vinNumber", "price", "priceDay", "priceWeek", "priceMonth");
+        vehiclesCrud.getCrudFormFactory().setVisiblePropertyIds("fotoAlbum","vehicleNmbr", "licenseNmbr", "make", "vehicleType","model", "year", "status",  "active", "location", "vinNumber", "price", "priceDay", "priceWeek", "priceMonth");
         vehiclesCrud.getCrudFormFactory().setDisabledPropertyIds(CrudOperation.UPDATE, "id", "created", "updated");
         vehiclesCrud.getCrudFormFactory().setDisabledPropertyIds(CrudOperation.ADD, "id", "created", "updated");
         vehiclesCrud.getGrid().setColumns("vehicleNmbr", "licenseNmbr", "make", "vehicleType", "model", "year", "status",  "active", "location", "vinNumber", "price", "priceDay", "priceWeek", "priceMonth");
+        vehiclesCrud.getCrudFormFactory().setFieldProvider("fotoAlbum", new FieldProvider() {
+            @Override
+            public Field buildField() {
+                VehicleAlbumField albumField =
+                        ((Vehicle) vehiclesCrud.getGrid().getSelectedRow()) != null ?
+                                new VehicleAlbumField(((Vehicle) vehiclesCrud.getGrid().getSelectedRow()).getFotoAlbum(), ((Vehicle) vehiclesCrud.getGrid().getSelectedRow()), vehicleService, fotoAlbumService) :
+                                new VehicleAlbumField(vehicleService, fotoAlbumService);
+                if (((Vehicle) vehiclesCrud.getGrid().getSelectedRow()) != null)
+                    albumField.setInternalValue((((Vehicle) vehiclesCrud.getGrid().getSelectedRow()).getFotoAlbum()));
+                return albumField;
+            }
+        });
 
         vehiclesCrud.getCrudFormFactory().setFieldType("vehicleType", ComboBox.class);
         vehiclesCrud.getCrudFormFactory().setFieldProvider("vehicleType", () -> new ComboBox("vehicleType", vehicleService.findAllTypesNames()));

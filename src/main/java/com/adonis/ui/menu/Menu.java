@@ -4,9 +4,15 @@ import com.adonis.data.persons.Person;
 import com.adonis.data.service.PersonService;
 import com.adonis.data.service.VehicleService;
 import com.adonis.data.vehicles.Vehicle;
+import com.adonis.ui.persons.CardPopup;
+import com.adonis.ui.persons.CreditCardUI;
 import com.adonis.utils.FileReader;
 import com.adonis.utils.VaadinUtils;
+import com.vaadin.client.Focusable;
+import com.vaadin.event.Action;
 import com.vaadin.event.MouseEvents;
+import com.vaadin.event.ShortcutAction;
+import com.vaadin.event.ShortcutListener;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.server.*;
@@ -27,9 +33,11 @@ import ua.edu.file.MyFiler;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import static com.adonis.utils.VaadinUtils.getInitialPath;
+import static com.adonis.utils.VaadinUtils.getPage;
 
 /**
  * Responsive navigation menu presenting a list of available views to the user.
@@ -49,6 +57,7 @@ public class Menu extends CssLayout {
     public final GridBasedCrudComponent<Person> personsCrud = new GridBasedCrudComponent<>(Person.class, new HorizontalSplitCrudLayout());
     //    public ImageData initialimage;
     Image image = new Image();
+    UploadField uploadFieldImage;
 
     public Menu(PersonService personService, VehicleService vehicleService, Navigator navigator) {
         this.navigator = navigator;
@@ -177,6 +186,7 @@ public class Menu extends CssLayout {
         navigator.addView(name, view);
         createViewButton(name, caption, icon);
     }
+
     public void addView(Class<? extends View> viewClass, final String name,
                         String caption, com.vaadin.server.Resource icon) {
         navigator.addView(name, viewClass);
@@ -213,9 +223,12 @@ public class Menu extends CssLayout {
             }
 
         });
+
         button.setPrimaryStyleName(ValoTheme.BUTTON_FRIENDLY);
-        button.setWidth(50, Unit.PERCENTAGE);
-        button.setHeight(90, Unit.PIXELS);
+//        button.setWidth(50, Unit.PERCENTAGE);
+        image.setWidth(90, Unit.PIXELS);
+        image.setHeight(90, Unit.PIXELS);
+
         FileReader.createDirectoriesFromCurrent(getInitialPath());
         final Image image = new Image("", new ThemeResource("img/" + nameImage));
         try {
@@ -226,7 +239,8 @@ public class Menu extends CssLayout {
             image.setSource(new ThemeResource("img/" + nameImage));
         }
 
-        image.setWidth(50, Unit.PERCENTAGE);
+//        image.setWidth(50, Unit.PERCENTAGE);
+        image.setWidth(90, Unit.PIXELS);
         image.setHeight(90, Unit.PIXELS);
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.setPrimaryStyleName(ValoTheme.MENU_ITEM);
@@ -234,8 +248,18 @@ public class Menu extends CssLayout {
         image.addClickListener(new MouseEvents.ClickListener() {
             @Override
             public void click(MouseEvents.ClickEvent event) {
-                final UploadField uploadFieldImage = new UploadField();
+                uploadFieldImage = new UploadField();
                 uploadFieldImage.setAcceptFilter("image/*");
+                uploadFieldImage.getUpload().addListener(new com.vaadin.v7.ui.Upload.FailedListener() {
+                    @Override
+                    public void uploadFailed(com.vaadin.v7.ui.Upload.FailedEvent event) {
+                        uploadFieldImage.clearDefaulLayout();
+                        horizontalLayout.removeComponent(uploadFieldImage);
+                    }
+
+                    private static final long serialVersionUID = 1L;
+
+                });
                 horizontalLayout.addComponent(uploadFieldImage, 2);
                 uploadFieldImage.getUpload().addListener(new com.vaadin.v7.ui.Upload.SucceededListener() {
 
@@ -255,7 +279,8 @@ public class Menu extends CssLayout {
                 });
                 uploadFieldImage.setFieldType(UploadField.FieldType.FILE);
                 horizontalLayout.markAsDirty();
-                image.setWidth(50, Unit.PERCENTAGE);
+//                image.setWidth(50, Unit.PERCENTAGE);
+                image.setWidth(90, Unit.PIXELS);
                 image.setHeight(90, Unit.PIXELS);
                 image.setVisible(false);
                 image.markAsDirty();

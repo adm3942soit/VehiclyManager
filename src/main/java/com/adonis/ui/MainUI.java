@@ -1,6 +1,7 @@
 package com.adonis.ui;
 
 import com.adonis.data.persons.Person;
+import com.adonis.data.service.FotoAlbumService;
 import com.adonis.data.service.PersonService;
 import com.adonis.data.service.RentaHistoryService;
 import com.adonis.data.service.VehicleService;
@@ -33,13 +34,16 @@ import java.util.function.Consumer;
  */
 @SpringUI
 @Theme("mytheme")
-@Widgetset("com.vaadin.v7.Vaadin7WidgetSet")
+@Widgetset("AppWidgetset")
 public class MainUI extends UI {
 
     @Autowired
     public PersonService service;
     @Autowired
     public VehicleService vehicleService;
+    @Autowired
+    public FotoAlbumService fotoAlbumService;
+
     @Autowired
     public RentaHistoryService rentaHistoryService;
 
@@ -80,7 +84,7 @@ public class MainUI extends UI {
 
         personsCrudView = new PersonsCrudView(service);
         rentaHistoryCrudView = new RentaHistoryCrudView(rentaHistoryService,service, vehicleService);
-        vehiclesCrudView = new VehiclesCrudView(vehicleService);
+        vehiclesCrudView = new VehiclesCrudView(vehicleService, fotoAlbumService);
 
         mainScreen = new MainScreen(MainUI.this);
     }

@@ -18,6 +18,7 @@ public class DateUtils {
     public static final int MINUTE = 1000 * 60;
     public static final int HOUR = MINUTE * 60;
     public static final int DAY = HOUR * 24;
+    public static final String pattern = "yyyy-MM-dd hh:mm:ss";
     public static List<SimpleDateFormat> dateFormats = new ArrayList<SimpleDateFormat>() {
         private static final long serialVersionUID = 1L;
 

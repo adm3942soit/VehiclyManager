@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -19,6 +20,7 @@ import javax.validation.constraints.Digits;
 @Getter
 @Setter
 @NoArgsConstructor
+@Cacheable(value = false)
 public class CreditCard extends Audit {
 //    @Column(name = "PERSON_ID", nullable = false)
 //    private Long personId;

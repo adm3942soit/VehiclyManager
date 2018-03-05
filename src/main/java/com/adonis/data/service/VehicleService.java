@@ -1,8 +1,12 @@
 package com.adonis.data.service;
 
+import com.adonis.data.payments.CreditCard;
 import com.adonis.data.vehicles.Vehicle;
 import com.adonis.data.vehicles.VehicleModel;
 import com.adonis.data.vehicles.VehicleType;
+import com.adonis.data.vehicles.img.Foto;
+import com.adonis.data.vehicles.img.FotoAlbum;
+import com.adonis.utils.DateUtils;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +20,12 @@ import java.io.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+
+import static com.adonis.utils.DateUtils.pattern;
 
 /**
  * Created by oksdud on 29.03.2017.
@@ -28,11 +35,13 @@ public class VehicleService {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private FotoAlbumService fotoAlbumService;
 
     public List<Vehicle> findAll() {
         String sql = "SELECT * FROM vehicles";
         List<Vehicle> vehicles = jdbcTemplate.query(sql,
-                new BeanPropertyRowMapper(Vehicle.class));
+                new VehicleRowMapper(this));
         return vehicles;
     }
     public List<Integer> findAllActive() {
@@ -44,7 +53,7 @@ public class VehicleService {
     public List<Integer> findAllNotActive() {
         String sql = "SELECT v.ID FROM vehicles v WHERE v.ACTIVE = 0";
         List<Integer> vehicles = jdbcTemplate.query(sql,
-                new BeanPropertyRowMapper(Vehicle.class));
+                new VehicleRowMapper(this));
         return vehicles;
     }
 
@@ -124,7 +133,7 @@ public class VehicleService {
         String sql = "SELECT * FROM vehicles WHERE ID = ?";
 
         Vehicle vehicle = (Vehicle) jdbcTemplate.queryForObject(
-                sql, new Object[]{id}, new BeanPropertyRowMapper(Vehicle.class));
+                sql, new Object[]{id}, new VehicleRowMapper(this));
 
         return vehicle;
     }
@@ -133,7 +142,7 @@ public class VehicleService {
         String sql = "SELECT * FROM vehicles WHERE VEHICLE_NMBR = ?";
 
         Vehicle vehicle = (Vehicle) jdbcTemplate.queryForObject(
-                sql, new Object[]{vehicleNumber}, new BeanPropertyRowMapper(Vehicle.class));
+                sql, new Object[]{vehicleNumber}, new VehicleRowMapper(this));
 
         return vehicle;
     }
@@ -164,7 +173,7 @@ public class VehicleService {
         Vehicle vehicle = null;
         try {
             vehicle = (Vehicle) jdbcTemplate.queryForObject(
-                    sql, new Object[]{}, new BeanPropertyRowMapper(Vehicle.class));
+                    sql, new Object[]{}, new VehicleRowMapper(this));
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -221,9 +230,9 @@ public class VehicleService {
         return total;
     }
 
-    public void update(Vehicle vehicle) {
-        if (vehicle == null) return;
-        jdbcTemplate.update(
+    public boolean update(Vehicle vehicle) {
+        if (vehicle == null) return false;
+        int ret = jdbcTemplate.update(
                 "UPDATE vehicles SET " +
                         "VEHICLE_NMBR=?, " +
                         "LICENSE_NMBR=?, " +
@@ -239,6 +248,7 @@ public class VehicleService {
                         "PRICE_DAY=?, " +
                         "PRICE_WEEK=?, " +
                         "PRICE_MONTH=?, " +
+                        "FOTO_ALBUM_ID=?, " +
                         "UPDATED =? " +
                         "WHERE ID=?",
                 vehicle.getVehicleNmbr(),
@@ -255,8 +265,10 @@ public class VehicleService {
                 vehicle.getPriceDay(),
                 vehicle.getPriceWeek(),
                 vehicle.getPriceMonth(),
+                vehicle.getFotoAlbum()!=null?vehicle.getFotoAlbum().getId():null,
                 new Date(),
                 vehicle.getId());
+     return ret!=0;
     }
 
     public Vehicle insert(Vehicle vehicle) {
@@ -265,8 +277,8 @@ public class VehicleService {
             jdbcTemplate.update(
                     "INSERT INTO vehicles " +
                             "(VEHICLE_NMBR, LICENSE_NMBR, MAKE, MODEL, YEAR, STATUS," +
-                            " VEHICLE_TYPE, ACTIVE, LOCATION, VIN_NUMBER, PRICE, PRICE_DAY,PRICE_WEEK, PRICE_MONTH, UPDATED, CREATED ) VALUES " +
-                            "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                            " VEHICLE_TYPE, ACTIVE, LOCATION, VIN_NUMBER, PRICE, PRICE_DAY,PRICE_WEEK, PRICE_MONTH, FOTO_ALBUM_ID, UPDATED, CREATED ) VALUES " +
+                            "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                     new Object[]{
                             vehicle.getVehicleNmbr(),
                             vehicle.getLicenseNmbr(),
@@ -282,6 +294,7 @@ public class VehicleService {
                             vehicle.getPriceDay(),
                             vehicle.getPriceWeek(),
                             vehicle.getPriceMonth(),
+                            vehicle.getFotoAlbum()!=null?vehicle.getFotoAlbum().getId():null,
                             new Date(), new Date()
                     });
         } catch (Exception e) {
@@ -600,6 +613,97 @@ public class VehicleService {
                 }
             }
         }
+    }
+
+    public FotoAlbum insert(FotoAlbum fotoAlbum) {
+        if (fotoAlbum == null) return null;
+        try {
+            jdbcTemplate.execute(
+                    "INSERT INTO foto_album ( CREATED, UPDATED)" +
+                            "  VALUES " +
+                            "( '"+ DateUtils.convertToStringByFormat(new Date(), new SimpleDateFormat(pattern))+"', '"+DateUtils.convertToStringByFormat(new Date(), new SimpleDateFormat(pattern))+"')");
+        } catch (DataAccessException e) {
+            return null;
+        }
+        return findLastFotoAlbum();
+    }
+    public Foto insert(Foto foto) {
+        if (foto == null) return null;
+        try {
+            jdbcTemplate.execute(
+                    "INSERT INTO foto ( FOTO_NAME, FOTO_ALBUM_ID, CREATED, UPDATED)" +
+                            "  VALUES " +
+                            "( '"+foto.getFotoName()+"' , "+(foto.getFotoAlbum()==null?null:foto.getFotoAlbum().getId())+" , '"+ DateUtils.convertToStringByFormat(new Date(), new SimpleDateFormat(pattern))+"' , '"+DateUtils.convertToStringByFormat(new Date(), new SimpleDateFormat(pattern))+"')");
+        } catch (DataAccessException e) {
+            return null;
+        }
+        return findLastFoto();
+    }
+
+    public FotoAlbum findLastFotoAlbum(){
+        String sql = "SELECT * FROM foto_album ORDER BY ID DESC LIMIT 1";
+        FotoAlbum fotoAlbum;
+        try {
+            fotoAlbum = (FotoAlbum) jdbcTemplate.queryForObject(
+                    sql, new Object[]{}, new BeanPropertyRowMapper(FotoAlbum.class));
+        } catch (Exception e) {
+            return null;
+        }
+        return fotoAlbum;
+    }
+    public Foto findLastFoto(){
+        String sql = "SELECT * FROM foto ORDER BY ID DESC LIMIT 1";
+        Foto foto;
+        try {
+            foto = (Foto) jdbcTemplate.queryForObject(
+                    sql, new Object[]{}, new BeanPropertyRowMapper(Foto.class));
+        } catch (Exception e) {
+            return null;
+        }
+        return foto;
+    }
+
+    public FotoAlbum addFotoAlbum(Long vehicleId){
+        Vehicle vehicle = findById(vehicleId);
+        if(vehicle.getFotoAlbum()==null) {
+            FotoAlbum fotoAlbum = insert(new FotoAlbum(new ArrayList<Foto>()));
+            vehicle.setFotoAlbum(fotoAlbum);
+            update(vehicle);
+         return fotoAlbum;
+        }
+     return null;
+    }
+
+    public void addFoto(Long vehicleId, Foto foto){
+        Vehicle vehicle = findById(vehicleId);
+        if(vehicle.getFotoAlbum()==null){
+            FotoAlbum fotoAlbum = addFotoAlbum(vehicleId);
+            if(foto.getId()==null){
+                foto.setFotoAlbum(fotoAlbum);
+                insert(foto);
+            }
+        }else{
+            if(foto.getId()==null){
+                foto.setFotoAlbum(vehicle.getFotoAlbum());
+                insert(foto);
+            }
+
+        }
+    }
+    public FotoAlbum findByFotoAlbumId(Long id) {
+        if (id == null) return null;
+        String sql = "SELECT * FROM foto_album WHERE ID = ?";
+        FotoAlbum fotoAlbum = null;
+        try {
+            fotoAlbum = (FotoAlbum) jdbcTemplate.queryForObject(
+                    sql, new Object[]{id}, new BeanPropertyRowMapper(FotoAlbum.class));
+        } catch (Exception e) {
+            return null;
+        }
+
+        return fotoAlbum;
+
+
     }
 
 }

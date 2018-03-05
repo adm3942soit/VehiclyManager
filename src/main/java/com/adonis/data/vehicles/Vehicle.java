@@ -1,13 +1,12 @@
 package com.adonis.data.vehicles;
 
 import com.adonis.data.Audit;
+import com.adonis.data.vehicles.img.FotoAlbum;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by oksdud on 05.04.2017.
@@ -18,6 +17,7 @@ import javax.persistence.Table;
 @Getter
 @Setter
 @NoArgsConstructor
+@Cacheable(value = false)
 public class Vehicle extends Audit {
     @Column(name = "VEHICLE_NMBR", length = 30)
     private String vehicleNmbr;
@@ -48,5 +48,8 @@ public class Vehicle extends Audit {
     @Column(name = "PRICE_MONTH")
     private Double priceMonth;
 
+//    @OneToOne(cascade = CascadeType.ALL)
+    @Column(name = "FOTO_ALBUM_ID")
+    private FotoAlbum fotoAlbum;
 
 }
