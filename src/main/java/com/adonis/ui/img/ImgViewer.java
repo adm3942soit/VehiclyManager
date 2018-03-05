@@ -52,7 +52,7 @@ public class ImgViewer extends CustomComponent implements View {
         mainLayout.setSpacing(true);
         setSizeFull();
         com.vaadin.v7.ui.Label info = new com.vaadin.v7.ui.Label(
-                "<b>ImageViewer Demo Application</b>&nbsp;&nbsp;&nbsp;"
+                "<b>ImageViewer</b>&nbsp;&nbsp;&nbsp;"
                         + "<i>Try the arrow keys, space/enter and home/end."
                         + " You can also click on the pictures or use the "
                         + "mouse wheel.&nbsp;&nbsp;", com.vaadin.v7.ui.Label.CONTENT_XHTML);
