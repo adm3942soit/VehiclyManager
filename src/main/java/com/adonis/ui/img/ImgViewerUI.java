@@ -70,7 +70,7 @@ public class ImgViewerUI extends UI {
         mainLayout.setSpacing(true);
         setSizeFull();
         Label info = new Label(
-                "<b>ImageViewer Demo Application</b>&nbsp;&nbsp;&nbsp;"
+                "<b>Fotos Viewer</b>&nbsp;&nbsp;&nbsp;"
                         + "<i>Try the arrow keys, space/enter and home/end."
                         + " You can also click on the pictures or use the "
                         + "mouse wheel.&nbsp;&nbsp;", Label.CONTENT_XHTML);
@@ -144,7 +144,7 @@ public class ImgViewerUI extends UI {
         mainLayout.setComponentAlignment(ctrls, Alignment.BOTTOM_CENTER);
 
         Label images = new Label(
-                "Sample Photos: Bruno Monginoux / www.Landscape-Photo.net (cc-by-nc-nd)");
+                "Sample Photos");
         images.setSizeUndefined();
         images.setStyleName("licence");
         mainLayout.addComponent(images);

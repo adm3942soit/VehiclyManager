@@ -69,6 +69,7 @@ public class MainScreen extends HorizontalLayout implements View {
 //        menu.addView(new VehicleTypesCrudView(ui.vehicleService), VehicleTypesCrudView.NAME, VehicleTypesCrudView.NAME, new ThemeResource("img/vehicle-type.jpg"));
 //        menu.addView(new VehiclesCrudView(ui.vehicleService), VehiclesCrudView.NAME, VehiclesCrudView.NAME, new ThemeResource("img/car.jpg"));//vehicles1
         menu.addViewWithEditableIcon(new VehiclesCrudView(ui.vehicleService, ui.fotoAlbumService), VehiclesCrudView.NAME, VehiclesCrudView.NAME, "car.jpg");//vehicles1
+        menu.addViewWithEditableIcon(new ImgViewer(ui.vehicleService, ui.fotoAlbumService), "VEHICLES FOTOS VIEW", "VEHICLES FOTOS VIEW", "user-icon.jpg");
 //        menu.addView(ui.getPersonsCrudView(), PersonsCrudView.NAME, PersonsCrudView.NAME, new ThemeResource("img/customers.jpg"));
         menu.addViewWithEditableIcon(ui.getPersonsCrudView(), PersonsCrudView.NAME, PersonsCrudView.NAME, "customers.jpg");
 //        menu.addView(new RentaHistoryCrudView(ui.rentaHistoryService, ui.service, ui.vehicleService), RentaHistoryCrudView.NAME, RentaHistoryCrudView.NAME, new ThemeResource("img/for-rent.jpg"));
@@ -83,7 +84,6 @@ public class MainScreen extends HorizontalLayout implements View {
         menu.addViewWithEditableIcon(new com.adonis.ui.renta.calendar.RentaCalendarView(personService, rentaHistoryService, vehicleService), com.adonis.ui.renta.calendar.RentaCalendarView.NAME, com.adonis.ui.renta.calendar.RentaCalendarView.NAME, "chart2.jpg");
         menu.addViewWithEditableIcon(new RegistrationUI(ui.service), "CUSTOMER REGISTRATION", "CUSTOMER REGISTRATION", "Register-Today.jpg");
         menu.addViewWithEditableIcon(new PersonUI(ui.service, true, MainUI.loginPerson), "PROFILE", "PROFILE", "user-icon.jpg");
-        menu.addViewWithEditableIcon(new ImgViewer(ui.vehicleService, ui.fotoAlbumService), "VEHICLES FOTOS VIEW", "VEHICLES FOTOS VIEW", "user-icon.jpg");
 //        menu.addViewWithEditableIcon(new ImgSlider(), "IMAGESLIDER", "IMAGESLIDER", "user-icon.jpg");
         menu.addViewWithEditableIcon(new PrintView(ui.service, ui.rentaHistoryService), "PRINT", "PRINT", "print-icon.jpg");
         menu.addViewWithEditableIcon(new XlsView(ui.service, ui.rentaHistoryService, ui.vehicleService), "LOAD", "LOAD", "xls1.jpg");
