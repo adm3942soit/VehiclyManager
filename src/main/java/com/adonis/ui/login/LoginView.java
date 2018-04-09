@@ -18,7 +18,6 @@ import java.util.function.Consumer;
  * Created by oksdud on 03.04.2017.
  */
 @Theme("mytheme")
-//@SpringView(name = LoginView.NAME)
 public class LoginView extends CssLayout implements View {
 
     private HorizontalLayout loginFormLayout;
