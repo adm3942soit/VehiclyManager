@@ -139,10 +139,18 @@ jar {
 	manifest {
 		attributes 'Main-Class': 'com.adonis.VehiclyManagerApplication'
 	}
-	zip64 = true
-	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-}
+	from ("src/main/webapp") {
+		into ("BOOT-INF/classes/app") // It is actually located under the "BOOT-INF/classes"
+	}
+	from 'src/main/webapp', sourceSets.main.output
+	// Compile theme and widgetset before creating jar
+	dependsOn 'vaadinCompile', 'vaadinThemeCompile'
+	// Sprinkle some spring boot sugar on the jar to make it runnable
+	finalizedBy bootRepackage
 
+//	zip64 = true
+//	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
 springBoot {
 	mainClass = "com.adonis.VehiclyManagerApplication"
 }
